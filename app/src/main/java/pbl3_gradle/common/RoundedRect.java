@@ -1,4 +1,4 @@
-package pbl3_gradle.views;
+package pbl3_gradle.common;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;

@@ -1,4 +1,4 @@
-package pbl3_gradle.views;
+package pbl3_gradle.common;
 
 // co the gap loi khi xu ly su kien -> can test som
 import javafx.animation.PauseTransition;

@@ -1,4 +1,4 @@
-package pbl3_gradle.views;
+package pbl3_gradle.common;
 
 import javafx.scene.layout.VBox;
 
@@ -13,6 +13,9 @@ public class MenuBarClass extends VBox {
             if (pageName.equals("AdminAddAccPage")) {
                 btnAdd.setStyleButton("#ffffff", "#2f74eb");
                 btnAdd.removeEffects();
+            } else if (pageName.equals("EditAcc_ShowAccPage")) {
+                btnEdit.setStyleButton("#ffffff", "#2f74eb");
+                btnEdit.removeEffects();
             }
             this.getChildren().addAll(btnAdd, btnEdit, btnDelete, btnChagne, btnLogout);
             this.setPrefSize(265.9, 311.3);

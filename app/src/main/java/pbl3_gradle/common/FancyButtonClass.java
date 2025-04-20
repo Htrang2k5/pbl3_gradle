@@ -1,12 +1,15 @@
-package pbl3_gradle.views;
+package pbl3_gradle.common;
 
 import javafx.animation.ScaleTransition;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 
 public class FancyButtonClass extends Button {
     public FancyButtonClass(String text, double width, double height, double x, double y) {
@@ -19,6 +22,14 @@ public class FancyButtonClass extends Button {
     public FancyButtonClass(String text, double width, double height, String bgColor, String textColor) {
         super(text);
         initStyleMenuButton(width, height, bgColor, textColor);
+        initHoverEffect();
+        initClickEffect();
+    }
+
+    public FancyButtonClass(AvatarViewClass image, String text, double width, double height, String bgColor,
+            String textColor) {
+        // super(text, image);
+        initStyleProfileButton(image, text, width, height, bgColor, textColor);
         initHoverEffect();
         initClickEffect();
     }
@@ -47,6 +58,27 @@ public class FancyButtonClass extends Button {
                         + "-fx-font-size: 16px;"
                         + "-fx-border-radius: 36px;"
                         + "-fx-background-radius: 36px;");
+        this.setPrefSize(width, height);
+        this.setCursor(javafx.scene.Cursor.HAND);
+    }
+
+    private void initStyleProfileButton(AvatarViewClass image, String text, double width, double height,
+            String bgColor, String textColor) {
+        this.setStyle(
+                "-fx-background-color: " + bgColor + ";"
+                        + "-fx-border-radius: 36px;"
+                        + "-fx-background-radius: 36px;");
+        Label label = new Label(text);
+        label.setStyle(
+                "-fx-text-fill: " + textColor + ";"
+                        + "-fx-font-size: 18px;"
+                        + "-fx-font-family: 'Helvetica';");
+        HBox hbox = new HBox();
+        hbox.getChildren().addAll(image, label);
+        hbox.setSpacing(20);
+        // hbox.setPrefSize(width, height);
+        hbox.setAlignment(Pos.CENTER_LEFT);
+        this.setGraphic(hbox);
         this.setPrefSize(width, height);
         this.setCursor(javafx.scene.Cursor.HAND);
     }
