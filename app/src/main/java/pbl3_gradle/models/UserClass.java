@@ -11,7 +11,7 @@ public class UserClass {
 
     public UserClass() {
         this.usename = "Htrang";
-        this.avatar = "file:/Users/htrang/Documents/University/PBL3/ImageAvatar.png";
+        this.avatar = "file:src/main/resources/image/ImageAvatar.png";
     }
 
     public String getUsename() {

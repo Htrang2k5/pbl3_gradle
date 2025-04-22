@@ -20,7 +20,7 @@ public class AdminAddAccPage {
                 RoundedRect rect = new RoundedRect();
                 // Tạo hình avatar
                 Image image = new Image(
-                                "file:/Users/htrang/Documents/University/PBL3/ImageAvatar.png");
+                                "file:src/main/resources/image/ImageAvatar.png");
 
                 AvatarViewClass avatar = new AvatarViewClass(image, 162.3, 2);
                 avatar.setLayoutX(67.3);

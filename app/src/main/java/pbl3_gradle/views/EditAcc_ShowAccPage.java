@@ -10,9 +10,6 @@ import pbl3_gradle.common.MenuBarClass;
 import pbl3_gradle.common.RoundedRect;
 import pbl3_gradle.controllers.TestController;
 import javafx.scene.layout.GridPane;
-
-import org.checkerframework.checker.units.qual.A;
-
 import javafx.geometry.Insets;
 import javafx.scene.control.TextField;
 
@@ -24,7 +21,7 @@ public class EditAcc_ShowAccPage {
                 RoundedRect rect = new RoundedRect();
                 // Tạo hình avatar
                 Image image = new Image(
-                                "file:/Users/htrang/Documents/University/PBL3/ImageAvatar.png");
+                                "file:src/main/resources/image/ImageAvatar.png");
 
                 AvatarViewClass avatar = new AvatarViewClass(image, 162.3, 2);
                 avatar.setLayoutX(67.3);
@@ -71,12 +68,12 @@ public class EditAcc_ShowAccPage {
                 ScrollPane scrollPane = new ScrollPane(gridPane);
                 scrollPane.setPrefSize(961.9, 508.8);
                 scrollPane.setLayoutX(357.0);
-                scrollPane.setLayoutY(203.7);
+                scrollPane.setLayoutY(208.0);
                 scrollPane.setStyle(
                                 "-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent;");
                 scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
                 // Tao textField tim kiem
-                Image findImage = new Image("file:/Users/htrang/Documents/University/PBL3/FindImage.png");
+                Image findImage = new Image("file:src/main/resources/image/FindImage.png");
                 AvatarViewClass findAvatar = new AvatarViewClass(findImage, 46.8, 0);
                 findAvatar.setLayoutX(392);
                 findAvatar.setLayoutY(110.3);
@@ -97,7 +94,8 @@ public class EditAcc_ShowAccPage {
 
         public void setStyleFindText(TextField findtext, Double width, Double height, Double x, Double y) {
                 findtext.setStyle(
-                                "-fx-background-color: transparent" + "-fx-text-fill: #2f74eb;"
+                                "-fx-background-color: #ffffff;"
+                                                + "-fx-text-fill: #2f74eb;"
                                                 + " -fx-font-size: 23 px; "
                                                 + "-fx-border-radius: 36px; " + "-fx-background-radius: 36px; "
                                                 + "-fx-border-color: #92badd;" + "-fx-border-width: 2px;"

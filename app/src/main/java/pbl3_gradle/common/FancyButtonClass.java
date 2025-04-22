@@ -90,7 +90,8 @@ public class FancyButtonClass extends Button {
                         + "-fx-font-size: 16px;"
                         + "-fx-border-radius: 36px;"
                         + "-fx-background-radius: 36px;"
-                        + "-fx-font-family: 'Helvetica';");
+                        + "-fx-font-family: 'Helvetica';"
+                        + "-fx-cursor: default;");
     }
 
     private final DropShadow hoverShadow = new DropShadow(10, Color.rgb(0, 0, 0, 0.6));

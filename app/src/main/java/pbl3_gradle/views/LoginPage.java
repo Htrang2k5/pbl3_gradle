@@ -51,7 +51,7 @@ public class LoginPage {
                 // loginButton.setLayoutY(487.8);
                 FancyButtonClass loginButton = new FancyButtonClass("Log in", 213.1, 59.8, 576.4, 487.8);
                 Image image = new Image(
-                                "file:/Users/htrang/Documents/University/PBL3/ImageAvatar.png");
+                                "file:/src/main/resources/image/ImageAvatar.png");
                 AvatarViewClass avatar = new AvatarViewClass(image, 120.8, 2);
                 avatar.setLayoutX(622.6);
                 avatar.setLayoutY(134.8);
