@@ -100,7 +100,7 @@ public class AdminAddAccPage {
 
         }
 
-        public void LabelStyle(Label label, String collor, String aligment, Double width, Double height) {
+        public static void LabelStyle(Label label, String collor, String aligment, Double width, Double height) {
                 label.setPrefSize(width, height);
                 label.setStyle(
                                 "-fx-text-fill: " + collor + ";"
@@ -109,7 +109,7 @@ public class AdminAddAccPage {
                                                 + "-fx-font-family:'Helvetica';");
         }
 
-        public void TextFieldStyle(TextField textField, String collor, Double width,
+        public static void TextFieldStyle(TextField textField, String collor, Double width,
                         Double height) {
                 textField.setPrefSize(width, height);
                 textField.setStyle(
@@ -123,7 +123,7 @@ public class AdminAddAccPage {
                                                 + "-fx-padding: 0 0 0 30;");
         }
 
-        public void PwTextFieldStyle(PasswordTextFieldClass textField, String collor, Double width,
+        public static void PwTextFieldStyle(PasswordTextFieldClass textField, String collor, Double width,
                         Double height) {
                 textField.setPrefSize(width, height);
                 textField.setStyle(
@@ -137,7 +137,7 @@ public class AdminAddAccPage {
                                                 + "-fx-padding: 0 0 0 30;");
         }
 
-        public void comboBxStyle(ComboBox<String> cbb, String color, double width, double height) {
+        public static void comboBxStyle(ComboBox<String> cbb, String color, double width, double height) {
                 // Kích thước
                 cbb.setPrefSize(width, height);
                 cbb.setPromptText("Select role");
