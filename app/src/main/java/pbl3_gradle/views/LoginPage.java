@@ -7,6 +7,7 @@ import javafx.scene.layout.Pane;
 import pbl3_gradle.common.AvatarViewClass;
 import pbl3_gradle.common.FancyButtonClass;
 import pbl3_gradle.common.RoundedRect;
+import pbl3_gradle.util.NavigationManager;
 import javafx.scene.image.Image;
 
 public class LoginPage {
@@ -50,8 +51,11 @@ public class LoginPage {
                 // loginButton.setLayoutX(576.4);
                 // loginButton.setLayoutY(487.8);
                 FancyButtonClass loginButton = new FancyButtonClass("Log in", 213.1, 59.8, 576.4, 487.8);
+                loginButton.setOnAction(e -> {
+                        NavigationManager.navigateToAdminAddAccPage();
+                });
                 Image image = new Image(
-                                "file:/src/main/resources/image/ImageAvatar.png");
+                                "file:src/main/resources/image/ImageAvatar.png");
                 AvatarViewClass avatar = new AvatarViewClass(image, 120.8, 2);
                 avatar.setLayoutX(622.6);
                 avatar.setLayoutY(134.8);

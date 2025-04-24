@@ -1,6 +1,7 @@
 package pbl3_gradle.common;
 
 import javafx.scene.layout.VBox;
+import pbl3_gradle.util.NavigationManager;
 
 public class MenuBarClass extends VBox {
     public MenuBarClass(int layer, String pageName) {
@@ -10,9 +11,17 @@ public class MenuBarClass extends VBox {
             FancyButtonClass btnDelete = new FancyButtonClass("Delete Acount", 265.9, 50.2, "#92badd", "#ffffff");
             FancyButtonClass btnChagne = new FancyButtonClass("Change Password", 265.9, 50.2, "#92badd", "#ffffff");
             FancyButtonClass btnLogout = new FancyButtonClass("Log out", 265.9, 50.2, "#92badd", "#ffffff");
+            btnAdd.setOnAction(e -> {
+                NavigationManager.navigateToAdminAddAccPage();
+            });
+            btnEdit.setOnAction(e -> {
+                NavigationManager.navigateToEditAccShowAccPage();
+            });
             if (pageName.equals("AdminAddAccPage")) {
                 btnAdd.setStyleButton("#ffffff", "#2f74eb");
                 btnAdd.removeEffects();
+                btnAdd.setOnAction(null);
+
             } else if (pageName.equals("EditAcc_ShowAccPage")) {
                 btnEdit.setStyleButton("#ffffff", "#2f74eb");
                 btnEdit.removeEffects();
