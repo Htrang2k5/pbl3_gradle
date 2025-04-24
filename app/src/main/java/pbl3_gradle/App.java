@@ -5,11 +5,13 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import pbl3_gradle.util.NavigationManager;
 
-import pbl3_gradle.views.LoginPage;
+//import pbl3_gradle.views.LoginPage;
+import pbl3_gradle.views.DeleteAccPage;
 
 public class App extends Application {
     public void start(Stage stage) {
-        LoginPage view = new LoginPage();
+        // LoginPage view = new LoginPage();
+        DeleteAccPage view = new DeleteAccPage();
         Scene scene = new Scene(view.getView(), 1366, 768);
         stage.setScene(scene);
         stage.setTitle("PBL3");

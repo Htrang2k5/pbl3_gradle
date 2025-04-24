@@ -6,7 +6,6 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import pbl3_gradle.common.AvatarViewClass;
 import pbl3_gradle.common.FancyButtonClass;
-import pbl3_gradle.common.MenuBarClass;
 import pbl3_gradle.common.RoundedRect;
 import pbl3_gradle.controllers.TestController;
 import javafx.scene.layout.GridPane;
