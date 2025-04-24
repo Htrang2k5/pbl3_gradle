@@ -10,38 +10,24 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import pbl3_gradle.common.AvatarViewClass;
 import pbl3_gradle.common.FancyButtonClass;
-import pbl3_gradle.common.MenuBarClass;
 import pbl3_gradle.common.PasswordTextFieldClass;
 import pbl3_gradle.common.RoundedRect;
-import pbl3_gradle.controllers.TestController;
 import pbl3_gradle.common.ImageButtonClass;
+import pbl3_gradle.util.AppContext;
 import javafx.geometry.Insets;
+import pbl3_gradle.models.UserClass;
+import pbl3_gradle.util.NavigationManager;
 
 public class EditAcc_EditingPage {
 
         public Pane getView() {
-                // Lay du lieu tu database
-                TestController testData = new TestController();
-                // Tạo hình chữ nhật cho menu
-                RoundedRect rect = new RoundedRect();
-                // Tạo hình avatar
-                Image image = new Image(
-                                "file:src/main/resources/image/ImageAvatar.png");
+                // Lay du lieu
+                UserClass user = (UserClass) AppContext.get("userSelected");
+                // Tap menu Bar
+                Pane menuBar = AdminAddAccPage.MenuBarStyle_Layer1(
+                                "file:src/main/resources/image/ImageAvatar.png", "Administrator",
+                                "EditAcc_EditingPage");
 
-                AvatarViewClass avatar = new AvatarViewClass(image, 162.3, 2);
-                avatar.setLayoutX(67.3);
-                avatar.setLayoutY(38.3);
-                // Tao Label cho avatar
-                Label avarLb = new Label("Administrator");
-                avarLb.setStyle(
-                                "-fx-text-fill: #2f74eb; -fx-font-size: 20px; -fx-alignment: center; -fx-font-family:'Helvetica';");
-                avarLb.setPrefSize(195.1, 31.7);
-                avarLb.setLayoutX(50.5);
-                avarLb.setLayoutY(218.7);
-                // Tao MenuBar
-                MenuBarClass menuBar = new MenuBarClass(1, "EditAcc_ShowAccPage");
-                menuBar.setLayoutX(15.5);
-                menuBar.setLayoutY(347.7);
                 // Tao main label
                 Label mainLb = new Label("EDIT ACCOUNT");
                 mainLb.setStyle(
@@ -57,6 +43,11 @@ public class EditAcc_EditingPage {
                 Image image1 = new Image(
                                 "file:src/main/resources/image/Back_Icon.png");
                 ImageButtonClass backButton = new ImageButtonClass(image1, 53.4, 53.4, 308.4, 10.4);
+                backButton.setOnAction(e -> {
+                        AppContext.remove("currentPage");
+                        AppContext.remove("userSelected");
+                        NavigationManager.navigateToEditAccShowAccPage();
+                });
                 // Tao khung hinh chu nhat
                 RoundedRect rect1 = new RoundedRect(345.7, 118.1, 967.1, 599, "transparent", "#92badd", 2, 36);
                 // Tao info avatar
@@ -69,10 +60,9 @@ public class EditAcc_EditingPage {
                 ava.setPrefSize(312, 82.6);
                 ava.setLayoutX(673.2);
                 ava.setLayoutY(76.8);
-                image = new Image(
-                                "file:src/main/resources/image/ImageAvatar.png");
+                Image image = new Image(user.getAvatar());
                 AvatarViewClass avatar1 = new AvatarViewClass(image, 62.4, 2);
-                Label username = new Label("Htrang");
+                Label username = new Label(user.getUsename());
                 username.setStyle(
                                 "-fx-text-fill: #2f74eb;"
                                                 + " -fx-font-size: 23px;"
@@ -100,13 +90,12 @@ public class EditAcc_EditingPage {
                 vbox.setLayoutY(214.3);
                 vbox.setPrefSize(276.1, 310.8);
                 // Tao group 3 textfield
-                TextField tf1 = new TextField();
-                PasswordTextFieldClass tf2 = new PasswordTextFieldClass();
-                PasswordTextFieldClass tf3 = new PasswordTextFieldClass();
+                TextField tf1 = new TextField(user.getUsename());
+                PasswordTextFieldClass tf2 = new PasswordTextFieldClass(user.getPassword());
+                PasswordTextFieldClass tf3 = new PasswordTextFieldClass(user.getPassword());
                 ComboBox<String> cbb = new ComboBox<>();
                 cbb.getItems().addAll("Scrum Master", "Developer", "Product Owner", "Project Owner");
-
-                tf1.setPromptText("Enter username");
+                cbb.setValue(user.getRole());
                 AdminAddAccPage.TextFieldStyle(tf1, "#2f74eb", 637.2, 60.1);
                 AdminAddAccPage.PwTextFieldStyle(tf2, "#2f74eb", 637.2, 60.1);
                 AdminAddAccPage.PwTextFieldStyle(tf3, "#2f74eb", 637.2, 60.1);
@@ -124,7 +113,7 @@ public class EditAcc_EditingPage {
                 // Tao Pane
 
                 Pane pane = new Pane();
-                pane.getChildren().addAll(rect, avatar, avarLb, menuBar, mainLb, backButton, rect1, ava, vbox, vbox1,
+                pane.getChildren().addAll(menuBar, mainLb, backButton, rect1, ava, vbox, vbox1,
                                 btnClear,
                                 btnSave);
                 pane.setStyle(

@@ -6,6 +6,8 @@ import pbl3_gradle.views.EditAcc_EditingPage;
 import pbl3_gradle.views.EditAcc_ShowAccPage;
 import pbl3_gradle.views.LoginPage;
 import javafx.scene.layout.Pane;
+import pbl3_gradle.views.DeleteAccPage;
+import pbl3_gradle.views.ChangePasswordPage;
 
 public class NavigationManager {
     private static Stage primaryStage;
@@ -36,6 +38,16 @@ public class NavigationManager {
     public static void navigateToLoginPage() {
         LoginPage loginPage = new LoginPage();
         navigateTo(loginPage.getView());
+    }
+
+    public static void navigateToDeleteAccPage() {
+        DeleteAccPage deleteAccPage = new DeleteAccPage();
+        navigateTo(deleteAccPage.getView());
+    }
+
+    public static void navigateToChangePasswordPage() {
+        ChangePasswordPage changePasswordPage = new ChangePasswordPage();
+        navigateTo(changePasswordPage.getView());
     }
 
 }

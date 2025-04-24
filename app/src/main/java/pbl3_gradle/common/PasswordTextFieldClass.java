@@ -8,7 +8,11 @@ import javafx.scene.input.KeyEvent;
 import javafx.util.Duration;
 
 public class PasswordTextFieldClass extends TextField {
-    private final StringBuilder realPassword = new StringBuilder();
+    private final StringBuilder realPassword = new StringBuilder(); // Lưu mật khẩu thật
+    // Khi nhập mật khẩu, sẽ hiện ký tự đó trong 1 giây
+    // Sau đó sẽ mask lại
+    // Nếu nhập tiếp thì sẽ reset lại thời gian
+    // Nếu không nhập gì thì sẽ mask lại
     private final PauseTransition maskingDelay = new PauseTransition(Duration.seconds(1));
 
     public PasswordTextFieldClass() {
@@ -16,8 +20,8 @@ public class PasswordTextFieldClass extends TextField {
 
         // Khi delay xong, mask toàn bộ
         maskingDelay.setOnFinished(e -> {
-            setText("*".repeat(realPassword.length()));
-            positionCaret(getText().length());
+            setText("*".repeat(realPassword.length())); // Mask lại
+            positionCaret(getText().length()); // Đặt con trỏ về cuối
         });
 
         // Bắt Backspace / Delete
@@ -25,6 +29,15 @@ public class PasswordTextFieldClass extends TextField {
 
         // Bắt insertion
         addEventFilter(KeyEvent.KEY_TYPED, this::handleInsert);
+    }
+
+    public PasswordTextFieldClass(String password) {
+        this();
+        setPromptText("Enter password");
+        // Nếu có mật khẩu mặc định thì hiển thị
+        realPassword.append(password);
+        setText("*".repeat(realPassword.length())); // Mask mật khẩu
+        positionCaret(getText().length()); // Đặt con trỏ về cuối
     }
 
     private void handleDelete(KeyEvent event) {

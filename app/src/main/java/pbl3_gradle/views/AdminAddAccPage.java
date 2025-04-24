@@ -16,26 +16,10 @@ import javafx.scene.control.ComboBox;
 
 public class AdminAddAccPage {
         public Pane getView() {
-                // Tạo hình chữ nhật cho menu
-                RoundedRect rect = new RoundedRect();
-                // Tạo hình avatar
-                Image image = new Image(
-                                "file:src/main/resources/image/ImageAvatar.png");
-
-                AvatarViewClass avatar = new AvatarViewClass(image, 162.3, 2);
-                avatar.setLayoutX(67.3);
-                avatar.setLayoutY(38.3);
-                // Tao Label cho avatar
-                Label avarLb = new Label("Administrator");
-                avarLb.setStyle(
-                                "-fx-text-fill: #2f74eb; -fx-font-size: 20 px; -fx-alignment: center; -fx-font-family: :'Helvetica';");
-                avarLb.setPrefSize(195.1, 31.7);
-                avarLb.setLayoutX(50.5);
-                avarLb.setLayoutY(218.7);
-                // Tao MenuBar
-                MenuBarClass menuBar = new MenuBarClass(1, "AdminAddAccPage");
-                menuBar.setLayoutX(15.5);
-                menuBar.setLayoutY(347.7);
+                // Tao menu bar
+                Pane menuBar = MenuBarStyle_Layer1(
+                                "file:src/main/resources/image/ImageAvatar.png",
+                                "Administrator", "AdminAddAccPage");
                 // Tao main label
                 Label mainLb = new Label("ADD ACCOUNT");
                 mainLb.setStyle(
@@ -89,7 +73,7 @@ public class AdminAddAccPage {
                 FancyButtonClass btnClear = new FancyButtonClass("Clear", 213.1, 59.8, 881.4, 556.5);
                 // Tao pane
                 Pane pane = new Pane();
-                pane.getChildren().addAll(rect, avatar, menuBar, avarLb, mainLb, rect1, btnClear, btnCreate);
+                pane.getChildren().addAll(menuBar, mainLb, rect1, btnClear, btnCreate);
                 pane.getChildren().addAll(vbox, vbox1);
                 pane.setStyle(
                                 "-fx-background-color: #ffffff; -fx-background-sdize: cover; ");
@@ -195,6 +179,37 @@ public class AdminAddAccPage {
                                 }
                         }
                 });
+
+        }
+
+        public static Pane MenuBarStyle_Layer1(String image, String text, String page) {
+                // Tạo hình chữ nhật cho menu
+                RoundedRect rect = new RoundedRect();
+                // Tạo hình avatar
+                Image imageA = new Image(image);
+
+                AvatarViewClass avatar = new AvatarViewClass(imageA, 162.3, 2);
+                avatar.setLayoutX(67.3);
+                avatar.setLayoutY(38.3);
+                // Tao Label cho avatar
+                Label avarLb = new Label(text);
+                avarLb.setStyle(
+                                "-fx-text-fill: #2f74eb; -fx-font-size: 20 px; -fx-alignment: center; -fx-font-family: :'Helvetica';");
+                avarLb.setPrefSize(195.1, 31.7);
+                avarLb.setLayoutX(50.5);
+                avarLb.setLayoutY(218.7);
+                // Tao MenuBar
+                MenuBarClass menuBar = new MenuBarClass(1, page);
+                menuBar.setLayoutX(15.5);
+                menuBar.setLayoutY(347.7);
+                Pane pane = new Pane();
+                pane.getChildren().addAll(rect, avatar, avarLb, menuBar);
+                pane.setStyle(
+                                "-fx-background-color: #ffffff; -fx-background-size: cover;");
+                pane.setPrefSize(296.1, 768);
+                pane.setLayoutX(0);
+                pane.setLayoutY(0);
+                return pane;
         }
 
 }

@@ -12,31 +12,17 @@ import pbl3_gradle.controllers.TestController;
 import javafx.scene.layout.GridPane;
 import javafx.geometry.Insets;
 import javafx.scene.control.TextField;
+import pbl3_gradle.util.AppContext;
+import pbl3_gradle.util.NavigationManager;
 
 public class EditAcc_ShowAccPage {
         public Pane getView() {
                 // Lay du lieu tu database
                 TestController testData = new TestController();
-                // Tạo hình chữ nhật cho menu
-                RoundedRect rect = new RoundedRect();
-                // Tạo hình avatar
-                Image image = new Image(
-                                "file:src/main/resources/image/ImageAvatar.png");
-
-                AvatarViewClass avatar = new AvatarViewClass(image, 162.3, 2);
-                avatar.setLayoutX(67.3);
-                avatar.setLayoutY(38.3);
-                // Tao Label cho avatar
-                Label avarLb = new Label("Administrator");
-                avarLb.setStyle(
-                                "-fx-text-fill: #2f74eb; -fx-font-size: 20px; -fx-alignment: center; -fx-font-family:'Helvetica';");
-                avarLb.setPrefSize(195.1, 31.7);
-                avarLb.setLayoutX(50.5);
-                avarLb.setLayoutY(218.7);
-                // Tao MenuBar
-                MenuBarClass menuBar = new MenuBarClass(1, "EditAcc_ShowAccPage");
-                menuBar.setLayoutX(15.5);
-                menuBar.setLayoutY(347.7);
+                // Tap menu Bar
+                Pane menuBar = AdminAddAccPage.MenuBarStyle_Layer1(
+                                "file:src/main/resources/image/ImageAvatar.png", "Administrator",
+                                "EditAcc_ShowAccPage");
                 // Tao main label
                 Label mainLb = new Label("EDIT ACCOUNT");
                 mainLb.setStyle(
@@ -57,12 +43,21 @@ public class EditAcc_ShowAccPage {
                 gridPane.setVgap(39);
                 gridPane.setPadding(new Insets(15, 10, 0, 10));
                 for (int i = 0; i < testData.getUserList().size(); i++) {
+                        int index = i;
                         Image image1 = new Image(
                                         testData.getUserList().get(i).getAvatar());
                         AvatarViewClass avatar1 = new AvatarViewClass(image1, 62.4, 0);
                         FancyButtonClass profileBtn = new FancyButtonClass(
                                         avatar1, testData.getUserList().get(i).getUsename(), 286.6, 82.6, "#c4dff8",
                                         "#2f74eb");
+                        profileBtn.setOnAction(e -> {
+                                // Luu thong tin user dang chon
+                                AppContext.set("userSelected",
+                                                testData.getUserList().get(index));
+                                // Chuyen sang trang EditAcc_EditingPage
+                                AppContext.set("currentPage", "EditAcc_EditingPage");
+                                NavigationManager.navigateToEditAccEditingPage();
+                        });
                         gridPane.add(profileBtn, i % 3, i / 3);
                 }
                 ScrollPane scrollPane = new ScrollPane(gridPane);
@@ -82,7 +77,7 @@ public class EditAcc_ShowAccPage {
 
                 // Tao pane
                 Pane pane = new Pane();
-                pane.getChildren().addAll(rect, avatar, avarLb, menuBar, mainLb, rect1, scrollPane, findtext,
+                pane.getChildren().addAll(menuBar, mainLb, rect1, scrollPane, findtext,
                                 findAvatar);
                 pane.setStyle(
                                 "-fx-background-color: #ffffff; -fx-background-sdize: cover; ");
