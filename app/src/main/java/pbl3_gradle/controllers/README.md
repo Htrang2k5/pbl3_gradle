@@ -1,7 +1,11 @@
-#username: 
-	- Không dấu cách, từ 5 -> 20 kí tự
-	- chỉ có các kí tự chữ cái, số, dấu gạch dưới _
+# Quy định Username & Password
 
-#password: 
-    - cho phép thêm các ký tự đặc biệt: ! @ # $ % ^ & *
-    - không dấu cách, từ 8 -> 32 kí tự
+## Username
+- 5–20 ký tự  
+- Chỉ gồm chữ cái, số, dấu gạch dưới `_`  
+- ❌ Không dấu cách, không ký tự đặc biệt khác
+
+## Password
+- 8–32 ký tự  
+- Cho phép chữ, số và ký tự đặc biệt: `! @ # $ % ^ & *`  
+- ❌ Không dấu cách
