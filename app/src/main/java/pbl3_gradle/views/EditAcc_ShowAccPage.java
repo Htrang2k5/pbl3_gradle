@@ -40,7 +40,7 @@ public class EditAcc_ShowAccPage {
                 GridPane gridPane = new GridPane();
                 gridPane.setHgap(27);
                 gridPane.setVgap(39);
-                gridPane.setPadding(new Insets(15, 10, 0, 10));
+                gridPane.setPadding(new Insets(15, 10, 20, 10));
                 for (int i = 0; i < testData.getUserList().size(); i++) {
                         int index = i;
                         Image image1 = new Image(
@@ -65,7 +65,7 @@ public class EditAcc_ShowAccPage {
                 scrollPane.setLayoutY(208.0);
                 scrollPane.setStyle(
                                 "-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent;");
-                scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+                scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS); // luon luon hien thi thanh cuon
                 // Tao textField tim kiem
                 Image findImage = new Image("file:src/main/resources/image/FindImage.png");
                 AvatarViewClass findAvatar = new AvatarViewClass(findImage, 46.8, 0);
@@ -86,7 +86,7 @@ public class EditAcc_ShowAccPage {
                 return pane;
         }
 
-        public void setStyleFindText(TextField findtext, Double width, Double height, Double x, Double y) {
+        public static void setStyleFindText(TextField findtext, Double width, Double height, Double x, Double y) {
                 findtext.setStyle(
                                 "-fx-background-color: #ffffff;"
                                                 + "-fx-text-fill: #2f74eb;"

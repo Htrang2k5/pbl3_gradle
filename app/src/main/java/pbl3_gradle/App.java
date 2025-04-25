@@ -14,7 +14,7 @@ public class App extends Application {
         DeleteAccPage view = new DeleteAccPage();
         Scene scene = new Scene(view.getView(), 1366, 768);
         stage.setScene(scene);
-        stage.setTitle("PBL3");
+        stage.setTitle("PBL3: Phần mềm hỗ trợ quản lý dự án");
         stage.setResizable(false);
         stage.show();
         NavigationManager.setStage(stage);

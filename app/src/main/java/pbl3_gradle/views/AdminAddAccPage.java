@@ -172,10 +172,10 @@ public class AdminAddAccPage {
                                         setStyle("");
                                 } else {
                                         setText(item);
-                                        setStyle(
-                                                        "-fx-text-fill: " + color + ";" +
-                                                                        "-fx-font-size: 16px;" +
-                                                                        "-fx-font-family: 'Helvetica';");
+                                        setStyle("-fx-text-fill: #92badd;" +
+                                                        "-fx-font-size: 16px;" +
+                                                        "-fx-font-family: 'Helvetica';"
+                                                        + "-fx");
                                 }
                         }
                 });

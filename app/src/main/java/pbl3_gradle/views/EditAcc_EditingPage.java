@@ -100,7 +100,6 @@ public class EditAcc_EditingPage {
                 AdminAddAccPage.PwTextFieldStyle(tf2, "#2f74eb", 637.2, 60.1);
                 AdminAddAccPage.PwTextFieldStyle(tf3, "#2f74eb", 637.2, 60.1);
                 AdminAddAccPage.comboBxStyle(cbb, "#2f74eb", 637.2, 60.1);
-                // choiceBox.setPromptText("Select role");
                 VBox vbox1 = new VBox();
                 vbox1.getChildren().addAll(tf1, tf2, tf3, cbb);
                 vbox1.setSpacing(25);
