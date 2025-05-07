@@ -24,8 +24,21 @@ public class ImageButtonClass extends Button {
         initClickEffect();
     }
 
-    private final EventHandler<MouseEvent> clickPressedHandler = e -> animateScale(0.95);
-    private final EventHandler<MouseEvent> clickReleasedHandler = e -> animateScale(1.05);
+    public ImageButtonClass(AvatarViewClass imageView, double width, double height, double x, double y) {
+        super();
+        setStyle(
+                "-fx-background-color: transparent;"
+                        + "-fx-border-color: transparent;"
+                        + "-fx-cursor: hand;");
+        setGraphic(imageView);
+        setPrefSize(width, height);
+        setLayoutX(x);
+        setLayoutY(y);
+        initClickEffect();
+    }
+
+    private final EventHandler<MouseEvent> clickPressedHandler = e -> animateScale(0.90);
+    private final EventHandler<MouseEvent> clickReleasedHandler = e -> animateScale(1.1);
 
     private void initClickEffect() {
         this.addEventHandler(MouseEvent.MOUSE_PRESSED, clickPressedHandler);

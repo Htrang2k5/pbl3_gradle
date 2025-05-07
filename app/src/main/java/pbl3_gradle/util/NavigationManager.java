@@ -1,13 +1,8 @@
 package pbl3_gradle.util;
 
 import javafx.stage.Stage;
-import pbl3_gradle.views.AdminAddAccPage;
-import pbl3_gradle.views.EditAcc_EditingPage;
-import pbl3_gradle.views.EditAcc_ShowAccPage;
-import pbl3_gradle.views.LoginPage;
+import pbl3_gradle.views.*;
 import javafx.scene.layout.Pane;
-import pbl3_gradle.views.DeleteAccPage;
-import pbl3_gradle.views.ChangePasswordPage;
 
 public class NavigationManager {
     private static Stage primaryStage;
@@ -50,4 +45,23 @@ public class NavigationManager {
         navigateTo(changePasswordPage.getView());
     }
 
+    public static void navigateToProfileMemberPage() {
+        ProfileMemberPage profileMemberPage = new ProfileMemberPage();
+        navigateTo(profileMemberPage.getView());
+    }
+
+    public static void navigateToCurrentProjectPage() {
+        CurrentProjectPage currentProjectPage = new CurrentProjectPage();
+        navigateTo(currentProjectPage.getView());
+    }
+
+    public static void navigateToCompeletedProjectPage() {
+        CompeletedProjectPage compeletedProjectPage = new CompeletedProjectPage();
+        navigateTo(compeletedProjectPage.getView());
+    }
+
+    public static void navigateToCommonNotificationsPage() {
+        CommonNotificationsPage commonNotificationsPage = new CommonNotificationsPage();
+        navigateTo(commonNotificationsPage.getView());
+    }
 }
