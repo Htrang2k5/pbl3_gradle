@@ -3,10 +3,10 @@ package pbl3_gradle.views;
 import javafx.scene.control.TextField;
 
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.layout.Pane;
 import pbl3_gradle.common.AvatarViewClass;
 import pbl3_gradle.common.FancyButtonClass;
-import pbl3_gradle.common.PasswordTextFieldClass;
 import pbl3_gradle.common.RoundedRect;
 import pbl3_gradle.util.NavigationManager;
 import javafx.scene.image.Image;
@@ -21,7 +21,7 @@ public class LoginPage {
                 username.setLayoutX(578);
                 username.setLayoutY(299.7);
                 // Create a new TextField for password
-                PasswordTextFieldClass password = new PasswordTextFieldClass();
+                PasswordField password = new PasswordField();
                 AdminAddAccPage.PwTextFieldStyle(password, "#2f74eb;", 423.1, 59.8);
                 password.setLayoutX(578);
                 password.setLayoutY(384);

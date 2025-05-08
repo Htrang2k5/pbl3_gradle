@@ -1,9 +1,9 @@
 package pbl3_gradle.views;
 
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import pbl3_gradle.common.PasswordTextFieldClass;
 import pbl3_gradle.common.RoundedRect;
 import pbl3_gradle.common.FancyButtonClass;
 
@@ -44,9 +44,9 @@ public class ChangePasswordPage {
                 vbox.setLayoutY(236.1);
                 vbox.setPrefSize(328.4, 234.9);
                 // Tao group 3 textfield
-                PasswordTextFieldClass tf1 = new PasswordTextFieldClass();
-                PasswordTextFieldClass tf2 = new PasswordTextFieldClass();
-                PasswordTextFieldClass tf3 = new PasswordTextFieldClass();
+                PasswordField tf1 = new PasswordField();
+                PasswordField tf2 = new PasswordField();
+                PasswordField tf3 = new PasswordField();
                 AdminAddAccPage.TextFieldStyle(tf1, "#2f74eb", 495.8, 54.5);
                 AdminAddAccPage.PwTextFieldStyle(tf2, "#2f74eb", 495.8, 54.5);
                 AdminAddAccPage.PwTextFieldStyle(tf3, "#2f74eb", 495.8, 54.5);
