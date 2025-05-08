@@ -12,7 +12,7 @@ public class Validator {
     private String validatePasswordRes = "";
 
     //kiểm tra tên đăng nhập có hợp lệ hay không
-    public boolean validateUsername(String username) {
+    public Boolean validateUsername(String username) {
         //kiểm tra tên đăng nhập có hợp lệ hay không
         if (username == null || username.isEmpty()) {
             validateUsernameRes = "Username cannot be empty";
@@ -38,7 +38,7 @@ public class Validator {
     }
 
     //kiểm tra mật khẩu có hợp lệ hay không
-    public boolean validatePassword(String pass1, String pass2) {
+    public Boolean validatePassword(String pass1, String pass2) {
         //kiểm tra 2 mật khẩu không được rỗng
         if (pass1 == null || pass2 == null || pass1.isEmpty() || pass2.isEmpty()) {
             validatePasswordRes = "Password cannot be empty";
@@ -69,5 +69,26 @@ public class Validator {
     //lấy kết quả của hàm validatePassword
     public String getValidatePasswordRes() {
         return validatePasswordRes;
+    }
+
+    //kiểm tra số điện thoại có hợp lệ hay không
+    public Boolean validatePhone(String phone){
+        final String PHONE_REGEX = "^([+]?\\d{1,3}[-.\\s]?)?(\\(\\d{1,4}\\)[-.\\s]?)?\\d{1,4}[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,9}$";
+
+        if (phone == null || phone.trim().isEmpty()) {
+            return false;
+        }
+        return phone.matches(PHONE_REGEX);
+    }
+
+    //kiểm tra email có hợp lệ hay không
+    public Boolean validateEmail(String email){
+        final String STRICT_EMAIL_REGEX = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
+                                        + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
+
+        if (email == null || email.trim().isEmpty()) {
+            return false;
+        }
+        return email.matches(STRICT_EMAIL_REGEX);
     }
 }
