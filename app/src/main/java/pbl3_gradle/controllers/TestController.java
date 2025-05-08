@@ -1,15 +1,23 @@
 package pbl3_gradle.controllers;
 
-import pbl3_gradle.models.TestModel;
+import pbl3_gradle.models.UserClass;
+
+import java.util.Vector;
+
 
 public class TestController {
-    private final TestModel model;
+    private Vector<UserClass> userList = new Vector<>();
 
     public TestController() {
-        this.model = new TestModel();
+        for (int i = 0; i < 20; i++) {
+            UserClass user = new UserClass();
+            userList.add(user);
+        }
+
     }
 
-    public String getMessage() {
-        return model.getGreeting();
+    public Vector<UserClass> getUserList() {
+        return userList;
     }
+
 }
