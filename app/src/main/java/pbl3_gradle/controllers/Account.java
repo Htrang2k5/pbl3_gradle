@@ -4,7 +4,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class Account {
     public static final Account Instance = new Account();
-
+    private String loginRes = "";
     private Account(){
         System.out.println("Initializing Account"); //for debugging
     }
@@ -31,7 +31,20 @@ public class Account {
             DataManager.Instance.processLogin(username, hashedPassword);
             return true;
         }
-        else return false;
+        else {
+            return false;
+        }
+
+    }
+
+    //thay đổi lỗi trả về nếu login failed
+    public void setLoginResult(String loginResult) {
+        this.loginRes = loginResult;
+    }
+
+    //xem lỗi trả về
+    public String getLoginResult() {
+        return loginRes;
     }
 
     //lưu tài khoản mới vào DB với username, password, role

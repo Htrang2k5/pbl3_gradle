@@ -91,5 +91,4 @@ public class Validator {
         }
         return email.matches(STRICT_EMAIL_REGEX);
     }
-
 }

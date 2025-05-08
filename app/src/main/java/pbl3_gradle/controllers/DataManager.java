@@ -36,7 +36,7 @@ public class DataManager {
         ResultSet rs = DBHelper.Instance.GetRecords(query, param);
 
         try {
-            return !rs.next();
+            return rs.next();
         } catch(SQLException e) {
             e.printStackTrace();
             return false;
@@ -45,19 +45,29 @@ public class DataManager {
 
     //kiểm tra xem username và password có hợp lệ không
     public boolean verifyLogin (String username, String password){
-        String query = "SELECT * FROM user WHERE BINARY username = ? AND BINARY password = ?";
+        if (!DataManager.Instance.verifyUsername(username)){
+            Account.Instance.setLoginResult("User not found");
+            return false;
+        }
+
+        String query = "SELECT username, password FROM user WHERE BINARY username = ?";
         SqlParameter[] param = {
-                new SqlParameter(1, username),
-                new SqlParameter(2, password)
+                new SqlParameter(1, username)
         };
         ResultSet rs = DBHelper.Instance.GetRecords(query, param);
 
-        try {
-            return rs.next();
+        try{
+            if (rs.next()){
+                String DBPassword = rs.getString("password");
+                if (!password.equals(DBPassword)){
+                    Account.Instance.setLoginResult("Wrong password");
+                    return false;
+                }
+            }
         } catch(SQLException e) {
-            e.printStackTrace();
-            return false;
+            throw new RuntimeException(e);
         }
+        return true;
     }
 
     //lấy thông tin đăng nhập và lưu vào CurrentUser
