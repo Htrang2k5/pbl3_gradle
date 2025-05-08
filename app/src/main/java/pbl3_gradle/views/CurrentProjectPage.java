@@ -6,6 +6,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+
 import javafx.animation.ScaleTransition;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
@@ -18,6 +19,8 @@ import javafx.geometry.Side;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Duration;
 import javafx.scene.control.ScrollPane;
+import pbl3_gradle.util.AppContext;
+import pbl3_gradle.util.CustomMessageBox;
 
 public class CurrentProjectPage {
         public Pane getView() {
@@ -57,6 +60,7 @@ public class CurrentProjectPage {
                 });
                 menuItem1.setOnAction(e -> {
                         // Navigate to CompletedProjectPage
+                        AppContext.set("currentPage", "CompeletedProjectPage");
                         NavigationManager.navigateToCompeletedProjectPage();
                 });
                 // Tao text field tim kiem
@@ -149,14 +153,27 @@ public class CurrentProjectPage {
                 ContextMenu contextMenu = new ContextMenu();
                 MenuItem menuItem1 = new MenuItem("Done");
                 MenuItem menuItem2 = new MenuItem("Delete");
+                MenuItem menuItem3 = new MenuItem("Redo");
                 menuItem1.setStyle(" -fx-font-size: 14px;"
                                 + " -fx-alignment: center; "
                                 + "-fx-font-family:'Helvetica';");
                 menuItem2.setStyle(" -fx-font-size: 14px;"
                                 + " -fx-alignment: center; "
                                 + "-fx-font-family:'Helvetica';");
-
-                contextMenu.getItems().addAll(menuItem1, menuItem2);
+                menuItem3.setStyle(" -fx-font-size: 14px;"
+                                + " -fx-alignment: center; "
+                                + "-fx-font-family:'Helvetica';");
+                if (AppContext.get("currentPage") == "CurrentProjectPage") {
+                        contextMenu.getItems().addAll(menuItem1, menuItem2);
+                        menuItem1.setOnAction(e -> {
+                                CustomMessageBox.show("Success!", "Done project!");
+                        });
+                } else {
+                        contextMenu.getItems().addAll(menuItem3, menuItem2);
+                        menuItem3.setOnAction(e -> {
+                                CustomMessageBox.show("Success!", "Redo project!");
+                        });
+                }
                 moreButton.setOnMouseClicked(e -> {
                         if (!contextMenu.isShowing()) {
                                 contextMenu.show(moreButton, Side.BOTTOM, 0, 0); // Hiện phía dưới button
@@ -165,6 +182,17 @@ public class CurrentProjectPage {
                         }
                 });
                 applyClickEffect(projectBtn);
+
+                // projectBtn.setOnAction(e -> {
+                // // Navigate to ProjectDetailPage
+                // AppContext.set("currentPage", "ProductBacklogPage");
+                // NavigationManager.navigateToProductBacklogPage();
+                // });
+
+                projectBtn.setOnMouseClicked(e -> {
+                        AppContext.set("currentPage", "ProductBacklogPage");
+                        NavigationManager.navigateToProductBacklogPage();
+                });
                 return projectBtn;
         }
 
@@ -182,4 +210,5 @@ public class CurrentProjectPage {
                 st.setToY(scale);
                 st.play();
         }
+
 }

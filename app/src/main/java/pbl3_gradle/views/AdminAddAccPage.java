@@ -4,11 +4,11 @@ import javafx.scene.layout.Pane;
 import javafx.scene.image.Image;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
+import javafx.scene.control.PasswordField;
 import javafx.scene.layout.VBox;
 import pbl3_gradle.common.AvatarViewClass;
 import pbl3_gradle.common.FancyButtonClass;
 import pbl3_gradle.common.MenuBarClass;
-import pbl3_gradle.common.PasswordTextFieldClass;
 import pbl3_gradle.common.RoundedRect;
 import javafx.scene.control.TextField;
 import javafx.scene.Cursor;
@@ -54,8 +54,8 @@ public class AdminAddAccPage {
                 vbox.setPrefSize(250, 281.5);
                 // Tao group 3 textfield
                 TextField tf1 = new TextField();
-                PasswordTextFieldClass tf2 = new PasswordTextFieldClass();
-                PasswordTextFieldClass tf3 = new PasswordTextFieldClass();
+                PasswordField tf2 = new PasswordField();
+                PasswordField tf3 = new PasswordField();
                 ComboBox<String> cbb = new ComboBox<>();
                 cbb.getItems().addAll("Scrum Master", "Developer", "Product Owner" );
 
@@ -151,7 +151,7 @@ public class AdminAddAccPage {
                                                 + "-fx-padding: 0 0 0 30;");
         }
 
-        public static void PwTextFieldStyle(PasswordTextFieldClass textField, String collor, Double width,
+        public static void PwTextFieldStyle(PasswordField textField, String collor, Double width,
                         Double height) {
                 textField.setPrefSize(width, height);
                 textField.setStyle(

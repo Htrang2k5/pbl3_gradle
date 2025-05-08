@@ -14,22 +14,27 @@ public class MenuBarClass extends VBox {
             FancyButtonClass btnLogout = new FancyButtonClass("Log out", 265.9, 50.2, "#92badd", "#ffffff");
             btnAdd.setOnAction(e -> {
                 AppContext.clear();
+                AppContext.set("currentPage", "AdminAddAccPage");
                 NavigationManager.navigateToAdminAddAccPage();
             });
             btnEdit.setOnAction(e -> {
                 AppContext.clear();
+                AppContext.set("currentPage", "EditAcc_EditingPage");
                 NavigationManager.navigateToEditAccShowAccPage();
             });
             btnDelete.setOnAction(e -> {
                 AppContext.clear();
+                AppContext.set("currentPage", "DeleteAccPage");
                 NavigationManager.navigateToDeleteAccPage();
             });
             btnChagne.setOnAction(e -> {
                 AppContext.clear();
+                AppContext.set("currentPage", "ChangePasswordPage");
                 NavigationManager.navigateToChangePasswordPage();
             });
             btnLogout.setOnAction(e -> {
                 AppContext.clear();
+                AppContext.set("currentPage", "LoginPage");
                 NavigationManager.navigateToLoginPage();
             });
             if (pageName.equals("AdminAddAccPage")) {
@@ -61,18 +66,22 @@ public class MenuBarClass extends VBox {
             FancyButtonClass btnLogout = new FancyButtonClass("Log out", 265.9, 50.2, "#92badd", "#ffffff");
             btnProfile.setOnAction(e -> {
                 AppContext.clear();
+                AppContext.set("currentPage", "ProfileMemberPage");
                 NavigationManager.navigateToProfileMemberPage();
             });
             btnProject.setOnAction(e -> {
                 AppContext.clear();
+                AppContext.set("currentPage", "CurrentProjectPage");
                 NavigationManager.navigateToCurrentProjectPage();
             });
             btnLogout.setOnAction(e -> {
                 AppContext.clear();
+                AppContext.set("currentPage", "LoginPage");
                 NavigationManager.navigateToLoginPage();
             });
             btnNotifications.setOnAction(e -> {
                 AppContext.clear();
+                AppContext.set("currentPage", "CommonNotificationsPage");
                 NavigationManager.navigateToCommonNotificationsPage();
             });
             if (pageName.equals("ProfileMemberPage")) {
@@ -91,6 +100,33 @@ public class MenuBarClass extends VBox {
             this.getChildren().addAll(btnProfile, btnProject, btnNotifications, btnLogout);
             this.setPrefSize(265.9, 257.2);
             this.setSpacing(21);
+        } else {
+            FancyButtonClass btnProductBacklog = new FancyButtonClass("Product Backlog", 265.9, 50.2, "#92badd",
+                    "#ffffff");
+            FancyButtonClass btnSprint = new FancyButtonClass("Sprint", 265.9, 50.2, "#92badd", "#ffffff");
+            FancyButtonClass btnKanbanBoard = new FancyButtonClass("Kanban Board", 265.9, 50.2, "#92badd", "#ffffff");
+            FancyButtonClass btnBurndown_Chart = new FancyButtonClass("Burndown Chart", 265.9, 50.2, "#92badd",
+                    "#ffffff");
+            FancyButtonClass btnMeetingPlan = new FancyButtonClass("Meeting Plan", 265.9, 50.2, "#92badd", "#ffffff");
+            FancyButtonClass btnMembers = new FancyButtonClass("Members", 265.9, 50.2, "#92badd", "#ffffff");
+            FancyButtonClass btnNotifications = new FancyButtonClass("Notifications", 265.9, 50.2, "#92badd",
+                    "#ffffff");
+            btnProductBacklog.setOnAction(e -> {
+                AppContext.clear();
+                AppContext.set("currentPage", "ProductBacklogPage");
+                NavigationManager.navigateToProductBacklogPage();
+            });
+
+            if (pageName.equals("ProductBacklogPage")) {
+                btnProductBacklog.setStyleButton("#ffffff", "#2f74eb");
+                btnProductBacklog.removeEffects();
+                btnProductBacklog.setOnAction(null);
+            }
+
+            this.getChildren().addAll(btnProductBacklog, btnSprint, btnKanbanBoard, btnBurndown_Chart,
+                    btnMeetingPlan, btnMembers, btnNotifications);
+            this.setPrefSize(269.5, 456.8);
+            this.setSpacing(17.8);
         }
     }
 }

@@ -64,4 +64,9 @@ public class NavigationManager {
         CommonNotificationsPage commonNotificationsPage = new CommonNotificationsPage();
         navigateTo(commonNotificationsPage.getView());
     }
+
+    public static void navigateToProductBacklogPage() {
+        ProductBacklogPage productBacklogPage = new ProductBacklogPage();
+        navigateTo(productBacklogPage.getView());
+    }
 }

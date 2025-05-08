@@ -4,6 +4,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import pbl3_gradle.common.AvatarViewClass;
 import pbl3_gradle.common.ImageButtonClass;
+import pbl3_gradle.util.AppContext;
 import pbl3_gradle.util.NavigationManager;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -36,6 +37,7 @@ public class CompeletedProjectPage {
                 ImageButtonClass backButton = new ImageButtonClass(image1, 53.4, 53.4, 308.4, 10.4);
                 backButton.setOnAction(e -> {
                         // Navigate back to the previous page
+                        AppContext.set("currentPage", "CurrentProjectPage");
                         NavigationManager.navigateToCurrentProjectPage();
                 });
                 // Tao text field tim kiem
