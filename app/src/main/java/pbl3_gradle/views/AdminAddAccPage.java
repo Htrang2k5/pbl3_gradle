@@ -13,29 +13,16 @@ import pbl3_gradle.common.RoundedRect;
 import javafx.scene.control.TextField;
 import javafx.scene.Cursor;
 import javafx.scene.control.ComboBox;
+import pbl3_gradle.controllers.Account;
+
+import javax.swing.*;
 
 public class AdminAddAccPage {
         public Pane getView() {
-                // Tạo hình chữ nhật cho menu
-                RoundedRect rect = new RoundedRect();
-                // Tạo hình avatar
-                Image image = new Image(
-                                "file:src/main/resources/image/ImageAvatar.png");
-
-                AvatarViewClass avatar = new AvatarViewClass(image, 162.3, 2);
-                avatar.setLayoutX(67.3);
-                avatar.setLayoutY(38.3);
-                // Tao Label cho avatar
-                Label avarLb = new Label("Administrator");
-                avarLb.setStyle(
-                                "-fx-text-fill: #2f74eb; -fx-font-size: 20 px; -fx-alignment: center; -fx-font-family: :'Helvetica';");
-                avarLb.setPrefSize(195.1, 31.7);
-                avarLb.setLayoutX(50.5);
-                avarLb.setLayoutY(218.7);
-                // Tao MenuBar
-                MenuBarClass menuBar = new MenuBarClass(1, "AdminAddAccPage");
-                menuBar.setLayoutX(15.5);
-                menuBar.setLayoutY(347.7);
+                // Tao menu bar
+                Pane menuBar = MenuBarStyle_Layer1(
+                                "file:src/main/resources/image/ImageAvatar.png",
+                                "Administrator", "AdminAddAccPage");
                 // Tao main label
                 Label mainLb = new Label("ADD ACCOUNT");
                 mainLb.setStyle(
@@ -70,7 +57,7 @@ public class AdminAddAccPage {
                 PasswordTextFieldClass tf2 = new PasswordTextFieldClass();
                 PasswordTextFieldClass tf3 = new PasswordTextFieldClass();
                 ComboBox<String> cbb = new ComboBox<>();
-                cbb.getItems().addAll("Scrum Master", "Developer", "Product Owner", "Project Owner");
+                cbb.getItems().addAll("Scrum Master", "Developer", "Product Owner" );
 
                 tf1.setPromptText("Enter username");
                 TextFieldStyle(tf1, "#2f74eb", 577.1, 54.5);
@@ -87,9 +74,50 @@ public class AdminAddAccPage {
                 // Tao button
                 FancyButtonClass btnCreate = new FancyButtonClass("Create", 213.1, 59.8, 614.4, 556.5);
                 FancyButtonClass btnClear = new FancyButtonClass("Clear", 213.1, 59.8, 881.4, 556.5);
+                btnCreate.setOnAction(e -> {
+                        String username = tf1.getText().trim();
+                        String pw = tf2.getText().trim();
+                        String rePw = tf3.getText().trim();
+                        String selectedRole = cbb.getValue();
+
+                        if (username.isEmpty() || pw.isEmpty() || rePw.isEmpty() || selectedRole == null) {
+                                System.out.println("Vui lòng điền đầy đủ thông tin."); // hoặc dùng Alert nếu bạn đã dùng JavaFX Dialogs
+                                return;
+                        }
+
+                        if (!pw.equals(rePw)) {
+                                System.out.println("Mật khẩu nhập lại không khớp.");
+                                return;
+                        }
+
+                        int role = switch (selectedRole) {
+                                case "Scrum Master" -> 3;
+                                case "Development Team" -> 4;
+                                case "Product Owner" -> 2;
+                                default -> 0;
+                        };
+
+                        Account.Instance.registerUser(username, pw, role);
+                        JOptionPane.showMessageDialog(null, "Tạo tài khoản thành công cho " + username, "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+
+
+                        // Xóa trường sau khi tạo tài khoản
+                        tf1.clear();
+                        tf2.clear();
+                        tf3.clear();
+                        cbb.setValue(null);
+                });
+
+                btnClear.setOnAction(e -> {
+                        tf1.clear();
+                        tf2.clear();
+                        tf3.clear();
+                        cbb.setValue(null);
+                });
+
                 // Tao pane
                 Pane pane = new Pane();
-                pane.getChildren().addAll(rect, avatar, menuBar, avarLb, mainLb, rect1, btnClear, btnCreate);
+                pane.getChildren().addAll(menuBar, mainLb, rect1, btnClear, btnCreate);
                 pane.getChildren().addAll(vbox, vbox1);
                 pane.setStyle(
                                 "-fx-background-color: #ffffff; -fx-background-sdize: cover; ");
@@ -100,7 +128,7 @@ public class AdminAddAccPage {
 
         }
 
-        public void LabelStyle(Label label, String collor, String aligment, Double width, Double height) {
+        public static void LabelStyle(Label label, String collor, String aligment, Double width, Double height) {
                 label.setPrefSize(width, height);
                 label.setStyle(
                                 "-fx-text-fill: " + collor + ";"
@@ -109,7 +137,7 @@ public class AdminAddAccPage {
                                                 + "-fx-font-family:'Helvetica';");
         }
 
-        public void TextFieldStyle(TextField textField, String collor, Double width,
+        public static void TextFieldStyle(TextField textField, String collor, Double width,
                         Double height) {
                 textField.setPrefSize(width, height);
                 textField.setStyle(
@@ -123,7 +151,7 @@ public class AdminAddAccPage {
                                                 + "-fx-padding: 0 0 0 30;");
         }
 
-        public void PwTextFieldStyle(PasswordTextFieldClass textField, String collor, Double width,
+        public static void PwTextFieldStyle(PasswordTextFieldClass textField, String collor, Double width,
                         Double height) {
                 textField.setPrefSize(width, height);
                 textField.setStyle(
@@ -137,7 +165,7 @@ public class AdminAddAccPage {
                                                 + "-fx-padding: 0 0 0 30;");
         }
 
-        public void comboBxStyle(ComboBox<String> cbb, String color, double width, double height) {
+        public static void comboBxStyle(ComboBox<String> cbb, String color, double width, double height) {
                 // Kích thước
                 cbb.setPrefSize(width, height);
                 cbb.setPromptText("Select role");
@@ -188,13 +216,44 @@ public class AdminAddAccPage {
                                         setStyle("");
                                 } else {
                                         setText(item);
-                                        setStyle(
-                                                        "-fx-text-fill: " + color + ";" +
-                                                                        "-fx-font-size: 16px;" +
-                                                                        "-fx-font-family: 'Helvetica';");
+                                        setStyle("-fx-text-fill: #92badd;" +
+                                                        "-fx-font-size: 16px;" +
+                                                        "-fx-font-family: 'Helvetica';"
+                                                        + "-fx");
                                 }
                         }
                 });
+
+        }
+
+        public static Pane MenuBarStyle_Layer1(String image, String text, String page) {
+                // Tạo hình chữ nhật cho menu
+                RoundedRect rect = new RoundedRect();
+                // Tạo hình avatar
+                Image imageA = new Image(image);
+
+                AvatarViewClass avatar = new AvatarViewClass(imageA, 162.3, 2);
+                avatar.setLayoutX(67.3);
+                avatar.setLayoutY(38.3);
+                // Tao Label cho avatar
+                Label avarLb = new Label(text);
+                avarLb.setStyle(
+                                "-fx-text-fill: #2f74eb; -fx-font-size: 20 px; -fx-alignment: center; -fx-font-family: :'Helvetica';");
+                avarLb.setPrefSize(195.1, 31.7);
+                avarLb.setLayoutX(50.5);
+                avarLb.setLayoutY(218.7);
+                // Tao MenuBar
+                MenuBarClass menuBar = new MenuBarClass(1, page);
+                menuBar.setLayoutX(15.5);
+                menuBar.setLayoutY(347.7);
+                Pane pane = new Pane();
+                pane.getChildren().addAll(rect, avatar, avarLb, menuBar);
+                pane.setStyle(
+                                "-fx-background-color: #ffffff; -fx-background-size: cover;");
+                pane.setPrefSize(296.1, 768);
+                pane.setLayoutX(0);
+                pane.setLayoutY(0);
+                return pane;
         }
 
 }

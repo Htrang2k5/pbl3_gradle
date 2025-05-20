@@ -94,6 +94,19 @@ public class FancyButtonClass extends Button {
                         + "-fx-cursor: default;");
     }
 
+    public void setStyleSelectButton(FancyButtonClass button, double borderWidth, String textColor, String bgColor) {
+        this.setStyle(
+                "-fx-background-color: " + bgColor + ";"
+                        + "-fx-text-fill: " + textColor + ";"
+                        + "-fx-font-size: 16px;"
+                        + "-fx-border-radius: 36px;"
+                        + "-fx-background-radius: 36px;"
+                        + "-fx-font-family: 'Helvetica';"
+                        + "-fx-cursor: hand;"
+                        + "-fx-border-width: " + borderWidth + "px;"
+                        + "-fx-border-color: #92badd;");
+    }
+
     private final DropShadow hoverShadow = new DropShadow(10, Color.rgb(0, 0, 0, 0.6));
 
     private final EventHandler<MouseEvent> hoverEnterHandler = e -> {
