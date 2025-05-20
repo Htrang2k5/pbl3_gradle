@@ -98,23 +98,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.App.executor": "Run",
-    "Gradle.pbl3_gradle [build].executor": "Run",
-    "Gradle.pbl3_gradle [runJavaFX].executor": "Run",
-    "Gradle.pbl3_gradle [run].executor": "Run",
-    "Gradle.pbl3_gradle.executor": "Run",
-    "Gradle.pbl3_gradle:app [:app:pbl3_gradle.App.main()].executor": "Run",
-    "Gradle.pbl3_gradle:app [build].executor": "Run",
-    "Gradle.pbl3_gradle:app [runJavaFX].executor": "Run",
-    "Gradle.pbl3_gradle:app [run].executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "kotlin-language-version-configured": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.App.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.pbl3_gradle [build].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.pbl3_gradle [runJavaFX].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.pbl3_gradle [run].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.pbl3_gradle.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.pbl3_gradle:app [:app:pbl3_gradle.App.main()].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.pbl3_gradle:app [build].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.pbl3_gradle:app [runJavaFX].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.pbl3_gradle:app [run].executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;
   }
-}]]></component>
-  <component name="RunManager" selected="Gradle.pbl3_gradle [build]">
+}</component>
+  <component name="RunManager" selected="Gradle.pbl3_gradle [runJavaFX]">
     <configuration name="pbl3_gradle [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -236,11 +236,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.pbl3_gradle [build]" />
+        <item itemvalue="Gradle.pbl3_gradle [runJavaFX]" />
         <item itemvalue="Gradle.pbl3_gradle:app [runJavaFX]" />
         <item itemvalue="Gradle.pbl3_gradle:app [run]" />
         <item itemvalue="Gradle.pbl3_gradle:app [build]" />
-        <item itemvalue="Gradle.pbl3_gradle [runJavaFX]" />
+        <item itemvalue="Gradle.pbl3_gradle [build]" />
       </list>
     </recent_temporary>
   </component>
