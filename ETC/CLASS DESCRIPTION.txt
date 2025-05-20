@@ -1,0 +1,22 @@
+Account
+	- Boolean login(String username, String password) //đăng nhập, thành công trả về true, không trả về false
+	- String getLoginResult() //Xem result của hàm login, nếu sai có thể dùng để xem lỗi gì
+	- void registerUser(String username, String password, int role) //đăng kí thành viên mới (thêm user mới vào database), lưu ý dùng Validator kiểm tra thông tin trên text box trước khi register nếu không có thể lỗi
+
+DataManager
+	- List<User> getAllUser() //lấy danh sách toàn bộ User có trong hệ thống chỉ có các thông tin idUser, username
+	- User getUserInfoByID(int userID) //lấy thông tin của User cần tìm theo ID
+	- void updateUserInfoByID(User user) //update lại thông tin của User cho vào hàm
+	- void deleteUserByID(int userID) //xóa User dựa theo userID
+
+Validator
+	- Boolean validateUsername(String username) //kiểm tra format username (dùng khi đăng kí User mới)
+	- Boolean validatePassword(String pass1, String pass2) //kiểm tra format password (dùng khi đăng kí User mới)
+	- String getValidateUsernameRes() //dùng để xem kết quả validateUsername() nếu trả về false
+	- String getValidatePasswordRes() //dùng để xem kết quả validatePassword() nếu trả về true
+	- Boolean validatePhone(String phone) //kiểm tra format số điện thoại
+	- Boolean validateEmail(String email) //kiểm tra format email
+
+CurrentUser: class dùng cho user hiện tại
+	- Boolean isAdmin() //trả về True nếu user hiện tại có quyền Admin
+	- và 1 mớ get set nếu muốn lấy gì :))
