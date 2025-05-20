@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 08, 2025 at 07:03 AM
+-- Generation Time: Apr 27, 2025 at 04:55 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -79,12 +79,12 @@ CREATE TABLE `comment` (
 
 CREATE TABLE `item` (
   `idItem` int(11) NOT NULL,
-  `idBacklog` int(11) DEFAULT NULL,
-  `title` varchar(255) DEFAULT NULL,
+  `idBacklog` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
   `description` text DEFAULT NULL,
-  `dateCreated` datetime DEFAULT NULL,
-  `dateModified` datetime DEFAULT NULL,
-  `status` varchar(255) DEFAULT NULL
+  `dateCreated` datetime NOT NULL,
+  `dateModified` datetime NOT NULL,
+  `status` tinyint(1) NOT NULL COMMENT '0: Not done\r\n1: Done'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='idBacklog can reference either ProductBacklog.idPBacklog or SprintBacklog.idSBacklog';
 
 -- --------------------------------------------------------
@@ -107,7 +107,7 @@ CREATE TABLE `label` (
 CREATE TABLE `meeting` (
   `idMeeting` int(11) NOT NULL,
   `title` varchar(255) NOT NULL,
-  `description` varchar(255) NOT NULL,
+  `description` text DEFAULT NULL,
   `date` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -167,7 +167,7 @@ CREATE TABLE `project` (
   `projectName` varchar(255) DEFAULT NULL,
   `dateCreated` datetime DEFAULT NULL,
   `dateModified` datetime DEFAULT NULL,
-  `status` varchar(255) DEFAULT NULL
+  `status` tinyint(1) DEFAULT NULL COMMENT '0: Not done\r\n1: Done'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -203,10 +203,14 @@ CREATE TABLE `sprint_backlog` (
 --
 
 CREATE TABLE `task` (
-  `idTask` int(11) DEFAULT NULL,
+  `idTask` int(11) NOT NULL,
   `idProject` int(11) DEFAULT NULL,
+  `title` varchar(255) NOT NULL,
+  `description` text DEFAULT NULL,
+  `dateCreated` datetime NOT NULL,
+  `dateModified` datetime NOT NULL,
   `dateDue` datetime DEFAULT NULL,
-  `status` varchar(255) DEFAULT NULL
+  `status` tinyint(1) DEFAULT NULL COMMENT '0: false\r\n1: true'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='idItem is both PK and FK to Item';
 
 -- --------------------------------------------------------
@@ -245,8 +249,9 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`idUser`, `username`, `password`, `email`, `fullName`, `role`, `englishName`, `address`, `phone`, `avatar`) VALUES
 (1, 'System', '', '', '', 0, '', '', '', ''),
-(2, 'admin', '8C6976E5B5410415BDE908BD4DEE15DFB167A9C873FC4BB8A81F6F2AB448A918', NULL, NULL, 1, NULL, NULL, NULL, 'src/main/resources/defaultAvatar.jpg'),
-(3, 'testingagain', 'EF797C8118F02DFB649607DD5D3F8C7623048C9C063D532CC95C5ED7A898A64F', NULL, NULL, 2, NULL, NULL, NULL, 'src/main/resources/defaultAvatar.jpg');
+(2, 'admin', 'admin', '', '', 1, '', '', '', ''),
+(3, 'testuser', '123456789', 'testemail@gmail.com', 'Test User', 2, 'testuser', '1 testuser St.', '0000111222', ''),
+(9, 'testingagain', 'EF797C8118F02DFB649607DD5D3F8C7623048C9C063D532CC95C5ED7A898A64F', NULL, NULL, 2, NULL, NULL, NULL, 'src/main/resources/defaultAvatar.jpg');
 
 -- --------------------------------------------------------
 
@@ -376,6 +381,7 @@ ALTER TABLE `sprint_backlog`
 -- Indexes for table `task`
 --
 ALTER TABLE `task`
+  ADD PRIMARY KEY (`idTask`),
   ADD KEY `task_ibfk_1` (`idProject`),
   ADD KEY `task_ibfk_2` (`idTask`);
 
@@ -542,8 +548,7 @@ ALTER TABLE `sprint_backlog`
 -- Constraints for table `task`
 --
 ALTER TABLE `task`
-  ADD CONSTRAINT `task_ibfk_1` FOREIGN KEY (`idProject`) REFERENCES `project` (`idProject`),
-  ADD CONSTRAINT `task_ibfk_2` FOREIGN KEY (`idTask`) REFERENCES `item` (`idItem`);
+  ADD CONSTRAINT `task_ibfk_1` FOREIGN KEY (`idProject`) REFERENCES `project` (`idProject`);
 
 --
 -- Constraints for table `task_label`
