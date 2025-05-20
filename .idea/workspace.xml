@@ -4,35 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9f9a53cc-b0fb-4c6d-bf00-9210d3307d97" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/out/production/resources/image/Back_Icon.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/out/production/resources/image/Bell_Icon.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/out/production/resources/image/ChangeAvatar.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/out/production/resources/image/FindImage.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/out/production/resources/image/ImageAvatar.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/out/production/resources/image/MoreIcon.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/out/production/resources/image/MoreIcon2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/models/CurrentUser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/App.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/controllers/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/controllers/Account.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/controllers/DataManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/controllers/DataManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/controllers/TestController.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/controllers/TestController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/controllers/Validator.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/controllers/Validator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/controllers/bruh.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/models/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/models/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/views/AdminAddAccPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/views/AdminAddAccPage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/views/ChangePasswordPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/views/ChangePasswordPage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/views/DeleteAccPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/views/DeleteAccPage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/views/EditAcc_EditingPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/views/EditAcc_EditingPage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/views/EditAcc_ShowAccPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/views/EditAcc_ShowAccPage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/views/LoginPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/views/LoginPage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/test/java/pbl3_gradle/AppTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/test/java/pbl3_gradle/AppTest.java" afterDir="false" />
-    </list>
+    <list default="true" id="9f9a53cc-b0fb-4c6d-bf00-9210d3307d97" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -69,6 +41,12 @@
                 <item name="pbl3_gradle" type="f1a62948:ProjectNode" />
                 <item name="Tasks" type="e4a08cd1:TasksNode" />
                 <item name="application" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="pbl3_gradle" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="build" type="c8890929:TasksNode$1" />
               </path>
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
@@ -120,24 +98,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.App.executor": "Run",
-    "Gradle.pbl3_gradle [build].executor": "Run",
-    "Gradle.pbl3_gradle [runJavaFX].executor": "Run",
-    "Gradle.pbl3_gradle [run].executor": "Run",
-    "Gradle.pbl3_gradle.executor": "Run",
-    "Gradle.pbl3_gradle:app [:app:pbl3_gradle.App.main()].executor": "Run",
-    "Gradle.pbl3_gradle:app [build].executor": "Run",
-    "Gradle.pbl3_gradle:app [runJavaFX].executor": "Run",
-    "Gradle.pbl3_gradle:app [run].executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "#11 on Rebasing phat",
-    "kotlin-language-version-configured": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.App.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.pbl3_gradle [build].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.pbl3_gradle [runJavaFX].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.pbl3_gradle [run].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.pbl3_gradle.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.pbl3_gradle:app [:app:pbl3_gradle.App.main()].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.pbl3_gradle:app [build].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.pbl3_gradle:app [runJavaFX].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.pbl3_gradle:app [run].executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;
   }
-}]]></component>
-  <component name="RunManager" selected="Gradle.pbl3_gradle [build]">
+}</component>
+  <component name="RunManager" selected="Gradle.pbl3_gradle [runJavaFX]">
     <configuration name="pbl3_gradle [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -259,11 +236,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.pbl3_gradle [build]" />
+        <item itemvalue="Gradle.pbl3_gradle [runJavaFX]" />
         <item itemvalue="Gradle.pbl3_gradle:app [runJavaFX]" />
         <item itemvalue="Gradle.pbl3_gradle:app [run]" />
         <item itemvalue="Gradle.pbl3_gradle:app [build]" />
-        <item itemvalue="Gradle.pbl3_gradle [runJavaFX]" />
+        <item itemvalue="Gradle.pbl3_gradle [build]" />
       </list>
     </recent_temporary>
   </component>
