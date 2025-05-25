@@ -111,16 +111,16 @@ public class FancyButtonClass extends Button {
 
     private final EventHandler<MouseEvent> hoverEnterHandler = e -> {
         this.setEffect(hoverShadow);
-        animateScale(1.05);
+        animateScale(1.01);
     };
 
     private final EventHandler<MouseEvent> hoverExitHandler = e -> {
         this.setEffect(null);
-        animateScale(0.95);
+        animateScale(0.99);
     };
 
-    private final EventHandler<MouseEvent> clickPressedHandler = e -> animateScale(0.95);
-    private final EventHandler<MouseEvent> clickReleasedHandler = e -> animateScale(1.05);
+    private final EventHandler<MouseEvent> clickPressedHandler = e -> animateScale(0.99);
+    private final EventHandler<MouseEvent> clickReleasedHandler = e -> animateScale(1.01);
 
     private void initHoverEffect() {
         this.addEventHandler(MouseEvent.MOUSE_ENTERED, hoverEnterHandler);

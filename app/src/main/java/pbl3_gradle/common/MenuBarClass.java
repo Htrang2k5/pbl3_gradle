@@ -13,27 +13,22 @@ public class MenuBarClass extends VBox {
             FancyButtonClass btnChagne = new FancyButtonClass("Change Password", 265.9, 50.2, "#92badd", "#ffffff");
             FancyButtonClass btnLogout = new FancyButtonClass("Log out", 265.9, 50.2, "#92badd", "#ffffff");
             btnAdd.setOnAction(e -> {
-                AppContext.clear();
                 AppContext.set("currentPage", "AdminAddAccPage");
                 NavigationManager.navigateToAdminAddAccPage();
             });
             btnEdit.setOnAction(e -> {
-                AppContext.clear();
                 AppContext.set("currentPage", "EditAcc_EditingPage");
                 NavigationManager.navigateToEditAccShowAccPage();
             });
             btnDelete.setOnAction(e -> {
-                AppContext.clear();
                 AppContext.set("currentPage", "DeleteAccPage");
                 NavigationManager.navigateToDeleteAccPage();
             });
             btnChagne.setOnAction(e -> {
-                AppContext.clear();
                 AppContext.set("currentPage", "ChangePasswordPage");
                 NavigationManager.navigateToChangePasswordPage();
             });
             btnLogout.setOnAction(e -> {
-                AppContext.clear();
                 AppContext.set("currentPage", "LoginPage");
                 NavigationManager.navigateToLoginPage();
             });
@@ -65,22 +60,18 @@ public class MenuBarClass extends VBox {
                     "#ffffff");
             FancyButtonClass btnLogout = new FancyButtonClass("Log out", 265.9, 50.2, "#92badd", "#ffffff");
             btnProfile.setOnAction(e -> {
-                AppContext.clear();
                 AppContext.set("currentPage", "ProfileMemberPage");
                 NavigationManager.navigateToProfileMemberPage();
             });
             btnProject.setOnAction(e -> {
-                AppContext.clear();
                 AppContext.set("currentPage", "CurrentProjectPage");
                 NavigationManager.navigateToCurrentProjectPage();
             });
             btnLogout.setOnAction(e -> {
-                AppContext.clear();
                 AppContext.set("currentPage", "LoginPage");
                 NavigationManager.navigateToLoginPage();
             });
             btnNotifications.setOnAction(e -> {
-                AppContext.clear();
                 AppContext.set("currentPage", "CommonNotificationsPage");
                 NavigationManager.navigateToCommonNotificationsPage();
             });
@@ -112,12 +103,11 @@ public class MenuBarClass extends VBox {
             FancyButtonClass btnNotifications = new FancyButtonClass("Notifications", 265.9, 50.2, "#92badd",
                     "#ffffff");
             btnProductBacklog.setOnAction(e -> {
-                AppContext.clear();
                 AppContext.set("currentPage", "ProductBacklogPage");
                 NavigationManager.navigateToProductBacklogPage();
             });
 
-            if (pageName.equals("ProductBacklogPage")) {
+            if (pageName.equals("ProductBacklogPage") || pageName.equals("DetailBacklogPage")) {
                 btnProductBacklog.setStyleButton("#ffffff", "#2f74eb");
                 btnProductBacklog.removeEffects();
                 btnProductBacklog.setOnAction(null);

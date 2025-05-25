@@ -69,4 +69,9 @@ public class NavigationManager {
         ProductBacklogPage productBacklogPage = new ProductBacklogPage();
         navigateTo(productBacklogPage.getView());
     }
+
+    public static void navigateToDetailBacklogPage() {
+        DetailBacklogPage detailBacklogPage = new DetailBacklogPage();
+        navigateTo(detailBacklogPage.getView());
+    }
 }
