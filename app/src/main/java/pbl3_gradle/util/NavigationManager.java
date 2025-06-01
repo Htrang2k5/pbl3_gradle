@@ -74,4 +74,19 @@ public class NavigationManager {
         DetailBacklogPage detailBacklogPage = new DetailBacklogPage();
         navigateTo(detailBacklogPage.getView());
     }
+
+    public static void navigateToCurrentSprintPage() {
+        CurrentSprintPage currentSprintPage = new CurrentSprintPage();
+        navigateTo(currentSprintPage.getView());
+    }
+
+    public static void navigateToAddNewSprintPage() {
+        AddNewSprintPage addNewSprintPage = new AddNewSprintPage();
+        navigateTo(addNewSprintPage.getView());
+    }
+
+    public static void navigateToSprintListPage() {
+        SprintListPage sprintListPage = new SprintListPage();
+        navigateTo(sprintListPage.getView());
+    }
 }
