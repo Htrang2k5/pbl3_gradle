@@ -106,11 +106,30 @@ public class MenuBarClass extends VBox {
                 AppContext.set("currentPage", "ProductBacklogPage");
                 NavigationManager.navigateToProductBacklogPage();
             });
+            btnSprint.setOnAction(e -> {
+                AppContext.set("currentPage", "CurrentSprintPage");
+                NavigationManager.navigateToCurrentSprintPage();
+            });
 
-            if (pageName.equals("ProductBacklogPage") || pageName.equals("DetailBacklogPage")) {
+            if (pageName.equals("ProductBacklogPage")) {
                 btnProductBacklog.setStyleButton("#ffffff", "#2f74eb");
                 btnProductBacklog.removeEffects();
                 btnProductBacklog.setOnAction(null);
+            } else if (pageName.equals("DetailBacklogPage")) {
+                if (AppContext.get("currentPage").equals("ProductBacklogPage")) {
+                    btnProductBacklog.setStyleButton("#ffffff", "#2f74eb");
+                    btnProductBacklog.removeEffects();
+                    btnProductBacklog.setOnAction(null);
+                } else if (AppContext.get("currentPage").equals("CurrentSprintPage")) {
+                    btnSprint.setStyleButton("#ffffff", "#2f74eb");
+                    btnSprint.removeEffects();
+                    btnSprint.setOnAction(null);
+                }
+            } else if (pageName.equals("CurrentSprintPage") || pageName.equals("AddNewSprintPage")
+                    || pageName.equals("SprintListPage")) {
+                btnSprint.setStyleButton("#ffffff", "#2f74eb");
+                btnSprint.removeEffects();
+                btnSprint.setOnAction(null);
             }
 
             this.getChildren().addAll(btnProductBacklog, btnSprint, btnKanbanBoard, btnBurndown_Chart,

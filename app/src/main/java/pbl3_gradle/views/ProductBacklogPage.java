@@ -157,7 +157,7 @@ public class ProductBacklogPage {
                 // Tao more button
                 Image image = new Image(
                                 "file:src/main/resources/image/MoreIcon2.png");
-                ImageButtonClass moreButton = new ImageButtonClass(image, 36.2, 32.5, 742.2, 11);
+                ImageButtonClass moreButton = new ImageButtonClass(image, 36.2, 32.5, 742.2, 10);
                 ContextMenu contextMenu = new ContextMenu();
                 MenuItem menuItem1 = new MenuItem("Delete");
                 menuItem1.setStyle(" -fx-font-size: 14px;"
@@ -177,10 +177,10 @@ public class ProductBacklogPage {
                 });
                 Pane pane1 = new Pane();
                 pane1.setPrefSize(795.2, 60);
-                if (status.equals("Not Set")) {
-                        pane1.getChildren().addAll(lbText);
-                } else
-                        pane1.getChildren().addAll(lbText, moreButton);
+                pane1.getChildren().addAll(lbText);
+                if (!status.equals("Not Set")) {
+                        pane1.getChildren().addAll(moreButton);
+                }
                 Button button = new Button();
                 button.setGraphic(pane1);
                 button.setStyle(
@@ -188,22 +188,30 @@ public class ProductBacklogPage {
                                                 + "-fx-background-radius: 36;"
                                                 + "-fx-border-radius: 36;"
                                                 + "-fx-cursor: hand;");
-                button.setLayoutX(87.3);
-                button.setLayoutY(0);
                 if (!status.equals("Not Set")) {
                         CurrentProjectPage.applyClickEffect(button);
                         button.setOnMouseClicked(e -> {
-                                AppContext.set("currentPage", "DetailBacklogPage");
                                 NavigationManager.navigateToDetailBacklogPage();
                         });
                 }
-                // Taoo pane
-                Pane pane = new Pane();
-                pane.getChildren().addAll(stackPane, button);
-                pane.setPrefSize(882.5, 69.3);
-                pane.setStyle("-fx-background-color: transparent; -fx-background-size: cover;");
+                // Tao checkbox
+                CheckBox checkBox = new CheckBox(null);
+                checkBox.setPrefSize(50, 70);
+                checkBox.setStyle("-fx-mark-color: #2f74eb;" + // Màu của dấu check ✓
+                                "-fx-box-border: #2f74eb;" + // Màu viền hộp
+                                "-fx-background-color: #ffffff;");
+                checkBox.setScaleX(1.1); // Phóng to theo chiều ngang
+                checkBox.setScaleY(1.1); // Phóng to theo chiều dọc
 
-                return pane;
+                // Taoo pane
+                HBox hBox = new HBox();
+                hBox.setSpacing(20); // Khoang cach giua cac phan tu
+                hBox.getChildren().addAll(stackPane, button);
+                if (status.equals("Doing")) {
+                        checkBox.setSelected(false);
+                        hBox.getChildren().add(checkBox);
+                }
+                return hBox;
         }
 
 }
