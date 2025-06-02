@@ -4,7 +4,6 @@ import pbl3_gradle.models.*;
 
 import java.util.*;
 import java.sql.*;
-import java.util.Date;
 
 public class DataManager {
     public static final DataManager Instance = new DataManager();
@@ -12,24 +11,7 @@ public class DataManager {
     private DataManager() {
         // Private constructor to prevent instantiation
     }
-
-    public String processData(ResultSet rs) { //testing
-//        List<String> data = new ArrayList<>();
-        String res = "";
-        try{
-            while (rs.next()) {
-                String name = rs.getString("username");
-                res = res + name + " ";
-            }
-        }
-        catch(Exception e){
-
-        }
-        return res;
-    }
-
     //Phần User
-
     //kiểm tra xem username đã tồn tại trong DB chưa
     public boolean verifyUsername(String username) {
         String query = "SELECT * FROM user WHERE BINARY username = ?";
@@ -201,16 +183,18 @@ public class DataManager {
     //Phần Project
     //Thêm mới một project
     public void addNewProject(Project project){
-        String query = "INSERT INTO project (idProject, projectName, description, dateCreated, dateModified, status) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO project (projectName, description, dateCreated, dateModified, status) VALUES (?, ?, ?, ?, ?)";
         SqlParameter[] param = {
-                new SqlParameter(1, project.getIdProject()),
-                new SqlParameter(2, project.getProjectName()),
-                new SqlParameter(3, project.getDescription()),
-                new SqlParameter(4, project.getDateCreated()),
-                new SqlParameter(5, project.getDateModified()),
-                new SqlParameter(6, project.isStatus())
+                new SqlParameter(1, project.getProjectName()),
+                new SqlParameter(2, project.getDescription()),
+                new SqlParameter(3, project.getDateCreated()),
+                new SqlParameter(4, project.getDateModified()),
+                new SqlParameter(5, project.isStatus())
         };
         DBHelper.Instance.ExecuteDB(query, param);
+
+        //sau khi tạo project, thêm cho project đó 1 kanban board
+        addNewBoard(project);
     }
 
     //Cập nhật trạng thái project: Undone -> Done
@@ -359,4 +343,33 @@ public class DataManager {
 //        DBHelper.Instance.ExecuteDB(query, param);
 //    }
 
+    //Phần Board
+    //Hàm thêm một bảng mới cho project sau khi project đó được tạo
+    public void addNewBoard(Project project){
+        String query = "INSERT INTO board (idProject, dateCreated, dateModified) VALUES (?, ?, ?)";
+        SqlParameter[] param = {
+                new SqlParameter(1, project.getIdProject()),
+                new SqlParameter(2, project.getDateCreated()),
+                new SqlParameter(3, project.getDateModified())
+        };
+        DBHelper.Instance.ExecuteDB(query, param);
+    }
+
+    //Lấy id của board theo idProject
+    public int getBoardIdByProject(int idProject) {
+        String query = "SELECT * FROM board WHERE idProject = ?";
+        SqlParameter[] param = {
+                new SqlParameter(1, idProject)
+        };
+        ResultSet rs = DBHelper.Instance.GetRecords(query, param);
+        int boardId = -1; // Trả về -1 nếu không tìm thấy
+        try {
+            if (rs.next()) {
+                boardId = rs.getInt("idBoard");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return boardId;
+    }
 }
