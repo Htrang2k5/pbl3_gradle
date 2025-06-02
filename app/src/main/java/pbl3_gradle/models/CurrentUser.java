@@ -95,11 +95,11 @@ public class CurrentUser{
         currentUser.avatar = avatar;
     }
 
-    public List<Integer> getProjectIDList() {
+    public List<String> getProjectIDList() {
         return currentUser.projectIDList;
     }
 
-    public void setProjectIDList(List<Integer> projectIDList) {
+    public void setProjectIDList(List<String> projectIDList) {
         currentUser.projectIDList = projectIDList;
     }
 

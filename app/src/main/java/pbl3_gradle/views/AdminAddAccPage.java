@@ -1,18 +1,14 @@
 package pbl3_gradle.views;
 
+import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.image.Image;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.PasswordField;
 import javafx.scene.layout.VBox;
 import pbl3_gradle.common.AvatarViewClass;
 import pbl3_gradle.common.FancyButtonClass;
 import pbl3_gradle.common.MenuBarClass;
 import pbl3_gradle.common.RoundedRect;
-import javafx.scene.control.TextField;
 import javafx.scene.Cursor;
-import javafx.scene.control.ComboBox;
 import pbl3_gradle.controllers.Account;
 
 import javax.swing.*;

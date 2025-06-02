@@ -1,6 +1,5 @@
 package pbl3_gradle.models;
 
-import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -12,11 +11,10 @@ public class User {
     protected String fullName;
     protected String englishName;
     protected int role;
-    protected Date birthday;
     protected String phone;
     protected String address;
     protected String avatar;
-    protected List<Integer> projectIDList;
+    protected List<String> projectIDList;
 
 //    public User(int userID, String userName, String userPassword, String email, String fullName, String englishName, int role, String phoneNumber, String address, String avatar) {
 //        super();
@@ -41,7 +39,6 @@ public class User {
         this.fullName = "";
         this.englishName = "";
         this.role = 0;
-        this.birthday = new Date();
         this.phone = "";
         this.address = "";
         this.avatar = "";
@@ -128,19 +125,11 @@ public class User {
         this.avatar = avatar;
     }
 
-    public List<Integer> getProjectIDList() {
+    public List<String> getProjectIDList() {
         return projectIDList;
     }
 
-    public void setProjectIDList(List<Integer> projectIDList) {
+    public void setProjectIDList(List<String> projectIDList) {
         this.projectIDList = projectIDList;
-    }
-
-    public Date getBirthday() {
-        return birthday;
-    }
-
-    public void setBirthday(Date birthday) {
-        this.birthday = birthday;
     }
 }

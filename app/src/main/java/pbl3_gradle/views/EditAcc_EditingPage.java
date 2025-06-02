@@ -1,19 +1,30 @@
 package pbl3_gradle.views;
 
 import javafx.geometry.Pos;
-import javafx.scene.control.*;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.layout.*;
-import pbl3_gradle.common.*;
-import pbl3_gradle.util.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import pbl3_gradle.common.AvatarViewClass;
+import pbl3_gradle.common.FancyButtonClass;
+import pbl3_gradle.common.RoundedRect;
+import pbl3_gradle.common.ImageButtonClass;
+import pbl3_gradle.controllers.DataManager;
+import pbl3_gradle.models.User;
+import pbl3_gradle.util.AppContext;
 import javafx.geometry.Insets;
 import pbl3_gradle.models.UserClass;
+import pbl3_gradle.util.NavigationManager;
 
 public class EditAcc_EditingPage {
 
         public Pane getView() {
                 // Lay du lieu
-                UserClass user = (UserClass) AppContext.get("userSelected");
+                User user = (User) AppContext.get("userSelected");
                 // Tap menu Bar
                 Pane menuBar = AdminAddAccPage.MenuBarStyle_Layer1(
                                 "file:src/main/resources/image/ImageAvatar.png", "Administrator",
@@ -51,9 +62,9 @@ public class EditAcc_EditingPage {
                 ava.setPrefSize(312, 82.6);
                 ava.setLayoutX(673.2);
                 ava.setLayoutY(76.8);
-                Image image = new Image(user.getAvatar());
+                Image image = new Image("file:src/main/resources/image/ImageAvatar.png");
                 AvatarViewClass avatar1 = new AvatarViewClass(image, 62.4, 2);
-                Label username = new Label(user.getUsename());
+                Label username = new Label(user.getUserName());
                 username.setStyle(
                                 "-fx-text-fill: #2f74eb;"
                                                 + " -fx-font-size: 23px;"
@@ -81,14 +92,14 @@ public class EditAcc_EditingPage {
                 vbox.setLayoutY(214.3);
                 vbox.setPrefSize(276.1, 310.8);
                 // Tao group 3 textfield
-                TextField tf1 = new TextField(user.getUsename());
+                TextField tf1 = new TextField(user.getUserName());
                 PasswordField tf2 = new PasswordField();
-                tf2.setText(user.getPassword());
+                tf2.setPromptText("Enter new password");
                 PasswordField tf3 = new PasswordField();
-                tf3.setText(user.getPassword());
+                tf3.setPromptText("Re-enter new password");
                 ComboBox<String> cbb = new ComboBox<>();
                 cbb.getItems().addAll("Scrum Master", "Developer", "Product Owner", "Project Owner");
-                cbb.setValue(user.getRole());
+                cbb.setValue(String.valueOf(user.getRole()));
                 AdminAddAccPage.TextFieldStyle(tf1, "#2f74eb", 637.2, 60.1);
                 AdminAddAccPage.PwTextFieldStyle(tf2, "#2f74eb", 637.2, 60.1);
                 AdminAddAccPage.PwTextFieldStyle(tf3, "#2f74eb", 637.2, 60.1);
@@ -102,8 +113,28 @@ public class EditAcc_EditingPage {
                 // Tao button
                 FancyButtonClass btnSave = new FancyButtonClass("Save", 213.1, 59.8, 566.6, 586.4);
                 FancyButtonClass btnClear = new FancyButtonClass("Clear", 213.1, 59.8, 878.6, 586.4);
-                // Tao Pane
+                btnSave.setOnAction(e -> {
+                        String newUsername = tf1.getText();
+                        String newPassword = tf2.getText();
+                        String retypePassword = tf3.getText();
+                        int newRole = cbb.getSelectionModel().getSelectedIndex(); // hoặc getValue()
 
+                        if (!newPassword.equals(retypePassword)) {
+                                // báo lỗi
+                                System.out.println("Passwords do not match");
+                                return;
+                        }
+                        ;
+                        user.setUserName(newUsername);
+                        user.setUserPassword(newPassword);
+                        user.setRole(newRole);
+                        DataManager.Instance.updateUserInfoByID(user);
+                        AppContext.remove("userSelected");
+                        NavigationManager.navigateToEditAccShowAccPage();
+                });
+
+
+                // Tao Pane
                 Pane pane = new Pane();
                 pane.getChildren().addAll(menuBar, mainLb, backButton, rect1, ava, vbox, vbox1,
                                 btnClear,

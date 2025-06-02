@@ -5,12 +5,33 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9f9a53cc-b0fb-4c6d-bf00-9210d3307d97" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/ETC/CLASS DESCRIPTION.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/controllers/ProjectController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/models/CurrentProject.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/out/production/resources/image/Back_Icon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/out/production/resources/image/Bell_Icon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/out/production/resources/image/ChangeAvatar.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/out/production/resources/image/FindImage.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/out/production/resources/image/ImageAvatar.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/out/production/resources/image/MoreIcon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/out/production/resources/image/MoreIcon2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/models/CurrentUser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/App.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/controllers/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/controllers/Account.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/controllers/DataManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/controllers/DataManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/models/Project.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/models/Project.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/controllers/TestController.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/controllers/TestController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/controllers/Validator.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/controllers/Validator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/controllers/bruh.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/models/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/models/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/views/AdminAddAccPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/views/AdminAddAccPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/views/ChangePasswordPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/views/ChangePasswordPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/views/DeleteAccPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/views/DeleteAccPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/views/EditAcc_EditingPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/views/EditAcc_EditingPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/views/EditAcc_ShowAccPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/views/EditAcc_ShowAccPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/views/LoginPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/views/LoginPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/test/java/pbl3_gradle/AppTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/test/java/pbl3_gradle/AppTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,12 +73,6 @@
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="pbl3_gradle" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-                <item name="build" type="c8890929:TasksNode$1" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="pbl3_gradle" type="f1a62948:ProjectNode" />
                 <item name="app" type="2d1252cf:ModuleNode" />
               </path>
               <path>
@@ -76,7 +91,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="phat" />
+        <entry key="$PROJECT_DIR$" value="main" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -107,6 +122,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Application.App.executor": "Run",
     "Gradle.pbl3_gradle [build].executor": "Run",
     "Gradle.pbl3_gradle [runJavaFX].executor": "Run",
     "Gradle.pbl3_gradle [run].executor": "Run",
@@ -117,11 +133,33 @@
     "Gradle.pbl3_gradle:app [run].executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "Merging main",
+    "git-widget-placeholder": "#11 on Rebasing phat",
     "kotlin-language-version-configured": "true"
   }
 }]]></component>
-  <component name="RunManager" selected="Gradle.pbl3_gradle [runJavaFX]">
+  <component name="RunManager" selected="Gradle.pbl3_gradle [build]">
+    <configuration name="pbl3_gradle [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="build" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
     <configuration name="pbl3_gradle [runJavaFX]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -134,28 +172,6 @@
         <option name="taskNames">
           <list>
             <option value="runJavaFX" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>false</RunAsTest>
-      <method v="2" />
-    </configuration>
-    <configuration name="pbl3_gradle [run]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="run" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -243,11 +259,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.pbl3_gradle [runJavaFX]" />
-        <item itemvalue="Gradle.pbl3_gradle [run]" />
+        <item itemvalue="Gradle.pbl3_gradle [build]" />
         <item itemvalue="Gradle.pbl3_gradle:app [runJavaFX]" />
         <item itemvalue="Gradle.pbl3_gradle:app [run]" />
         <item itemvalue="Gradle.pbl3_gradle:app [build]" />
+        <item itemvalue="Gradle.pbl3_gradle [runJavaFX]" />
       </list>
     </recent_temporary>
   </component>

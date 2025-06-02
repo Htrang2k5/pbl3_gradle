@@ -65,9 +65,9 @@ public class ChangePasswordPage {
                 // Tao button save
                 FancyButtonClass saveBtn = new FancyButtonClass("SAVE", 213.1, 59.8, 726, 553.1);
                 saveBtn.setOnAction(e -> {
-                        String currentPw = tf1.getPassword();
-                        String newPw = tf2.getPassword();
-                        String confirmPw = tf3.getPassword();
+                        String currentPw = tf1.getText();
+                        String newPw = tf2.getText();
+                        String confirmPw = tf3.getText();
 
                         // Lấy username hiện tại
                         String currentUsername = CurrentUser.Instance.getUserName();
