@@ -118,6 +118,7 @@ public class DataManager {
                 user.setEmail(rs.getString("email"));
                 user.setFullName(rs.getString("fullName"));
                 user.setRole(rs.getInt("role"));
+                user.setBirthday(rs.getDate("birthday"));
                 user.setEnglishName(rs.getString("englishName"));
                 user.setPhone(rs.getString("phone"));
                 user.setAddress(rs.getString("address"));
@@ -372,4 +373,7 @@ public class DataManager {
         }
         return boardId;
     }
+
+    //Phần List
+
 }
