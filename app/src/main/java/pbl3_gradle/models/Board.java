@@ -1,5 +1,6 @@
 package pbl3_gradle.models;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -8,6 +9,13 @@ public class Board {
     protected Date dateCreated;
     protected Date dateModified;
     protected List<TaskList> taskLists;
+
+    public Board(){
+        idBoard = -1;
+        dateCreated = new Date();
+        dateModified = new Date();
+        taskLists = new ArrayList<TaskList>();
+    }
 
     public int getIdBoard() {
         return idBoard;
@@ -39,5 +47,12 @@ public class Board {
 
     public void setTaskLists(List<TaskList> taskLists) {
         this.taskLists = taskLists;
+    }
+
+    public void loadDataFromDatabase(){
+        if (idBoard == -1){
+            System.out.println("Board id is not set. Cannot load data from database.");
+            return;
+        }
     }
 }

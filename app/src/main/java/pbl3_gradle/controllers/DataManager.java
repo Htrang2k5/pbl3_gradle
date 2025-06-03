@@ -192,7 +192,8 @@ public class DataManager {
                 new SqlParameter(4, project.getDateModified()),
                 new SqlParameter(5, project.isStatus())
         };
-        DBHelper.Instance.ExecuteDB(query, param);
+        int newProjectId = DBHelper.Instance.ExecuteInsertAndGetId(query, param);
+        project.setIdProject(newProjectId);
 
         //sau khi tạo project, thêm cho project đó 1 kanban board
         addNewBoard(project);
