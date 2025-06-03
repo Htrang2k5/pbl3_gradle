@@ -118,6 +118,7 @@ public class DataManager {
                 user.setEmail(rs.getString("email"));
                 user.setFullName(rs.getString("fullName"));
                 user.setRole(rs.getInt("role"));
+                user.setBirthday(rs.getDate("birthday"));
                 user.setEnglishName(rs.getString("englishName"));
                 user.setPhone(rs.getString("phone"));
                 user.setAddress(rs.getString("address"));
@@ -191,7 +192,8 @@ public class DataManager {
                 new SqlParameter(4, project.getDateModified()),
                 new SqlParameter(5, project.isStatus())
         };
-        DBHelper.Instance.ExecuteDB(query, param);
+        int newProjectId = DBHelper.Instance.ExecuteInsertAndGetId(query, param);
+        project.setIdProject(newProjectId);
 
         //sau khi tạo project, thêm cho project đó 1 kanban board
         addNewBoard(project);
@@ -372,4 +374,7 @@ public class DataManager {
         }
         return boardId;
     }
+
+    //Phần List
+
 }
