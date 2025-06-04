@@ -4,6 +4,7 @@ import pbl3_gradle.models.*;
 
 import java.util.*;
 import java.sql.*;
+import java.util.Date;
 
 public class DataManager {
     public static final DataManager Instance = new DataManager();
@@ -345,7 +346,7 @@ public class DataManager {
 //        DBHelper.Instance.ExecuteDB(query, param);
 //    }
 
-    //Phần Board
+    //----------------Phần Board--------------------
     //Hàm thêm một bảng mới cho project sau khi project đó được tạo
     public void addNewBoard(Project project){
         String query = "INSERT INTO board (idProject, dateCreated, dateModified) VALUES (?, ?, ?)";
@@ -375,6 +376,49 @@ public class DataManager {
         return boardId;
     }
 
-    //Phần List
+    //-----------------Phần List--------------------
+    public List<TaskList> getTaskListByBoardId(int idBoard) {
+        String query = "SELECT * FROM task_list WHERE idBoard = ? ORDER BY position";
+        SqlParameter[] param = {
+                new SqlParameter(1, idBoard)
+        };
+        ResultSet rs = DBHelper.Instance.GetRecords(query, param);
 
+        List<TaskList> resTaskList = new ArrayList<>();
+        try {
+            while (rs.next()) {
+                TaskList taskList = new TaskList();
+                taskList.setIdTaskList(rs.getInt("idList"));
+                taskList.setName(rs.getString("name"));
+                taskList.setPosition(rs.getInt("position"));
+                resTaskList.add(taskList);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return resTaskList;
+    }
+
+    //Tạo task list mới trong database thuộc về board có idBoard
+    public TaskList createTaskList(TaskList taskList, int idBoard) {
+        String query = "INSERT INTO task_list (idBoard, title, position, dateCreated) VALUES (?, ?, ?, ?)";
+        SqlParameter[] param = {
+                new SqlParameter(1, idBoard),
+                new SqlParameter(2, taskList.getName()),
+                new SqlParameter(3, taskList.getPosition()),
+                new SqlParameter(4, new Date())
+        };
+        int newTaskListId = DBHelper.Instance.ExecuteInsertAndGetId(query, param);
+        taskList.setIdTaskList(newTaskListId);
+        return taskList;
+    }
+
+    // Xoá task list trong database
+    public void deleteTaskList(TaskList taskList) {
+        String query = "DELETE FROM task_list WHERE idList = ?";
+        SqlParameter[] param = {
+                new SqlParameter(1, taskList.getIdTaskList())
+        };
+        DBHelper.Instance.ExecuteDB(query, param);
+    }
 }
