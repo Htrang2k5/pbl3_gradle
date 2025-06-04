@@ -89,4 +89,9 @@ public class NavigationManager {
         SprintListPage sprintListPage = new SprintListPage();
         navigateTo(sprintListPage.getView());
     }
+
+    public static void navigateToKanbanBoardPage() {
+        KanbanBoardPage kanbanBoardPage = new KanbanBoardPage();
+        navigateTo(kanbanBoardPage.getView());
+    }
 }

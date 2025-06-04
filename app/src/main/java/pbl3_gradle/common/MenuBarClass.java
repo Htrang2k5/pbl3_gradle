@@ -110,6 +110,10 @@ public class MenuBarClass extends VBox {
                 AppContext.set("currentPage", "CurrentSprintPage");
                 NavigationManager.navigateToCurrentSprintPage();
             });
+            btnKanbanBoard.setOnAction(e -> {
+                AppContext.set("currentPage", "KanbanBoardPage");
+                NavigationManager.navigateToKanbanBoardPage();
+            });
 
             if (pageName.equals("ProductBacklogPage")) {
                 btnProductBacklog.setStyleButton("#ffffff", "#2f74eb");
@@ -130,6 +134,10 @@ public class MenuBarClass extends VBox {
                 btnSprint.setStyleButton("#ffffff", "#2f74eb");
                 btnSprint.removeEffects();
                 btnSprint.setOnAction(null);
+            } else if (pageName.equals("KanbanBoardPage")) {
+                btnKanbanBoard.setStyleButton("#ffffff", "#2f74eb");
+                btnKanbanBoard.removeEffects();
+                btnKanbanBoard.setOnAction(null);
             }
 
             this.getChildren().addAll(btnProductBacklog, btnSprint, btnKanbanBoard, btnBurndown_Chart,
