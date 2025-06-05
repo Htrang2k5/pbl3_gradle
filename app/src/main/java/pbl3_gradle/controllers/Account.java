@@ -10,7 +10,7 @@ public class Account {
     }
 
     //hash original password using SHA-256
-    private static String hashPassword(String password) {
+    public static String hashPassword(String password) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             byte[] hash = md.digest(password.getBytes());
@@ -27,7 +27,7 @@ public class Account {
     //đăng nhập với username và password
     public Boolean login(String username, String password){
         String hashedPassword = hashPassword(password);
-        if (DataManager.Instance.verifyLogin(username, hashedPassword)){
+        if (DataManager.Instance.verifyLogin(username,hashedPassword)){
             DataManager.Instance.processLogin(username, hashedPassword);
             return true;
         }

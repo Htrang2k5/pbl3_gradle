@@ -13,6 +13,9 @@ import pbl3_gradle.common.RoundedRect;
 import javafx.scene.control.TextField;
 import javafx.scene.Cursor;
 import javafx.scene.control.ComboBox;
+import pbl3_gradle.controllers.Account;
+
+import javax.swing.*;
 
 public class AdminAddAccPage {
         public Pane getView() {
@@ -54,7 +57,7 @@ public class AdminAddAccPage {
                 PasswordTextFieldClass tf2 = new PasswordTextFieldClass();
                 PasswordTextFieldClass tf3 = new PasswordTextFieldClass();
                 ComboBox<String> cbb = new ComboBox<>();
-                cbb.getItems().addAll("Scrum Master", "Developer", "Product Owner", "Project Owner");
+                cbb.getItems().addAll("Scrum Master", "Developer", "Product Owner" );
 
                 tf1.setPromptText("Enter username");
                 TextFieldStyle(tf1, "#2f74eb", 577.1, 54.5);
@@ -71,6 +74,47 @@ public class AdminAddAccPage {
                 // Tao button
                 FancyButtonClass btnCreate = new FancyButtonClass("Create", 213.1, 59.8, 614.4, 556.5);
                 FancyButtonClass btnClear = new FancyButtonClass("Clear", 213.1, 59.8, 881.4, 556.5);
+                btnCreate.setOnAction(e -> {
+                        String username = tf1.getText().trim();
+                        String pw = tf2.getText().trim();
+                        String rePw = tf3.getText().trim();
+                        String selectedRole = cbb.getValue();
+
+                        if (username.isEmpty() || pw.isEmpty() || rePw.isEmpty() || selectedRole == null) {
+                                System.out.println("Vui lòng điền đầy đủ thông tin."); // hoặc dùng Alert nếu bạn đã dùng JavaFX Dialogs
+                                return;
+                        }
+
+                        if (!pw.equals(rePw)) {
+                                System.out.println("Mật khẩu nhập lại không khớp.");
+                                return;
+                        }
+
+                        int role = switch (selectedRole) {
+                                case "Scrum Master" -> 3;
+                                case "Development Team" -> 4;
+                                case "Product Owner" -> 2;
+                                default -> 0;
+                        };
+
+                        Account.Instance.registerUser(username, pw, role);
+                        JOptionPane.showMessageDialog(null, "Tạo tài khoản thành công cho " + username, "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+
+
+                        // Xóa trường sau khi tạo tài khoản
+                        tf1.clear();
+                        tf2.clear();
+                        tf3.clear();
+                        cbb.setValue(null);
+                });
+
+                btnClear.setOnAction(e -> {
+                        tf1.clear();
+                        tf2.clear();
+                        tf3.clear();
+                        cbb.setValue(null);
+                });
+
                 // Tao pane
                 Pane pane = new Pane();
                 pane.getChildren().addAll(menuBar, mainLb, rect1, btnClear, btnCreate);

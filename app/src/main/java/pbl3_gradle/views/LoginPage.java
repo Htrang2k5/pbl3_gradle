@@ -8,6 +8,9 @@ import pbl3_gradle.common.AvatarViewClass;
 import pbl3_gradle.common.FancyButtonClass;
 import pbl3_gradle.common.PasswordTextFieldClass;
 import pbl3_gradle.common.RoundedRect;
+import pbl3_gradle.controllers.Account;
+import pbl3_gradle.controllers.DataManager;
+import pbl3_gradle.models.CurrentUser;
 import pbl3_gradle.util.NavigationManager;
 import javafx.scene.image.Image;
 
@@ -39,9 +42,29 @@ public class LoginPage {
                 lb3.setPrefSize(161.6, 35.9);
                 lb3.setLayoutX(399.7);
                 lb3.setLayoutY(396);
+               // create new a login button
                 FancyButtonClass loginButton = new FancyButtonClass("Log in", 213.1, 59.8, 576.4, 487.8);
                 loginButton.setOnAction(e -> {
-                        NavigationManager.navigateToAdminAddAccPage();
+                        String user = username.getText().trim();
+                        String pass = password.getPassword();
+
+                        System.out.println("Username: " + user);
+                        System.out.println("Password: " + pass);
+                        System.out.println(Account.hashPassword(pass));
+                        if (user.isEmpty() || pass.isEmpty()) {
+                                showAlert("Please enter both username and password.");
+                                return;
+                        }
+
+                        boolean isLoggedIn = pbl3_gradle.controllers.Account.Instance.login(user, pass);
+                        if (isLoggedIn) {
+                                if(CurrentUser.Instance.getRole()==1){
+                                 NavigationManager.navigateToAdminAddAccPage();}
+                                else NavigationManager.navigateToProfileMemberPage();
+                        } else {
+                                String error = pbl3_gradle.controllers.Account.Instance.getLoginResult();
+                                showAlert(error.isEmpty() ? "Login failed: Invalid username or password." : error);
+                        }
                 });
                 Image image = new Image(
                                 "file:src/main/resources/image/ImageAvatar.png");
@@ -60,5 +83,13 @@ public class LoginPage {
                 return pane;
 
         }
+        private void showAlert(String message) {
+                javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR);
+                alert.setTitle("Login Error");
+                alert.setHeaderText(null);
+                alert.setContentText(message);
+                alert.showAndWait();
+        }
+
 
 }

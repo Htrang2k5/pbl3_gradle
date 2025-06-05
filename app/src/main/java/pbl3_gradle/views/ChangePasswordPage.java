@@ -1,11 +1,17 @@
 package pbl3_gradle.views;
 
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import pbl3_gradle.common.PasswordTextFieldClass;
 import pbl3_gradle.common.RoundedRect;
 import pbl3_gradle.common.FancyButtonClass;
+import pbl3_gradle.controllers.Account;
+import pbl3_gradle.controllers.DataManager;
+import pbl3_gradle.controllers.Validator;
+import pbl3_gradle.models.CurrentUser;
+import pbl3_gradle.models.User;
 
 public class ChangePasswordPage {
         public Pane getView() {
@@ -58,6 +64,38 @@ public class ChangePasswordPage {
                 vbox1.setPrefSize(495.8, 251.5);
                 // Tao button save
                 FancyButtonClass saveBtn = new FancyButtonClass("SAVE", 213.1, 59.8, 726, 553.1);
+                saveBtn.setOnAction(e -> {
+                        String currentPw = tf1.getPassword();
+                        String newPw = tf2.getPassword();
+                        String confirmPw = tf3.getPassword();
+
+                        // Lấy username hiện tại
+                        String currentUsername = CurrentUser.Instance.getUserName();
+                        // in ra username lên màn hình
+                        System.out.println("Current username: " + currentUsername);
+                        // Hash password cũ để kiểm tra
+
+                        String hashedCurrentPw = Account.hashPassword(currentPw);
+                         System.out.println("Hashed current password: " + currentPw);
+                        System.out.println("Hashed current password: " + hashedCurrentPw);
+                        if (!DataManager.Instance.verifyLogin(currentUsername, hashedCurrentPw)) {
+                                showAlert(Alert.AlertType.ERROR, "Current password is incorrect.");
+                                return;
+                        }
+
+                        // Kiểm tra mật khẩu mới và xác nhận bằng Validator
+                        if (!Validator.Instance.validatePassword(newPw, confirmPw)) {
+                                showAlert(Alert.AlertType.ERROR, Validator.Instance.getValidatePasswordRes());
+                                return;
+                        }
+User admin = DataManager.Instance.getUserInfoByID(CurrentUser.Instance.getUserID());
+                        // Hash mật khẩu mới
+                     admin.setUserPassword(Account.hashPassword(newPw));
+
+                   DataManager.Instance.updateUserInfoByID(admin);
+
+                });
+
                 // Tao pane
                 Pane pane = new Pane();
                 pane.getChildren().addAll(menuBar, mainLb, rect, vbox, vbox1, saveBtn);
@@ -68,4 +106,12 @@ public class ChangePasswordPage {
                 pane.setLayoutY(0);
                 return pane;
         }
+        private void showAlert(Alert.AlertType type, String message) {
+                Alert alert = new Alert(type);
+                alert.setTitle("Notification");
+                alert.setHeaderText(null);
+                alert.setContentText(message);
+                alert.showAndWait();
+        }
+
 }

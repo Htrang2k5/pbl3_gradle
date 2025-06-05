@@ -9,7 +9,9 @@ public class Project {
     protected String description;
     protected Date dateCreated;
     protected Date dateModified;
+
     protected ProductBacklog productBacklog;
+
     protected boolean status;
 
     protected SprintList sprintList;
@@ -60,4 +62,5 @@ public class Project {
     public void setSprintList(SprintList sprintList) {
         this.sprintList = sprintList;
     }
+
 }
