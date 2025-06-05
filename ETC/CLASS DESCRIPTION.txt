@@ -8,6 +8,7 @@ DataManager
 	- User getUserInfoByID(int userID) //lấy thông tin của User cần tìm theo ID
 	- void updateUserInfoByID(User user) //update lại thông tin của User cho vào hàm
 	- void deleteUserByID(int userID) //xóa User dựa theo userID
+	- void addNewProject(Project project) //Thêm project mới vào database; biến project chỉ cần gán name, description
 
 Validator
 	- Boolean validateUsername(String username) //kiểm tra format username (dùng khi đăng kí User mới)

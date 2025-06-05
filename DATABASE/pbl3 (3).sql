@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 27, 2025 at 04:55 PM
+-- Generation Time: Jun 05, 2025 at 06:18 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -24,6 +24,22 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `activity_log`
+--
+
+CREATE TABLE `activity_log` (
+  `idLog` int(11) NOT NULL,
+  `idBoard` int(11) DEFAULT NULL,
+  `idUser` int(11) DEFAULT NULL,
+  `action` varchar(255) NOT NULL,
+  `entityType` varchar(100) NOT NULL,
+  `idEntity` int(11) NOT NULL,
+  `dateCreated` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `attachment`
 --
 
@@ -33,6 +49,28 @@ CREATE TABLE `attachment` (
   `filePath` varchar(255) DEFAULT NULL,
   `fileName` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='idItem references Task (not just any Item)';
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `board`
+--
+
+CREATE TABLE `board` (
+  `idBoard` int(11) NOT NULL,
+  `idProject` int(11) DEFAULT NULL,
+  `dateCreated` datetime NOT NULL,
+  `dateModified` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `board`
+--
+
+INSERT INTO `board` (`idBoard`, `idProject`, `dateCreated`, `dateModified`) VALUES
+(7, 4, '2025-06-03 20:05:12', '2025-06-03 20:05:12'),
+(8, 5, '2025-06-03 21:16:32', '2025-06-03 21:16:32'),
+(9, 6, '2025-06-03 21:21:27', '2025-06-03 21:21:27');
 
 -- --------------------------------------------------------
 
@@ -68,7 +106,9 @@ CREATE TABLE `checklist_item` (
 CREATE TABLE `comment` (
   `idComment` int(11) NOT NULL,
   `idTask` int(11) DEFAULT NULL,
-  `description` text DEFAULT NULL
+  `idUser` int(11) NOT NULL,
+  `content` text DEFAULT NULL,
+  `dateCreated` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='idItem references Task (not just any Item)';
 
 -- --------------------------------------------------------
@@ -80,6 +120,7 @@ CREATE TABLE `comment` (
 CREATE TABLE `item` (
   `idItem` int(11) NOT NULL,
   `idBacklog` int(11) NOT NULL,
+  `backlogType` tinyint(1) NOT NULL,
   `title` varchar(255) NOT NULL,
   `description` text DEFAULT NULL,
   `dateCreated` datetime NOT NULL,
@@ -95,7 +136,8 @@ CREATE TABLE `item` (
 
 CREATE TABLE `label` (
   `idLabel` int(11) NOT NULL,
-  `labelName` varchar(255) DEFAULT NULL
+  `labelName` varchar(255) DEFAULT NULL,
+  `color` varchar(255) NOT NULL DEFAULT '#FFFFFF'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -165,10 +207,20 @@ CREATE TABLE `product_backlog` (
 CREATE TABLE `project` (
   `idProject` int(11) NOT NULL,
   `projectName` varchar(255) DEFAULT NULL,
+  `description` text DEFAULT NULL,
   `dateCreated` datetime DEFAULT NULL,
   `dateModified` datetime DEFAULT NULL,
   `status` tinyint(1) DEFAULT NULL COMMENT '0: Not done\r\n1: Done'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `project`
+--
+
+INSERT INTO `project` (`idProject`, `projectName`, `description`, `dateCreated`, `dateModified`, `status`) VALUES
+(4, 'TestProject', 'This is a test project', '2025-06-03 20:05:12', '2025-06-03 20:05:12', 0),
+(5, 'TestProject', 'This is a test project', '2025-06-03 21:16:32', '2025-06-03 21:16:32', 0),
+(6, 'TestProject', 'This is a test project', '2025-06-03 21:21:27', '2025-06-03 21:21:27', 0);
 
 -- --------------------------------------------------------
 
@@ -179,8 +231,10 @@ CREATE TABLE `project` (
 CREATE TABLE `sprint` (
   `idSprint` int(11) NOT NULL,
   `idProject` int(11) DEFAULT NULL,
+  `title` varchar(255) NOT NULL,
   `dateStart` datetime DEFAULT NULL,
-  `dateEnd` datetime DEFAULT NULL,
+  `estimatedEndDate` date NOT NULL,
+  `actualEndDate` date NOT NULL,
   `status` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -204,13 +258,14 @@ CREATE TABLE `sprint_backlog` (
 
 CREATE TABLE `task` (
   `idTask` int(11) NOT NULL,
-  `idProject` int(11) DEFAULT NULL,
+  `idTaskList` int(11) DEFAULT NULL,
   `title` varchar(255) NOT NULL,
   `description` text DEFAULT NULL,
   `dateCreated` datetime NOT NULL,
   `dateModified` datetime NOT NULL,
   `dateDue` datetime DEFAULT NULL,
-  `status` tinyint(1) DEFAULT NULL COMMENT '0: false\r\n1: true'
+  `status` tinyint(1) DEFAULT NULL COMMENT '0: false\r\n1: true',
+  `position` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='idItem is both PK and FK to Item';
 
 -- --------------------------------------------------------
@@ -227,6 +282,20 @@ CREATE TABLE `task_label` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `task_list`
+--
+
+CREATE TABLE `task_list` (
+  `idTaskList` int(11) NOT NULL,
+  `idBoard` int(11) DEFAULT NULL,
+  `title` varchar(255) NOT NULL,
+  `position` int(11) NOT NULL,
+  `dateCreated` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `user`
 --
 
@@ -237,21 +306,22 @@ CREATE TABLE `user` (
   `email` varchar(255) DEFAULT NULL,
   `fullName` varchar(255) DEFAULT NULL,
   `role` tinyint(1) DEFAULT 2 COMMENT '0: System\r\n1: Admin\r\n2: PO\r\n3: SM\r\n4: DT',
+  `birthday` date DEFAULT NULL,
   `englishName` varchar(255) DEFAULT NULL,
   `address` varchar(255) DEFAULT NULL,
   `phone` varchar(255) DEFAULT NULL,
-  `avatar` varchar(255) DEFAULT 'src/main/resources/defaultAvatar.jpg'
+  `avatar` varchar(255) DEFAULT 'src/main/resources/ImageAvatar.png'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`idUser`, `username`, `password`, `email`, `fullName`, `role`, `englishName`, `address`, `phone`, `avatar`) VALUES
-(1, 'System', '', '', '', 0, '', '', '', ''),
-(2, 'admin', 'admin', '', '', 1, '', '', '', ''),
-(3, 'testuser', '123456789', 'testemail@gmail.com', 'Test User', 2, 'testuser', '1 testuser St.', '0000111222', ''),
-(9, 'testingagain', 'EF797C8118F02DFB649607DD5D3F8C7623048C9C063D532CC95C5ED7A898A64F', NULL, NULL, 2, NULL, NULL, NULL, 'src/main/resources/defaultAvatar.jpg');
+INSERT INTO `user` (`idUser`, `username`, `password`, `email`, `fullName`, `role`, `birthday`, `englishName`, `address`, `phone`, `avatar`) VALUES
+(1, 'System', '', '', '', 0, '0000-00-00', '', '', '', ''),
+(2, 'admin', 'admin', '', '', 1, '0000-00-00', '', '', '', ''),
+(3, 'testuser', '123456789', 'testemail@gmail.com', 'Test User', 2, '0000-00-00', 'testuser', '1 testuser St.', '0000111222', ''),
+(9, 'testingagain', 'EF797C8118F02DFB649607DD5D3F8C7623048C9C063D532CC95C5ED7A898A64F', NULL, NULL, 2, '0000-00-00', NULL, NULL, NULL, 'src/main/resources/ImageAvatar.png');
 
 -- --------------------------------------------------------
 
@@ -282,11 +352,26 @@ CREATE TABLE `user_task` (
 --
 
 --
+-- Indexes for table `activity_log`
+--
+ALTER TABLE `activity_log`
+  ADD PRIMARY KEY (`idLog`),
+  ADD KEY `idBoard` (`idBoard`),
+  ADD KEY `idUser` (`idUser`);
+
+--
 -- Indexes for table `attachment`
 --
 ALTER TABLE `attachment`
   ADD PRIMARY KEY (`idAttachment`),
   ADD KEY `attachment_ibfk_1` (`idTask`);
+
+--
+-- Indexes for table `board`
+--
+ALTER TABLE `board`
+  ADD PRIMARY KEY (`idBoard`),
+  ADD KEY `idProject` (`idProject`);
 
 --
 -- Indexes for table `checklist`
@@ -307,7 +392,8 @@ ALTER TABLE `checklist_item`
 --
 ALTER TABLE `comment`
   ADD PRIMARY KEY (`idComment`),
-  ADD KEY `comment_ibfk_1` (`idTask`);
+  ADD KEY `comment_ibfk_1` (`idTask`),
+  ADD KEY `comment_ibfk_2` (`idUser`);
 
 --
 -- Indexes for table `item`
@@ -382,8 +468,8 @@ ALTER TABLE `sprint_backlog`
 --
 ALTER TABLE `task`
   ADD PRIMARY KEY (`idTask`),
-  ADD KEY `task_ibfk_1` (`idProject`),
-  ADD KEY `task_ibfk_2` (`idTask`);
+  ADD KEY `task_ibfk_2` (`idTask`),
+  ADD KEY `idList` (`idTaskList`);
 
 --
 -- Indexes for table `task_label`
@@ -391,6 +477,13 @@ ALTER TABLE `task`
 ALTER TABLE `task_label`
   ADD KEY `tasklabel_ibfk_1` (`idLabel`),
   ADD KEY `tasklabel_ibfk_2` (`idTask`);
+
+--
+-- Indexes for table `task_list`
+--
+ALTER TABLE `task_list`
+  ADD PRIMARY KEY (`idTaskList`),
+  ADD KEY `idBoard` (`idBoard`);
 
 --
 -- Indexes for table `user`
@@ -415,6 +508,18 @@ ALTER TABLE `user_task`
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `activity_log`
+--
+ALTER TABLE `activity_log`
+  MODIFY `idLog` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `board`
+--
+ALTER TABLE `board`
+  MODIFY `idBoard` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `checklist`
@@ -456,13 +561,19 @@ ALTER TABLE `notification`
 -- AUTO_INCREMENT for table `project`
 --
 ALTER TABLE `project`
-  MODIFY `idProject` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idProject` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `sprint`
 --
 ALTER TABLE `sprint`
   MODIFY `idSprint` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `task_list`
+--
+ALTER TABLE `task_list`
+  MODIFY `idTaskList` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `user`
@@ -475,10 +586,23 @@ ALTER TABLE `user`
 --
 
 --
+-- Constraints for table `activity_log`
+--
+ALTER TABLE `activity_log`
+  ADD CONSTRAINT `activity_log_ibfk_1` FOREIGN KEY (`idBoard`) REFERENCES `board` (`idBoard`),
+  ADD CONSTRAINT `activity_log_ibfk_2` FOREIGN KEY (`idUser`) REFERENCES `user` (`idUser`);
+
+--
 -- Constraints for table `attachment`
 --
 ALTER TABLE `attachment`
   ADD CONSTRAINT `attachment_ibfk_1` FOREIGN KEY (`idTask`) REFERENCES `task` (`idTask`);
+
+--
+-- Constraints for table `board`
+--
+ALTER TABLE `board`
+  ADD CONSTRAINT `board_ibfk_1` FOREIGN KEY (`idProject`) REFERENCES `project` (`idProject`);
 
 --
 -- Constraints for table `checklist`
@@ -496,7 +620,8 @@ ALTER TABLE `checklist_item`
 -- Constraints for table `comment`
 --
 ALTER TABLE `comment`
-  ADD CONSTRAINT `comment_ibfk_1` FOREIGN KEY (`idTask`) REFERENCES `task` (`idTask`);
+  ADD CONSTRAINT `comment_ibfk_1` FOREIGN KEY (`idTask`) REFERENCES `task` (`idTask`),
+  ADD CONSTRAINT `comment_ibfk_2` FOREIGN KEY (`idUser`) REFERENCES `user` (`idUser`);
 
 --
 -- Constraints for table `item`
@@ -548,7 +673,7 @@ ALTER TABLE `sprint_backlog`
 -- Constraints for table `task`
 --
 ALTER TABLE `task`
-  ADD CONSTRAINT `task_ibfk_1` FOREIGN KEY (`idProject`) REFERENCES `project` (`idProject`);
+  ADD CONSTRAINT `task_ibfk_1` FOREIGN KEY (`idTaskList`) REFERENCES `task_list` (`idTaskList`);
 
 --
 -- Constraints for table `task_label`
@@ -556,6 +681,12 @@ ALTER TABLE `task`
 ALTER TABLE `task_label`
   ADD CONSTRAINT `task_label_ibfk_1` FOREIGN KEY (`idLabel`) REFERENCES `label` (`idLabel`),
   ADD CONSTRAINT `task_label_ibfk_2` FOREIGN KEY (`idTask`) REFERENCES `task` (`idTask`);
+
+--
+-- Constraints for table `task_list`
+--
+ALTER TABLE `task_list`
+  ADD CONSTRAINT `task_list_ibfk_1` FOREIGN KEY (`idBoard`) REFERENCES `board` (`idBoard`);
 
 --
 -- Constraints for table `user_project`

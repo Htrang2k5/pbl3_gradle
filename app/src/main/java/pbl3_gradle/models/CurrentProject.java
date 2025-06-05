@@ -54,11 +54,19 @@ public class CurrentProject {
         currentProject.status = status;
     }
 
-//    public ProductBacklog getProductBacklog() {
-//        return currentProject.productBacklog;
-//    }
-//    public void setProductBacklog(ProductBacklog productBacklog) {
-//        currentProject.productBacklog = productBacklog;
-//        DataManager.Instance.updateProject(currentProject);
-//    }
+    public ProductBacklog getProductBacklog() {
+        return currentProject.productBacklog;
+    }
+    public void setProductBacklog(ProductBacklog productBacklog) {
+        currentProject.productBacklog = productBacklog;
+        DataManager.Instance.updateProject(currentProject);
+    }
+
+    public SprintList getSprintList() {
+        return currentProject.sprintList;
+    }
+    public void setSprintList(SprintList sprintList) {
+        currentProject.sprintList = sprintList;
+        DataManager.Instance.updateProject(currentProject);
+    }
 }
