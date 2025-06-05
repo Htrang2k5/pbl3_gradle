@@ -5,6 +5,12 @@ public class ChecklistItem {
     protected String content;
     protected boolean checked;
 
+    public ChecklistItem() {
+        idChecklistItem = -1; // Default value indicating no ID assigned
+        content = ""; // Default empty content
+        checked = false; // Default unchecked state
+    }
+
     public int getIdChecklistItem() {
         return idChecklistItem;
     }

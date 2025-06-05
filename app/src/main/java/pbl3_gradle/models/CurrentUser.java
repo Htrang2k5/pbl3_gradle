@@ -102,4 +102,8 @@ public class CurrentUser{
     public void setProjectIDList(List<Integer> projectIDList) {
         currentUser.projectIDList = projectIDList;
     }
+
+    public User getUserObject(){
+        return currentUser;
+    }
 }

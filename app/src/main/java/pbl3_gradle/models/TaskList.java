@@ -1,5 +1,8 @@
 package pbl3_gradle.models;
 
+import pbl3_gradle.controllers.DataManager;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class TaskList {
@@ -11,7 +14,7 @@ public class TaskList {
     public TaskList(){
         idTaskList = -1;
         name = "";
-        tasks = null;
+        tasks = new ArrayList<Task>();
         position = 0;
     }
 
@@ -45,5 +48,15 @@ public class TaskList {
 
     public void setPosition(int position) {
         this.position = position;
+    }
+
+    public void createNewTask(String taskName){
+        Task newTask = new Task();
+        newTask.setTitle(taskName);
+        newTask.setPosition(tasks.size());
+
+//        update to database too
+        newTask = DataManager.Instance.createTask(newTask, idTaskList);
+        tasks.add(newTask);
     }
 }

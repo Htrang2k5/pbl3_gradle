@@ -1,6 +1,9 @@
 package pbl3_gradle.controllers;
 import pbl3_gradle.models.*;
 
+import java.util.Calendar;
+import java.util.Date;
+
 public class Validator {
     public static final Validator Instance = new Validator();
 
@@ -90,5 +93,18 @@ public class Validator {
             return false;
         }
         return email.matches(STRICT_EMAIL_REGEX);
+    }
+
+    //kiểm tra due date có hợp lệ hay không
+    public Boolean validateDueDate(int year, int month, int day, int hour24, int minute){
+        Date now = new Date();
+
+        // Create Calendar object for the due date
+        Calendar dueCal = Calendar.getInstance();
+        dueCal.set(year, month - 1, day, hour24, minute, 0); // month is 0-based
+        Date dueDate = dueCal.getTime();
+
+        // Return true if due date is in the future
+        return dueDate.after(now);
     }
 }
