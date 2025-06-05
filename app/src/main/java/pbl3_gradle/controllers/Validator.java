@@ -1,6 +1,6 @@
 package pbl3_gradle.controllers;
 import pbl3_gradle.models.*;
-
+import java.time.*;
 public class Validator {
     public static final Validator Instance = new Validator();
 
@@ -90,5 +90,42 @@ public class Validator {
             return false;
         }
         return email.matches(STRICT_EMAIL_REGEX);
+    }
+
+    //kiểm tra project name có hợp lệ hay không
+    public Boolean validateProjectName(String projectName) {
+        if (projectName == null || projectName.trim().isEmpty()) {
+            return false;
+        }
+        // Kiểm tra độ dài tên dự án
+        if (projectName.length() > 50) {
+            return false;
+        }
+        // Kiểm tra ký tự hợp lệ
+        if (!projectName.matches("^[a-zA-Z0-9_\\s]+$")) {
+            return false;
+        }
+        return true;
+    }
+
+    //kiểm tra date có hợp lệ hay không
+    public Boolean validateDate(LocalDate startdate, LocalDate enddate) {
+        if (startdate == null || enddate == null) {
+            return false;
+        }
+        // Kiểm tra ngày không được là ngày trước hôm nay
+        LocalDate today = LocalDate.now();
+        if (startdate.isBefore(today)) {
+            return false;
+        }
+        //Kiểm tra ngày kết thúc không được trước ngày bắt đầu
+        if (enddate.isBefore(startdate)) {
+            return false;
+        }
+        // Kiểm tra ngày kết thúc không được là ngày trước hôm nay
+        if (enddate.isBefore(today)) {
+            return false;
+        }
+        return true;
     }
 }

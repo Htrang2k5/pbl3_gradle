@@ -10,9 +10,10 @@ public class Project {
     protected Date dateCreated;
     protected Date dateModified;
     protected ProductBacklog productBacklog;
-    protected List<Sprint> sprints;
-    //SprintBacklog
     protected boolean status;
+
+    protected SprintList sprintList;
+
 
     //public ProductBacklog()
 
@@ -23,6 +24,8 @@ public class Project {
         this.dateCreated = new Date();
         this.dateModified = new Date();
         this.status = false;
+        this.productBacklog = new ProductBacklog(0,0, new ArrayList<>());
+        this.sprintList = new SprintList();
     }
 
     // Các getter và setter
@@ -49,5 +52,12 @@ public class Project {
     }
     public void setProductBacklog(ProductBacklog productBacklog) {
         this.productBacklog = productBacklog;
+    }
+
+    public SprintList getSprintList() {
+        return sprintList;
+    }
+    public void setSprintList(SprintList sprintList) {
+        this.sprintList = sprintList;
     }
 }
