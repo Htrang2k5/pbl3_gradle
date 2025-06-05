@@ -39,7 +39,7 @@ public class ProductBacklogPage {
                 Pane backlog8 = backlog(8, "Backlog 8", "In Progress");
                 Pane backlog9 = backlog(9, "Backlog 9", "Done");
 
-                FancyButtonClass addBacklogBtn = new FancyButtonClass("+ Add another backlog item", 899.5, 69.3, 0, 0);
+                FancyButtonClass addBacklogBtn = new FancyButtonClass("+Add another backlog item", 899.5, 69.3, 0, 0);
 
                 VBox vBox = new VBox(); // Tao VBox de chua cac backlog
                 vBox.setSpacing(20); // Khoang cach giua cac backlog
@@ -73,6 +73,7 @@ public class ProductBacklogPage {
                 RoundedRect rect1 = new RoundedRect(15.1, 22.9, 265.9, 150.1, "#ffffff", "#92badd", 2, 12);
                 // Tao ten Label cho project
                 Label lbProject = new Label("Chicken learn to fly");
+                //----------------------------------------
                 lbProject.setPrefSize(197, 18.8);
                 lbProject.setLayoutX(31.3);
                 lbProject.setLayoutY(35.4);
@@ -83,6 +84,7 @@ public class ProductBacklogPage {
                                                 + "-fx-font-weight: bold;");
                 // Tao label description cho project
                 Label lbDescription = new Label("Project description");
+                //--------------------------------------
                 lbDescription.setPrefWidth(233.4);
                 lbDescription.setMaxHeight(103.3);
                 lbDescription.setLayoutX(31.3);

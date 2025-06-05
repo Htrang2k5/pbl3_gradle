@@ -4,6 +4,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import pbl3_gradle.common.AvatarViewClass;
 import pbl3_gradle.common.ImageButtonClass;
+import pbl3_gradle.controllers.DataManager;
+import pbl3_gradle.controllers.ProjectController;
+import pbl3_gradle.models.Project;
 import pbl3_gradle.util.AppContext;
 import pbl3_gradle.util.NavigationManager;
 import javafx.geometry.Insets;
@@ -12,6 +15,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+
+import java.util.List;
 
 public class CompeletedProjectPage {
         public Pane getView() {
@@ -48,24 +53,20 @@ public class CompeletedProjectPage {
                 TextField findtext = new TextField();
                 EditAcc_ShowAccPage.setStyleFindText(findtext, 981.8, 65.9, 338.1, 124.7);
                 // Tao list current project
-                String projectTitle = "Chicken learn to Fly";
-                String projectDescription = "This is a project about chicken learn to fly";
-                Button projectBtn1 = CurrentProjectPage.projectButton(projectTitle, projectDescription);
-                Button projectBtn2 = CurrentProjectPage.projectButton("", "");
-                Button projectBtn3 = CurrentProjectPage.projectButton("", "");
-                Button projectBtn4 = CurrentProjectPage.projectButton("", "");
-                Button projectBtn5 = CurrentProjectPage.projectButton("", "");
-                Button projectBtn6 = CurrentProjectPage.projectButton("", "");
+                List<Project> allProjectsCompelted = ProjectController.Instance.getCompletedProject();
+                Button[] projects = new Button[allProjectsCompelted.size()];
+                for (int i = 0; i < allProjectsCompelted.size() ; i++) {
+                        Project project = allProjectsCompelted.get(i);
+                        projects[i] = CurrentProjectPage.createProjectButton(project.getProjectName(), project.getDescription());
+                }
+
                 GridPane gridPane = new GridPane();
                 gridPane.setHgap(24); // Set horizontal gap between buttons
                 gridPane.setVgap(24); // Set vertical gap between buttons
                 gridPane.setPadding(new Insets(5, 5, 5, 5));
-                gridPane.add(projectBtn1, 0 % 2, 0 / 2);
-                gridPane.add(projectBtn2, 1 % 2, 1 / 2);
-                gridPane.add(projectBtn3, 2 % 2, 2 / 2);
-                gridPane.add(projectBtn4, 3 % 2, 3 / 2);
-                gridPane.add(projectBtn5, 4 % 2, 4 / 2);
-                gridPane.add(projectBtn6, 5 % 2, 5 / 2);
+                for(int i=0;i<projects.length;i++){
+                        gridPane.add(projects[i], i % 2, i / 2);
+                }
 
                 ScrollPane scrollPane = new ScrollPane(gridPane);
                 scrollPane.setPrefSize(1050, 530);

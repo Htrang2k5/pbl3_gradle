@@ -6,13 +6,14 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import pbl3_gradle.common.*;
+import pbl3_gradle.models.CurrentUser;
 
 public class ProfileMemberPage {
         public Pane getView() {
                 // Tao menu bar
                 Pane menuBar = MenuBarStyle_Layer2(
-                        "file:src/main/resources/image/ImageAvatar.png", "Nguyễn Thị Huyền Trang",
-                        "Scrum Master",
+                        "file:src/main/resources/image/ImageAvatar.png", CurrentUser.Instance.getFullName(),
+                        getRoleName(CurrentUser.Instance.getRole()),
                         "ProfileMemberPage");
                 // Tao Avatar iamge
                 Image image1 = new Image(
@@ -26,7 +27,7 @@ public class ProfileMemberPage {
                 AvatarViewClass avatar2 = new AvatarViewClass(image2, 46.1, 0);
                 ImageButtonClass btnChange = new ImageButtonClass(avatar2, 46.1, 46.1, 879.3, 178.3);
                 // Tao label ten
-                Label nameLb = new Label("Nguyễn Thị Huyền Trang");
+                Label nameLb = new Label(CurrentUser.Instance.getFullName());
                 nameLb.setStyle(
                         "-fx-text-fill: #2f74eb; -fx-font-size: 20 px; -fx-alignment: center; -fx-font-family: :'Helvetica';");
                 nameLb.setPrefSize(443.1, 31.7);
@@ -35,7 +36,7 @@ public class ProfileMemberPage {
                 // Tao hinh chu nhat bao quanh bang thong tin
                 RoundedRect rect = new RoundedRect(377, 297.6, 918.2, 434.6, "#c4dff8", "#ffffff", 0, 15);
                 // Tao bang thong tin
-                GridPane gridPane = BangThongTin("HTrangg", "Scrum Master");
+                GridPane gridPane = BangThongTin();
                 gridPane.setLayoutX(403);
                 gridPane.setLayoutY(315);
                 // Tao pane
@@ -86,7 +87,7 @@ public class ProfileMemberPage {
                 return pane;
         }
 
-        public static GridPane BangThongTin(String nameText, String roleText) {
+        public static GridPane BangThongTin() {
                 GridPane gridPane = new GridPane();
                 Label lb1 = new Label("Username");
                 Label lb2 = new Label("Full Name");
@@ -95,8 +96,8 @@ public class ProfileMemberPage {
                 Label lb5 = new Label("Address");
                 Label lb6 = new Label("Role");
                 Label lb7 = new Label("Phone Number");
-                Label lb8 = new Label(nameText);
-                Label lb9 = new Label(roleText);
+                Label lb8 = new Label(CurrentUser.Instance.getUserName());
+                Label lb13 = new Label(getRoleName(CurrentUser.Instance.getRole()));
 
                 lb1.setStyle(
                         "-fx-text-fill: #2f74eb; -fx-font-size: 14 px; -fx-alignment: center; -fx-font-family: :'Helvetica'; -fx-border-color: #ffffff; -fx-border-width:1px;");
@@ -115,7 +116,7 @@ public class ProfileMemberPage {
                         "-fx-text-fill: #2f74eb; -fx-font-size: 14 px; -fx-alignment: center; -fx-font-family: :'Helvetica'; -fx-border-color: #ffffff; -fx-border-width:1px;");
                 lb8.setStyle(
                         "-fx-text-fill: #2f74eb; -fx-font-size: 14 px; -fx-alignment: center; -fx-font-family: :'Helvetica'; -fx-border-color: #ffffff; -fx-border-width:1px;");
-                lb9.setStyle(
+                lb13.setStyle(
                         "-fx-text-fill: #2f74eb; -fx-font-size: 14 px; -fx-alignment: center; -fx-font-family: :'Helvetica'; -fx-border-color: #ffffff; -fx-border-width:1px;");
                 lb1.setPrefSize(273.2, 57.2);
                 lb2.setPrefSize(273.2, 57.2);
@@ -126,7 +127,7 @@ public class ProfileMemberPage {
                 lb7.setPrefSize(273.2, 57.2);
 
                 lb8.setPrefSize(593.9, 57.2);
-                lb9.setPrefSize(593.9, 57.2);
+                lb13.setPrefSize(593.9, 57.2);
 
                 gridPane.add(lb1, 0, 0);
                 gridPane.add(lb2, 0, 1);
@@ -136,31 +137,46 @@ public class ProfileMemberPage {
                 gridPane.add(lb6, 0, 5);
                 gridPane.add(lb7, 0, 6);
                 gridPane.add(lb8, 1, 0);
-                gridPane.add(lb9, 1, 5);
+                gridPane.add(lb13, 1, 5);
 
                 TextField tf1 = new TextField();
+                if(CurrentUser.Instance.getFullName() != null) {
+                        tf1.setText(CurrentUser.Instance.getFullName());
+                }
                 tf1.setPromptText("Enter your full name here");
                 tf1.setStyle(
                         "-fx-text-fill: #2f74eb; -fx-font-size: 14 px; -fx-alignment: center; -fx-font-family: :'Helvetica'; -fx-border-color: #ffffff; -fx-border-width:1px; -fx-background-color: transparent;");
                 tf1.setPrefSize(593.9, 57.2);
 
                 TextField tf2 = new TextField();
+                if(CurrentUser.Instance.getEnglishName() != null) {
+                        tf2.setText(CurrentUser.Instance.getEnglishName());
+                }
                 tf2.setPromptText("Enter your English name here");
                 tf2.setStyle(
                         "-fx-text-fill: #2f74eb; -fx-font-size: 14 px; -fx-alignment: center; -fx-font-family: :'Helvetica'; -fx-border-color: #ffffff; -fx-border-width:1px;-fx-background-color: transparent;");
                 tf2.setPrefSize(593.9, 57.2);
 
                 TextField tf3 = new TextField();
+//                if(CurrentUser.Instance.getDateOfBirth() != null) {
+//                        tf3.setText(CurrentUser.Instance.getDateOfBirth());
+//                }
                 tf3.setPromptText("Enter your date of birth here");
                 tf3.setStyle(
                         "-fx-text-fill: #2f74eb; -fx-font-size: 14 px; -fx-alignment: center; -fx-font-family: :'Helvetica'; -fx-border-color: #ffffff; -fx-border-width:1px;-fx-background-color: transparent;");
                 tf3.setPrefSize(593.9, 57.2);
                 TextField tf4 = new TextField();
+                if(CurrentUser.Instance.getAddress() != null) {
+                        tf4.setText(CurrentUser.Instance.getAddress());
+                }
                 tf4.setPromptText("Enter your address here");
                 tf4.setStyle(
                         "-fx-text-fill: #2f74eb; -fx-font-size: 14 px; -fx-alignment: center; -fx-font-family: :'Helvetica'; -fx-border-color: #ffffff; -fx-border-width:1px;-fx-background-color: transparent;");
                 tf4.setPrefSize(593.9, 57.2);
                 TextField tf5 = new TextField();
+                if(CurrentUser.Instance.getPhone() != null) {
+                        tf5.setText(CurrentUser.Instance.getPhone());
+                }
                 tf5.setPromptText("Enter your phone number here");
                 tf5.setStyle(
                         "-fx-text-fill: #2f74eb; -fx-font-size: 14 px; -fx-alignment: center; -fx-font-family: :'Helvetica'; -fx-border-color: #ffffff; -fx-border-width:1px;-fx-background-color: transparent;");
@@ -172,5 +188,21 @@ public class ProfileMemberPage {
                 gridPane.add(tf5, 1, 6);
                 return gridPane;
         }
+        public static String getRoleName(int role){
+
+                switch (role) {
+                        case 1:
+                                return "Administrator";
+                        case 2:
+                                return "Product Owner";
+                        case 3:
+                                return "Scrum Master";
+                        case 4:
+                                return "Developer";
+                        default:
+                                return "Unknown Role";
+                }
+        }
+
 
 }
