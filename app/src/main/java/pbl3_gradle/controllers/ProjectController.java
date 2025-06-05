@@ -17,7 +17,7 @@ public class ProjectController {
 
     private List<Project> projectsUndone = new ArrayList<>();
     private List<Project> projectsComplete = new ArrayList<>();
-    private List<Item> items = new ArrayList<>();
+//    private List<Item> items = new ArrayList<>();
 
     //Load toàn bộ project từ db, chia thành 2 list: Undone và Completed
     private void loadProjectsFromDatabase() {
