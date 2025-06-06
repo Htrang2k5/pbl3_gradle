@@ -20,6 +20,8 @@ import javafx.scene.layout.*;
 import javafx.util.Duration;
 import pbl3_gradle.common.FancyButtonClass;
 import pbl3_gradle.common.ImageButtonClass;
+import pbl3_gradle.util.AppContext;
+import pbl3_gradle.util.NavigationManager;
 
 public class KanbanBoardPage {
         public Pane getView() {
@@ -145,6 +147,10 @@ public class KanbanBoardPage {
                 taskPane.getChildren().addAll(checkBox, taskLabel);
                 setupDraggableTaskPane(taskPane); // Thiết lập drag target cho task pane
                 applyClickEffect(taskPane);
+                taskPane.setOnMouseClicked(event -> {
+                        AppContext.set("currentPage", "TaskDetailPage");
+                        NavigationManager.navigateToDetailTaskPage();
+                });
                 return taskPane;
         }
 

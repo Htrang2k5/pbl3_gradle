@@ -154,6 +154,7 @@ public class CurrentProjectPage {
                 MenuItem menuItem1 = new MenuItem("Done");
                 MenuItem menuItem2 = new MenuItem("Delete");
                 MenuItem menuItem3 = new MenuItem("Redo");
+                MenuItem menuItem4 = new MenuItem("Edit");
                 menuItem1.setStyle(" -fx-font-size: 14px;"
                                 + " -fx-alignment: center; "
                                 + "-fx-font-family:'Helvetica';");
@@ -163,16 +164,33 @@ public class CurrentProjectPage {
                 menuItem3.setStyle(" -fx-font-size: 14px;"
                                 + " -fx-alignment: center; "
                                 + "-fx-font-family:'Helvetica';");
+                menuItem4.setStyle(" -fx-font-size: 14px;"
+                                + " -fx-alignment: center; "
+                                + "-fx-font-family:'Helvetica';");
                 if (AppContext.get("currentPage") == "CurrentProjectPage") {
-                        contextMenu.getItems().addAll(menuItem1, menuItem2);
+                        contextMenu.getItems().addAll(menuItem1, menuItem2, menuItem4);
                         menuItem1.setOnAction(e -> {
                                 CustomMessageBox.show("Success!", "Done project!");
                         });
+                        menuItem4.setOnAction(e -> {
+                                // Navigate to EditProjectPage
+                                AppContext.set("lastPage", "CurrentProjectPage");
+                                AppContext.set("currentPage", "EditProjectPage");
+                                NavigationManager.navigateToEditProjectPage();
+                        });
+                        applyClickEffect(projectBtn);
                 } else {
-                        contextMenu.getItems().addAll(menuItem3, menuItem2);
+                        contextMenu.getItems().addAll(menuItem3, menuItem2, menuItem4);
                         menuItem3.setOnAction(e -> {
                                 CustomMessageBox.show("Success!", "Redo project!");
                         });
+                        menuItem4.setOnAction(e -> {
+                                // Navigate to EditProjectPage
+                                AppContext.set("lastPage", "CompeletedProjectPage");
+                                AppContext.set("currentPage", "EditProjectPage");
+                                NavigationManager.navigateToEditProjectPage();
+                        });
+                        applyClickEffect(projectBtn);
                 }
                 moreButton.setOnMouseClicked(e -> {
                         if (!contextMenu.isShowing()) {

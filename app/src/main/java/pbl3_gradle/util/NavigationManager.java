@@ -94,4 +94,24 @@ public class NavigationManager {
         KanbanBoardPage kanbanBoardPage = new KanbanBoardPage();
         navigateTo(kanbanBoardPage.getView());
     }
+
+    public static void navigateToDetailTaskPage() {
+        DetailTaskPage detailTaskPage = new DetailTaskPage();
+        navigateTo(detailTaskPage.getView());
+    }
+
+    public static void navigateToEditProjectPage() {
+        EditProjectPage editProjectPage = new EditProjectPage();
+        navigateTo(editProjectPage.getView());
+    }
+
+    public static void navigateToBurndownChartPage() {
+        BurndownChartPage burndownChartPage = new BurndownChartPage();
+        navigateTo(burndownChartPage.getView());
+    }
+
+    public static void navigateToProjectMembersPage() {
+        ProjectMembersPage projectMembersPage = new ProjectMembersPage();
+        navigateTo(projectMembersPage.getView());
+    }
 }
