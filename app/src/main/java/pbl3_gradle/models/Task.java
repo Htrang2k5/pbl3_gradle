@@ -18,8 +18,6 @@ public class Task {
     protected int position;
     protected List<User> members;
     protected List<Comment> comments;
-    protected List<Checklist> checklists;
-    protected Label label;
 
     public Task(){
         idTask = -1;
@@ -32,7 +30,6 @@ public class Task {
         position = 0;
         members = new ArrayList<User>();
         comments = new ArrayList<Comment>();
-        checklists = new ArrayList<Checklist>();
     }
 
     public int getIdTask() {
@@ -107,19 +104,28 @@ public class Task {
         this.members = members;
     }
 
-    public void addMember(User user) {
-        if (this.members != null && !this.members.contains(user)) {
-            this.members.add(user);
+    public void addMember(int idUser) {
+        for (User member : members) {
+            if (member.getUserID() == idUser) {
+                // User already exists in the task, no need to add again
+                return;
+            }
         }
 
+        // If the user is not already a member, create a new User object and add it
+        User newMember = DataManager.Instance.getUserInfoInTask(idUser);
         //add to database too
-        DataManager.Instance.addMemberToTask(user, idTask);
+        DataManager.Instance.addMemberToTask(newMember, idTask);
     }
 
-    public void removeMember(User user) {
-        //remove by User id
-        if (this.members != null) {
-            this.members.removeIf(member -> member.getUserID() == user.getUserID());
+    public void removeMember(int idUser) {
+        for (User member : members) {
+            if (member.getUserID() == idUser) {
+                // User found, remove from the task
+                DataManager.Instance.removeMemberFromTask(member, idTask);
+                members.remove(member);
+                return;
+            }
         }
     }
 
@@ -140,30 +146,6 @@ public class Task {
         this.comments.add(comment);
     }
 
-    public Label getLabel() {
-        return label;
-    }
-
-    public void setLabel(Label label) {
-        this.label = label;
-    }
-
-    public List<Checklist> getChecklists() {
-        return checklists;
-    }
-
-    public void setChecklists(List<Checklist> checklists) {
-        this.checklists = checklists;
-    }
-
-    public void createNewChecklist(String checklistName) {
-        Checklist newChecklist = new Checklist();
-        newChecklist.setName(checklistName);
-        // Update to database too
-        newChecklist = DataManager.Instance.createChecklist(newChecklist, idTask);
-        this.checklists.add(newChecklist); // Assuming comments can also hold checklists
-    }
-
     public void createNewDueDate(int year, int month, int day, int hour24, int minute) {
         // Create a new Date object with the specified year, month, day, hour, and minute
         Calendar cal = Calendar.getInstance();
@@ -173,5 +155,12 @@ public class Task {
 
         // Update to database too
         DataManager.Instance.updateTaskDueDate(this.idTask, dueDate);
+    }
+
+    public Date convertIntToDate(int year, int month, int day, int hour24, int minute) {
+        // Create a new Date object with the specified year, month, day, hour, and minute
+        Calendar cal = Calendar.getInstance();
+        cal.set(year, month - 1, day, hour24, minute, 0); // Month is 0-based in Calendar
+        return cal.getTime();
     }
 }

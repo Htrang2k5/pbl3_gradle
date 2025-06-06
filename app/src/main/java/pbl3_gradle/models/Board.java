@@ -11,14 +11,12 @@ public class Board {
     protected Date dateCreated;
     protected Date dateModified;
     protected List<TaskList> taskLists;
-    protected List<Label> labels;
 
     public Board(){
         idBoard = -1;
         dateCreated = new Date();
         dateModified = new Date();
         taskLists = new ArrayList<TaskList>();
-        labels = new ArrayList<Label>();
     }
 
     public int getIdBoard() {
@@ -60,6 +58,9 @@ public class Board {
         }
 
         this.taskLists = DataManager.Instance.getTaskListByBoardId(idBoard);
+        for (TaskList taskList : taskLists) {
+            taskList.setTasks(DataManager.Instance.getTaskByTaskListId(taskList.getIdTaskList()));
+        }
     }
 
     //tạo task list mới trong Board
@@ -88,21 +89,6 @@ public class Board {
         } else {
             System.out.println("Task List with ID " + idTaskList + " not found.");
         }
-    }
-
-    public List<Label> getLabels() {
-        return labels;
-    }
-
-    public void setLabels(List<Label> labels) {
-        this.labels = labels;
-    }
-
-    public void createNewLabel(Label label) {
-        //Label object should have name and color set
-        label = DataManager.Instance.addNewLabelToBoard(label, idBoard);
-
-        labels.add(label);
     }
 
     private void updatePositions(List<Task> tasks) {

@@ -16,7 +16,6 @@ public class Project {
 
     protected SprintList sprintList;
 
-
     //public ProductBacklog()
 
     public Project() {
