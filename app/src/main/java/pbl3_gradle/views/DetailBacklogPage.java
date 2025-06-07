@@ -3,12 +3,13 @@ package pbl3_gradle.views;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import pbl3_gradle.common.*;
+import pbl3_gradle.models.Item;
 import pbl3_gradle.util.AppContext;
 import pbl3_gradle.util.NavigationManager;
 import javafx.scene.control.Label;
 
 public class DetailBacklogPage {
-        public Pane getView() {
+        public Pane getView(Item item) {
                 // Tao MenuBar
                 Pane menuBar = ProductBacklogPage.MenuBarStyle_Layer3("Detail Backlog", "DetailBacklogPage");
                 // Tao button Back
@@ -23,7 +24,7 @@ public class DetailBacklogPage {
                         }
                 });
                 // Tao backlog lam tieu de
-                Pane backlog = ProductBacklogPage.backlog(1, "Design UI", "Not Set");
+                Pane backlog = ProductBacklogPage.backlog(1, item);
                 backlog.setPrefSize(894.4, 68.8);
                 backlog.setLayoutX(386.2);
                 backlog.setLayoutY(63.9);
@@ -31,7 +32,7 @@ public class DetailBacklogPage {
                 RoundedRect rect = new RoundedRect(339.2, 156.1, 988.5, 570.4, "#c4dff8", "#ffffff", 0, 36);
                 // Tao label description
                 Label description = new Label(
-                                "Description: This is a detailed description of the backlog item. It includes all the necessary information that the team needs to understand the requirements and expectations for this item.");
+                        item.getDescription());
                 description.setStyle(
                                 "-fx-text-fill: #2f74eb; -fx-font-size: 18px; -fx-alignment: TOP_LEFT; -fx-font-family: 'Helvetica';");
                 description.setPrefWidth(903);

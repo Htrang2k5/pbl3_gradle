@@ -12,7 +12,7 @@ public class Item {
     protected String description;
     protected Date dateCreated;
     protected Date dateModified;
-    protected Boolean status;
+    protected Boolean status;//
 
     public Item() {
         this.idItem = 0;

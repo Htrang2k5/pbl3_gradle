@@ -46,8 +46,8 @@ public class CurrentProjectPage {
         private Pane createMenuBar() {
                 return ProfileMemberPage.MenuBarStyle_Layer2(
                         "file:src/main/resources/image/ImageAvatar.png",
-                        "Nguyễn Thị Huyền Trang",
-                        "Scrum Master",
+                        CurrentUser.Instance.getFullName(),
+                        ProfileMemberPage.getRoleName(CurrentUser.Instance.getRole()),
                         "CurrentProjectPage");
         }
 
@@ -189,6 +189,8 @@ public class CurrentProjectPage {
 
                 projectButton.setOnMouseClicked(e -> {
                         AppContext.set("currentPage", "ProductBacklogPage");
+                     Project prj= DataManager.Instance.getProjectByName(title);
+                     DataManager.Instance.setCurrentProject(prj);
                         NavigationManager.navigateToProductBacklogPage();
                 });
 
@@ -229,12 +231,19 @@ public class CurrentProjectPage {
                         });
                         deleteItem.setOnAction(e -> {
                                 ProjectController.Instance.removeProject(idProject);
-                                CustomMessageBox.show("Success!", "Deleted project!"); // Thông báo thành công
+                                CustomMessageBox.show("Success!", "Deleted project!");
                         });
 
                 } else {
                         menu.getItems().addAll(redoItem, deleteItem);
-                        redoItem.setOnAction(e -> CustomMessageBox.show("Success!", "Redo project!"));
+                        redoItem.setOnAction(e -> {
+                                ProjectController.Instance.markUndoneProject(idProject);  // Gọi hàm đánh dấu project là đã redo
+                                CustomMessageBox.show("Success!", "Redo project!");
+                        });
+                        deleteItem.setOnAction(e -> {
+                                ProjectController.Instance.removeProject(idProject);
+                                CustomMessageBox.show("Success!", "Deleted project!");
+                        });
                 }
 
                 moreBtn.setOnMouseClicked(e -> {
@@ -257,4 +266,5 @@ public class CurrentProjectPage {
                 st.setToY(scale);
                 st.play();
         }
+
 }

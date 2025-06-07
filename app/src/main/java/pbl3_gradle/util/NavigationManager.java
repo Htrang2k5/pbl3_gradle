@@ -1,6 +1,7 @@
 package pbl3_gradle.util;
 
 import javafx.stage.Stage;
+import pbl3_gradle.models.Item;
 import pbl3_gradle.views.*;
 import javafx.scene.layout.Pane;
 
@@ -70,9 +71,9 @@ public class NavigationManager {
         navigateTo(productBacklogPage.getView());
     }
 
-    public static void navigateToDetailBacklogPage() {
+    public static void navigateToDetailBacklogPage(Item item) {
         DetailBacklogPage detailBacklogPage = new DetailBacklogPage();
-        navigateTo(detailBacklogPage.getView());
+        navigateTo(detailBacklogPage.getView(item));
     }
 
     public static void navigateToCurrentSprintPage() {

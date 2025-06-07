@@ -79,6 +79,7 @@ public class DataManager {
                 CurrentUser.Instance.setPhone(rs.getString("phone"));
                 CurrentUser.Instance.setAddress(rs.getString("address"));
                 CurrentUser.Instance.setAvatar(rs.getString("avatar"));
+                CurrentUser.Instance.setBirthday(rs.getDate("birthday"));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -435,14 +436,14 @@ public class DataManager {
     //Lấy thông tin của Product Backlog hiện tại, trả về ProductBacklog
     public ProductBacklog getCurrentProductBacklog() {
         int idProject = CurrentProject.Instance.getIdProject();
-        String query = "SELECT * FROM productBacklog WHERE idProject = ?";
+        String query = "SELECT * FROM product_backlog WHERE idProject = ?";
         SqlParameter[] param = { new SqlParameter(1, idProject) };
         ResultSet rs = DBHelper.Instance.GetRecords(query, param);
 
         try {
             if (rs.next()) {
                 int idProductBacklog = rs.getInt("idProductBacklog");
-                List<Item> items = DataManager.Instance.getAllItemByBacklog(idProductBacklog, 0);
+                List<Item> items = DataManager.Instance.getAllItemByBacklog(idProductBacklog, 1);
                 return new ProductBacklog(idProductBacklog, idProject, items);
             }
         } catch (SQLException e) {
@@ -546,7 +547,7 @@ public class DataManager {
                 sprint.setActualEndDate(rs.getDate("endDate"));
                 sprint.setStatus(rs.getBoolean("status"));
 
-                List<Item> items = DataManager.Instance.getAllItemByBacklog(sprint.getIdSprint(), 1);
+                List<Item> items = DataManager.Instance.getAllItemByBacklog(sprint.getIdSprint(), 0);
                 sprint.setItems(items);
                 sprintList.addSprint(sprint);
             }
@@ -570,7 +571,7 @@ public class DataManager {
                 sprint.setIdSprint(rs.getInt("idSprint"));
                 sprint.setIdProject(rs.getInt("idProject"));
                 sprint.setTitle(rs.getString("title"));
-                sprint.setStartDate(rs.getDate("startDate"));
+                sprint.setStartDate(rs.getDate("dateStart"));
                 sprint.setEstimatedEndDate(rs.getDate("estimatedEndDate"));
                 sprint.setActualEndDate(rs.getDate("actualEndDate"));
                 sprint.setStatus(rs.getBoolean("status"));
@@ -597,7 +598,7 @@ public class DataManager {
                 sprint.setIdSprint(rs.getInt("idSprint"));
                 sprint.setIdProject(rs.getInt("idProject"));
                 sprint.setTitle(rs.getString("title"));
-                sprint.setStartDate(rs.getDate("startDate"));
+                sprint.setStartDate(rs.getDate("dateStart"));
                 sprint.setEstimatedEndDate(rs.getDate("estimatedEndDate"));
                 sprint.setActualEndDate(rs.getDate("actualEndDate"));
                 sprint.setStatus(rs.getBoolean("status"));
@@ -615,7 +616,7 @@ public class DataManager {
         sprint.setIdProject(CurrentProject.Instance.getIdProject());
         sprint.setStatus(false); // Mặc định trạng thái là chưa hoàn thành
 
-        String query = "INSERT INTO sprint (idProject, title, startDate, estimatedEndDate, actualEndDate, status) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO sprint (idProject, title, dateStart, estimatedEndDate, actualEndDate, status) VALUES (?, ?, ?, ?, ?, ?)";
         SqlParameter[] param = {
                 new SqlParameter(1, sprint.getIdProject()),
                 new SqlParameter(2, sprint.getTitle()),
@@ -646,7 +647,9 @@ public class DataManager {
         String query = "UPDATE sprint SET title = ? WHERE idSprint = ?";
         SqlParameter[] param = {
                 new SqlParameter(1, sprint.getTitle()),
+                new SqlParameter(2, sprint.getIdSprint())
         };
+
         DBHelper.Instance.ExecuteDB(query, param);
 
         sprintList.updateSprint(sprint);
@@ -672,7 +675,7 @@ public class DataManager {
 
     //Lấy khoảng thời gian ước tính của một sprint
     public long getEstimatedTimeForSprint(Sprint sprint) {
-        String query = "SELECT startDate, estimatedEndDate FROM sprint WHERE idSprint = ?";
+        String query = "SELECT dateStart, estimatedEndDate FROM sprint WHERE idSprint = ?";
         SqlParameter[] param = {
                 new SqlParameter(1, sprint.getIdSprint())
         };

@@ -2,6 +2,7 @@ package pbl3_gradle.views;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Random;
 
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -11,6 +12,10 @@ import javafx.scene.layout.Pane;
 import pbl3_gradle.common.FancyButtonClass;
 import pbl3_gradle.common.ImageButtonClass;
 import pbl3_gradle.common.RoundedRect;
+import pbl3_gradle.controllers.DataManager;
+import pbl3_gradle.models.CurrentProject;
+import pbl3_gradle.models.Sprint;
+import pbl3_gradle.models.SprintList;
 import pbl3_gradle.util.AppContext;
 import pbl3_gradle.util.CustomMessageBox;
 import pbl3_gradle.util.NavigationManager;
@@ -98,10 +103,20 @@ public class AddNewSprintPage {
                 // Tao button Create
                 FancyButtonClass createButton = new FancyButtonClass("Create New Sprint", 295.4, 59.8, 491.2, 642.3);
                 createButton.setOnAction(e -> {
-                        AppContext.set("CurrentSprint", "Srpint1"); // tao gia tri ao
-                        CustomMessageBox.show("Success!",
-                                        "New sprint has been created successfully!");
-                        AppContext.set("currentPage", "CurrentSprintPage");
+                        String name = nameSprint.getText().trim();
+                        LocalDate startDate = startDatePicker.getValue();
+                        LocalDate endDate = endDatePicker.getValue();
+                     Sprint sprint =  new Sprint();
+                        sprint.setTitle(name);
+                        sprint.setStartDate(java.sql.Date.valueOf(startDate));
+                        sprint.setEstimatedEndDate(java.sql.Date.valueOf(endDate));
+                        sprint.setStatus(false);
+                        Random random = new Random();
+                        int randomNumber = random.nextInt(100) + 1; // từ 1 đến 100
+                        sprint.setIdSprint(randomNumber);
+                        sprint.setIdProject(CurrentProject.Instance.getIdProject());
+                        SprintList sprintList = new SprintList();
+                        DataManager.Instance.addNewSprintToSprintList(sprintList, sprint);
                         NavigationManager.navigateToCurrentSprintPage();
                 });
                 // Tao button Clear

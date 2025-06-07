@@ -158,9 +158,9 @@ public class ProfileMemberPage {
                 tf2.setPrefSize(593.9, 57.2);
 
                 TextField tf3 = new TextField();
-//                if(CurrentUser.Instance.getDateOfBirth() != null) {
-//                        tf3.setText(CurrentUser.Instance.getDateOfBirth());
-//                }
+                if(CurrentUser.Instance.getBirthday() != null) {
+                        tf3.setText(CurrentUser.Instance.getBirthday().toString());
+                }
                 tf3.setPromptText("Enter your date of birth here");
                 tf3.setStyle(
                         "-fx-text-fill: #2f74eb; -fx-font-size: 14 px; -fx-alignment: center; -fx-font-family: :'Helvetica'; -fx-border-color: #ffffff; -fx-border-width:1px;-fx-background-color: transparent;");
