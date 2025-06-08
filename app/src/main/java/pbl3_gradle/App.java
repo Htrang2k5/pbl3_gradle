@@ -2,29 +2,21 @@ package pbl3_gradle;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import pbl3_gradle.util.NavigationManager;
 
-//import pbl3_gradle.views.LoginPage;
-//import pbl3_gradle.views.DeleteAccPage;
-import pbl3_gradle.views.EditAcc_ShowAccPage;
 import pbl3_gradle.views.LoginPage;
-import pbl3_gradle.views.ProfileMemberPage;
+import pbl3_gradle.views.DeleteAccPage;
+import pbl3_gradle.views.*;
+import pbl3_gradle.controllers.*;
+import pbl3_gradle.models.*;
+import java.util.*;
 
-public class App extends Application {
-    public void start(Stage stage) {
-         LoginPage view = new LoginPage();
-        // DeleteAccPage view = new DeleteAccPage();
-//        ProfileMemberPage view = new ProfileMemberPage();
-        Scene scene = new Scene(view.getView(), 1366, 768);
-        stage.setScene(scene);
-        stage.setTitle("PBL3: Phần mềm hỗ trợ quản lý dự án");
-        stage.setResizable(false);
-        stage.show();
-        NavigationManager.setStage(stage);
-    }
-
+public class App {
     public static void main(String[] args) {
-        launch(args);
     }
 }

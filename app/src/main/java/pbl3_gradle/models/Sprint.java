@@ -1,12 +1,11 @@
 package pbl3_gradle.models;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class Sprint {
     private int idSprint;
     private int idProject;
     private String title;
-    private Date startDate;
+    private Date dateStart;
     private Date estimatedEndDate;
     private Date actualEndDate;
     private Boolean status;
@@ -17,7 +16,8 @@ public class Sprint {
         this.idSprint = 0;
         this.idProject = 0;
         this.title = "";
-        this.startDate = new Date();
+        this.dateStart = new Date();
+        this.estimatedEndDate = new Date();
         this.actualEndDate = new Date();
         this.status = false;
         this.items = null;
@@ -32,8 +32,8 @@ public class Sprint {
     public String getTitle() {return title;}
     public void setTitle(String title) {this.title = title;}
 
-    public Date getStartDate() {return startDate;}
-    public void setStartDate(Date startDate) {this.startDate = startDate;}
+    public Date getDateStart() {return dateStart;}
+    public void setDateStart(Date dateStart) {this.dateStart = dateStart;}
 
     public Date getEstimatedEndDate() {return estimatedEndDate;}
     public void setEstimatedEndDate(Date estimatedEndDate) {this.estimatedEndDate = estimatedEndDate;}
@@ -49,5 +49,9 @@ public class Sprint {
     }
     public void setItems(List<Item> items) {
         this.items = items;
+    }
+
+    public Date getEndDate() {
+        return this.actualEndDate = new Date();
     }
 }

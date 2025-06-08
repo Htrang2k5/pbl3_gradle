@@ -344,9 +344,9 @@ public class DataManager {
         ResultSet rs = DBHelper.Instance.GetRecords(query, param);
 
         try {
-            if (rs.next()) {
+            if (rs != null && rs.next()) {
                 int idProductBacklog = rs.getInt("idProductBacklog");
-                List<Item> items = DataManager.Instance.getAllItemByBacklog(idProductBacklog, 0);
+                List<Item> items = DataManager.Instance.getAllItemByBacklog(idProductBacklog, true);
                 return new ProductBacklog(idProductBacklog, idProject, items);
             }
         } catch (SQLException e) {
@@ -355,8 +355,23 @@ public class DataManager {
         return null;
     }
 
+    //thêm một Product Backlog mới cho project hiện tại
+    public void addNewProductBacklog(int idProject) {
+        String query = "INSERT INTO product_backlog (idProject) VALUES (?)";
+        SqlParameter[] param = {
+                new SqlParameter(1, idProject)
+        };
+        DBHelper.Instance.ExecuteDB(query, param);
+
+        // Cập nhật lại Product Backlog trong CurrentProject
+        ProductBacklog productBacklog = new ProductBacklog(0, idProject, new ArrayList<>());
+        productBacklog.setIdProject(idProject);
+        CurrentProject.Instance.setProductBacklog(productBacklog);
+    }
+
+
     // Lấy tất cả item trong Product Backlog
-    public List<Item> getAllItemByBacklog(int idBacklog, int backlogType) {
+    public List<Item> getAllItemByBacklog(int idBacklog, boolean backlogType) {
         String query = "SELECT * FROM item WHERE idBacklog = ? AND backlogType = ?";
         SqlParameter[] param = {
                 new SqlParameter(1, idBacklog),
@@ -366,16 +381,16 @@ public class DataManager {
 
         List<Item> itemList = new ArrayList<>();
         try {
-            while (rs.next()) {
+            while (rs != null && rs.next()) {
                 Item item = new Item();
                 item.setIdItem(rs.getInt("idItem"));
+                item.setIdBacklog(rs.getInt("idBacklog"));
+                item.setBacklogType(rs.getBoolean("backlogType"));
                 item.setTitle(rs.getString("title"));
                 item.setDescription(rs.getString("description"));
                 item.setDateCreated(rs.getDate("dateCreated"));
                 item.setDateModified(rs.getDate("dateModified"));
                 item.setStatus(rs.getBoolean("status"));
-                item.setIdBacklog(rs.getInt("idBacklog"));
-                item.setBacklogType(rs.getBoolean("backlogType"));
 
                 itemList.add(item);
             }
@@ -456,15 +471,17 @@ public class DataManager {
 
         SprintList sprintList = new SprintList();
         try {
-            while (rs.next()) {
+            while (rs != null && rs.next()) {
                 Sprint sprint = new Sprint();
                 sprint.setIdSprint(rs.getInt("idSprint"));
                 sprint.setIdProject(rs.getInt("idProject"));
-                sprint.setStartDate(rs.getDate("startDate"));
-                sprint.setActualEndDate(rs.getDate("endDate"));
+                sprint.setTitle(rs.getString("title"));
+                sprint.setDateStart(rs.getDate("dateStart"));
+                sprint.setEstimatedEndDate(rs.getDate("estimatedEndDate"));
+                sprint.setActualEndDate(rs.getDate("actualEndDate"));
                 sprint.setStatus(rs.getBoolean("status"));
 
-                List<Item> items = DataManager.Instance.getAllItemByBacklog(sprint.getIdSprint(), 1);
+                List<Item> items = DataManager.Instance.getAllItemByBacklog(sprint.getIdSprint(), false);
                 sprint.setItems(items);
                 sprintList.addSprint(sprint);
             }
@@ -483,12 +500,12 @@ public class DataManager {
 
         List<Sprint> unfinishedSprints = new ArrayList<>();
         try {
-            while (rs.next()) {
+            while (rs != null && rs.next()) {
                 Sprint sprint = new Sprint();
                 sprint.setIdSprint(rs.getInt("idSprint"));
                 sprint.setIdProject(rs.getInt("idProject"));
                 sprint.setTitle(rs.getString("title"));
-                sprint.setStartDate(rs.getDate("startDate"));
+                sprint.setDateStart(rs.getDate("dateStart"));
                 sprint.setEstimatedEndDate(rs.getDate("estimatedEndDate"));
                 sprint.setActualEndDate(rs.getDate("actualEndDate"));
                 sprint.setStatus(rs.getBoolean("status"));
@@ -505,17 +522,19 @@ public class DataManager {
     public List<Sprint> getUnfinishedSprints() {
         int idProject = CurrentProject.Instance.getIdProject();
         String query = "SELECT * FROM sprint WHERE idProject = ? AND status = false";
-        SqlParameter[] param = { new SqlParameter(1, idProject) };
+        SqlParameter[] param = {
+                new SqlParameter(1, idProject)
+        };
         ResultSet rs = DBHelper.Instance.GetRecords(query, param);
 
         List<Sprint> unfinishedSprints = new ArrayList<>();
         try {
-            while (rs.next()) {
+            while (rs != null && rs.next()) {
                 Sprint sprint = new Sprint();
                 sprint.setIdSprint(rs.getInt("idSprint"));
                 sprint.setIdProject(rs.getInt("idProject"));
                 sprint.setTitle(rs.getString("title"));
-                sprint.setStartDate(rs.getDate("startDate"));
+                sprint.setDateStart(rs.getDate("dateStart"));
                 sprint.setEstimatedEndDate(rs.getDate("estimatedEndDate"));
                 sprint.setActualEndDate(rs.getDate("actualEndDate"));
                 sprint.setStatus(rs.getBoolean("status"));
@@ -533,11 +552,11 @@ public class DataManager {
         sprint.setIdProject(CurrentProject.Instance.getIdProject());
         sprint.setStatus(false); // Mặc định trạng thái là chưa hoàn thành
 
-        String query = "INSERT INTO sprint (idProject, title, startDate, estimatedEndDate, actualEndDate, status) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO sprint (idProject, title, dateStart, estimatedEndDate, actualEndDate, status) VALUES (?, ?, ?, ?, ?, ?)";
         SqlParameter[] param = {
                 new SqlParameter(1, sprint.getIdProject()),
                 new SqlParameter(2, sprint.getTitle()),
-                new SqlParameter(3, sprint.getStartDate()),
+                new SqlParameter(3, sprint.getDateStart()),
                 new SqlParameter(4, sprint.getEstimatedEndDate()),
                 new SqlParameter(5, sprint.getActualEndDate()),
                 new SqlParameter(6, sprint.getStatus())
@@ -564,6 +583,7 @@ public class DataManager {
         String query = "UPDATE sprint SET title = ? WHERE idSprint = ?";
         SqlParameter[] param = {
                 new SqlParameter(1, sprint.getTitle()),
+                new SqlParameter(2, sprint.getIdSprint())
         };
         DBHelper.Instance.ExecuteDB(query, param);
 
@@ -590,14 +610,14 @@ public class DataManager {
 
     //Lấy khoảng thời gian ước tính của một sprint
     public long getEstimatedTimeForSprint(Sprint sprint) {
-        String query = "SELECT startDate, estimatedEndDate FROM sprint WHERE idSprint = ?";
+        String query = "SELECT dateStart, estimatedEndDate FROM sprint WHERE idSprint = ?";
         SqlParameter[] param = {
                 new SqlParameter(1, sprint.getIdSprint())
         };
         ResultSet rs = DBHelper.Instance.GetRecords(query, param);
         try {
-            if (rs.next()) {
-                LocalDate startDate = rs.getDate("startDate").toLocalDate();
+            if (rs != null && rs.next()) {
+                LocalDate startDate = rs.getDate("dateStart").toLocalDate();
                 LocalDate estimatedEndDate = rs.getDate("estimatedEndDate").toLocalDate();
                 if (startDate != null && estimatedEndDate != null) {
                     return ChronoUnit.DAYS.between(startDate, estimatedEndDate);
@@ -611,17 +631,17 @@ public class DataManager {
 
     //Lấy khoảng thời gian thực tế của một sprint
     public long getActualTimeForSprint(Sprint sprint) {
-        String query = "SELECT startDate, actualEndDate FROM sprint WHERE idSprint = ?";
+        String query = "SELECT dateStart, actualEndDate FROM sprint WHERE idSprint = ?";
         SqlParameter[] param = {
                 new SqlParameter(1, sprint.getIdSprint())
         };
         ResultSet rs = DBHelper.Instance.GetRecords(query, param);
         try {
-            if (rs.next()) {
-                LocalDate startDate = rs.getDate("startDate").toLocalDate();
+            if (rs != null && rs.next()) {
+                LocalDate dateStart = rs.getDate("dateStart").toLocalDate();
                 LocalDate actualEndDate = rs.getDate("actualEndDate").toLocalDate();
-                if (startDate != null && actualEndDate != null) {
-                    return ChronoUnit.DAYS.between(startDate, actualEndDate);
+                if (dateStart != null && actualEndDate != null) {
+                    return ChronoUnit.DAYS.between(dateStart, actualEndDate);
                 }
             }
         } catch (SQLException e) {
@@ -629,6 +649,7 @@ public class DataManager {
         }
         return 0;
     }
+
     //Lấy id của board theo idProject
     public int getBoardIdByProject(int idProject) {
         String query = "SELECT * FROM board WHERE idProject = ?";

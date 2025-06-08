@@ -6,10 +6,13 @@ import pbl3_gradle.controllers.*;
 
 public class CurrentProject {
     public static final CurrentProject Instance = new CurrentProject();
-    private Project currentProject;
+    public Project currentProject;
 
-    private CurrentProject() {
+    public CurrentProject() {
         currentProject = new Project();
+    }
+    public void setCurrentProject(Project project) {
+        this.currentProject = project;
     }
 
     public int getIdProject() {
@@ -68,5 +71,11 @@ public class CurrentProject {
     public void setSprintList(SprintList sprintList) {
         currentProject.sprintList = sprintList;
         DataManager.Instance.updateProject(currentProject);
+    }
+    public List<Sprint> getAllSprint() {
+        if (currentProject != null && currentProject.getSprintList() != null) {
+            return currentProject.getSprintList().getSprintList(); // Gọi đúng tên hàm
+        }
+        return new ArrayList<>();
     }
 }

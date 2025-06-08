@@ -26,7 +26,7 @@ public class Project {
         this.dateCreated = new Date();
         this.dateModified = new Date();
         this.status = false;
-        this.productBacklog = new ProductBacklog(0,0, new ArrayList<>());
+        this.productBacklog = new ProductBacklog();
         this.sprintList = new SprintList();
     }
 

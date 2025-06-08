@@ -16,6 +16,17 @@ public class ProductBacklog {
     public void setIdProductBacklog(int idProductBacklog) {
         this.idProductBacklog = idProductBacklog;
     }
+    public int getIdProject() {
+        return idProject;
+    }
+    public void setIdProject(int idProject) {
+        this.idProject = idProject;
+    }
+    public ProductBacklog() {
+        this.idProductBacklog = 0;
+        this.idProject = 0;
+        this.items = DataManager.Instance.getAllItemByBacklog(this.idProductBacklog, true);
+    }
     public ProductBacklog(int idProductBacklog, int idProject, List<Item> items) {
         this.idProductBacklog = idProductBacklog;
         this.idProject = idProject;
