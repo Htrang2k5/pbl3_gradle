@@ -186,7 +186,6 @@ public class ProductBacklogPage {
                 if (!item.getStatus().equals("Not Set")) {
                         pane1.getChildren().add(moreButton);
                 }
-
                 Button button = new Button();
                 button.setGraphic(pane1);
                 button.setStyle("-fx-background-color: #c4dff8; -fx-background-radius: 36; -fx-border-radius: 36; -fx-cursor: hand;");

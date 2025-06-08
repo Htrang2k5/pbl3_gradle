@@ -5,15 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9f9a53cc-b0fb-4c6d-bf00-9210d3307d97" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_5_21_2025_9_52_AM_[Changes]/shelved.patch" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_5_21_2025_9_52_AM_[Changes]/shelved.patch" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_5_21_2025_9_52_AM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_5_21_2025_9_52_AM__Changes_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/controllers/DataManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/controllers/DataManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/models/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/models/Board.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/util/NavigationManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/util/NavigationManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/views/CurrentProjectPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/views/CurrentProjectPage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/views/DetailTaskPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/views/DetailTaskPage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/views/KanbanBoardPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/views/KanbanBoardPage.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/views/ProductBacklogPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/views/ProductBacklogPage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/views/ProjectMembersPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/views/ProjectMembersPage.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
