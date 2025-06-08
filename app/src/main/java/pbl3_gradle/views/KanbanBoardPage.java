@@ -1,6 +1,8 @@
 package pbl3_gradle.views;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javafx.animation.ScaleTransition;
 import javafx.collections.ObservableList;
@@ -20,6 +22,11 @@ import javafx.scene.layout.*;
 import javafx.util.Duration;
 import pbl3_gradle.common.FancyButtonClass;
 import pbl3_gradle.common.ImageButtonClass;
+import pbl3_gradle.controllers.DataManager;
+import pbl3_gradle.models.Board;
+import pbl3_gradle.models.CurrentProject;
+import pbl3_gradle.models.Task;
+import pbl3_gradle.models.TaskList;
 import pbl3_gradle.util.AppContext;
 import pbl3_gradle.util.NavigationManager;
 
@@ -27,88 +34,90 @@ public class KanbanBoardPage {
         public Pane getView() {
                 // Create MenuBar
                 Pane menuBar = ProductBacklogPage.MenuBarStyle_Layer3("Kanban Board", "KanbanBoardPage");
+
                 // Create the main label
                 Label mainLabel = new Label("KANBAN BOARD");
                 mainLabel.setStyle(
-                                "-fx-text-fill: #2f74eb; -fx-font-size: 26px; -fx-alignment: center; -fx-font-family: 'Arial'; -fx-font-weight: bold;");
+                        "-fx-text-fill: #2f74eb; -fx-font-size: 26px; -fx-alignment: center; -fx-font-family: 'Arial'; -fx-font-weight: bold;");
                 mainLabel.setPrefSize(216.9, 44.6);
                 mainLabel.setLayoutX(339.8);
                 mainLabel.setLayoutY(25.8);
-                // Tao vbox chua cac task
-                List<Pane> taskPanes = List.of(
-                                taskPane("Task 1", false),
-                                taskPane("Task 2", true),
-                                taskPane("Task 3", false),
-                                taskPane("Task 4", true),
-                                taskPane("Task 5", false));
-                // create a new HBox to hold the task lists
-                HBox taskListsContainer = new HBox(20); // Khoang cach giua cac task list
-                setupVBoxDropTarget(taskListsContainer); // Thiết lập drag target cho task lists
-                taskListsContainer.setPadding(new Insets(0, 10, 0, 10));
-                // Create the list of tasks
-                VBox taskList = listTasks("Document", taskPanes, taskListsContainer);
-                VBox tasklist2 = listTasks("Todo", List.of(
-                                taskPane("Task 6", false)), taskListsContainer);
 
-                List<VBox> taskLists = List.of(taskList, tasklist2, listTasks("None", null, taskListsContainer));
+                // HBox chứa các task list
+                HBox taskListsContainer = new HBox(20);
+                setupVBoxDropTarget(taskListsContainer);
+                taskListsContainer.setPadding(new Insets(10, 10, 0, 10));
                 taskListsContainer.setFillHeight(false);
-                for (VBox taskListItem : taskLists) {
-                        taskListsContainer.getChildren().add(taskListItem);
+
+                // Lấy danh sách TaskList
+                List<TaskList> taskList = DataManager.Instance.getTaskListByBoardId(
+                        DataManager.Instance.getBoardIdByProject(CurrentProject.Instance.getIdProject()));
+
+                for (TaskList taskListItem : taskList) {
+                        VBox tl = listTasks(taskListItem, taskListsContainer);
+                        taskListsContainer.getChildren().add(tl);
                 }
-                // Create a button to add new task list
+
+                // Nút thêm Task List mới
                 FancyButtonClass addNewTaskListButton = new FancyButtonClass("Add New Task List", 345.7, 69.1, 0, 0);
                 addNewTaskListButton.setOnAction(e -> {
-                        // Xu ly su kien them task list moi
-                        VBox newTaskList = listTasks("New Task List", null, taskListsContainer);
-                        taskListsContainer.getChildren().remove(addNewTaskListButton); // Remove the button temporarily
+                        TaskList newtl = new TaskList();
+                        newtl.setName("New Task List");
+                        Random rand = new Random();
+                        int randomNumber = rand.nextInt(100) + 1;
+                        newtl.setIdTaskList(randomNumber);
+                        DataManager.Instance.createTaskList(newtl, DataManager.Instance.getBoardIdByProject(CurrentProject.Instance.getIdProject()));
+                        VBox newTaskList = listTasks(newtl, taskListsContainer);
+                        taskListsContainer.getChildren().remove(addNewTaskListButton);
                         taskListsContainer.getChildren().add(newTaskList);
-                        taskListsContainer.getChildren().add(addNewTaskListButton); // Add the button back
+                        taskListsContainer.getChildren().add(addNewTaskListButton);
                 });
                 taskListsContainer.getChildren().add(addNewTaskListButton);
-                taskListsContainer.setPadding(new Insets(10, 0, 0, 0));
 
+                // ScrollPane chứa taskListsContainer
                 ScrollPane scrollPane = new ScrollPane(taskListsContainer);
-                scrollPane.setStyle(
-                                "-fx-background: transparent; -fx-background-color: transparent; "
-                                                + "-fx-border-color: transparent; -fx-border-width: 0px; ");
+                scrollPane.setStyle("-fx-background: transparent; -fx-background-color: transparent; "
+                        + "-fx-border-color: transparent; -fx-border-width: 0px;");
                 scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
                 scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
                 scrollPane.setPrefSize(1000, 1000);
                 scrollPane.setLayoutX(330.8);
                 scrollPane.setLayoutY(70);
-                // Create main pane
+
+                // Main pane
                 Pane mainPane = new Pane();
                 mainPane.getChildren().addAll(menuBar, mainLabel, scrollPane);
                 mainPane.setPrefSize(1366, 768);
                 mainPane.setStyle("-fx-background-color: #ffffff; -fx-background-size: cover;");
+
                 return mainPane;
         }
 
-        public static Pane taskPane(String taskName, Boolean status) {
+        public static Pane taskPane(Task task) {
                 Pane taskPane = new Pane();
                 taskPane.setPrefSize(305.6, 118.4);
-                if (status) {
+                if (task.getStatus()) {
                         taskPane.setStyle(
-                                        "-fx-background-color: #c4dff8;"
-                                                        + "-fx-border-radius: 10px;"
-                                                        + "-fx-background-radius: 10px;"
-                                                        + "-fx-border-color: #92badd;"
-                                                        + "-fx-border-width: 2px;"
-                                                        + "-fx-cursor: hand;");
+                                "-fx-background-color: #c4dff8;"
+                                        + "-fx-border-radius: 10px;"
+                                        + "-fx-background-radius: 10px;"
+                                        + "-fx-border-color: #92badd;"
+                                        + "-fx-border-width: 2px;"
+                                        + "-fx-cursor: hand;");
                 } else
                         // Neu task chua hoan thanh
                         taskPane.setStyle(
-                                        "-fx-background-color: #c4dff8;"
-                                                        + "-fx-border-radius: 10px;"
-                                                        + "-fx-background-radius: 10px;"
-                                                        + "-fx-cursor: hand;");
+                                "-fx-background-color: #c4dff8;"
+                                        + "-fx-border-radius: 10px;"
+                                        + "-fx-background-radius: 10px;"
+                                        + "-fx-cursor: hand;");
                 // Tao label ten cho task
-                Label taskLabel = new Label(taskName);
+                Label taskLabel = new Label(task.getTitle());
                 taskLabel.setStyle(
-                                "-fx-text-fill: #2f74eb;"
-                                                + "-fx-font-size: 18px;"
-                                                + "-fx-alignment: TOP_LEFT;"
-                                                + "-fx-font-family: 'Helvetica';");
+                        "-fx-text-fill: #2f74eb;"
+                                + "-fx-font-size: 18px;"
+                                + "-fx-alignment: TOP_LEFT;"
+                                + "-fx-font-family: 'Helvetica';");
                 taskLabel.setWrapText(true);
                 taskLabel.setPrefSize(244.1, 100.3);
                 taskLabel.setLayoutX(48);
@@ -117,59 +126,62 @@ public class KanbanBoardPage {
                 CheckBox checkBox = new CheckBox(null);
                 checkBox.setPrefSize(50, 70);
                 checkBox.setStyle("-fx-mark-color: #2f74eb;" + // Màu của dấu check ✓
-                                "-fx-box-border: #2f74eb;" + // Màu viền hộp
-                                "-fx-background-color: transparent;");
+                        "-fx-box-border: #2f74eb;" + // Màu viền hộp
+                        "-fx-background-color: transparent;");
                 checkBox.setPrefSize(30.1, 30.1);
                 // checkBox.setScaleX(1.1); // Phóng to theo chiều ngang
                 // checkBox.setScaleY(1.1); // Phóng to theo chiều dọc
                 checkBox.setLayoutX(10);
                 checkBox.setLayoutY(7);
-                checkBox.setSelected(status);
+                checkBox.setSelected(task.getStatus());
                 checkBox.setOnAction(event -> {
                         // Xu ly su kien
                         if (checkBox.isSelected()) {
                                 taskPane.setStyle(
-                                                "-fx-background-color: #c4dff8;"
-                                                                + "-fx-border-radius: 10px;"
-                                                                + "-fx-background-radius: 10px;"
-                                                                + "-fx-border-color: #92badd;"
-                                                                + "-fx-border-width: 2px;"
-                                                                + "-fx-cursor: hand;");
+                                        "-fx-background-color: #c4dff8;"
+                                                + "-fx-border-radius: 10px;"
+                                                + "-fx-background-radius: 10px;"
+                                                + "-fx-border-color: #92badd;"
+                                                + "-fx-border-width: 2px;"
+                                                + "-fx-cursor: hand;");
                         } else {
                                 taskPane.setStyle(
-                                                "-fx-background-color: #c4dff8;"
-                                                                + "-fx-border-radius: 10px;"
-                                                                + "-fx-background-radius: 10px;"
-                                                                + "-fx-cursor: hand;");
+                                        "-fx-background-color: #c4dff8;"
+                                                + "-fx-border-radius: 10px;"
+                                                + "-fx-background-radius: 10px;"
+                                                + "-fx-cursor: hand;");
                         }
                         // Xu ly thay doi trang thai cua task ve controller o day he Phat
+                        task.setStatus(checkBox.isSelected());
+                        DataManager.Instance.updateTask(task); // Cập nhật trạng thái task vào DB
                 });
                 taskPane.getChildren().addAll(checkBox, taskLabel);
                 setupDraggableTaskPane(taskPane); // Thiết lập drag target cho task pane
                 applyClickEffect(taskPane);
                 taskPane.setOnMouseClicked(event -> {
                         AppContext.set("currentPage", "TaskDetailPage");
-                        NavigationManager.navigateToDetailTaskPage();
+                        NavigationManager.navigateToDetailTaskPage(task);
                 });
+                taskPane.setUserData(task);
                 return taskPane;
         }
 
-        public static VBox listTasks(String name, List<Pane> taskPanes, HBox taskListContainer) {
-                // Tao label co the sua ten list
-                Label listLabel = new Label(name);
-                listLabel.setStyle(
-                                "-fx-text-fill: #2f74eb; -fx-font-size: 16px; -fx-alignment: left; -fx-font-family: 'Helvetica';");
+        public static VBox listTasks(TaskList taskList, HBox taskListContainer) {
+                // Label hiển thị tên task list
+                Label listLabel = new Label(taskList.getName());
+                listLabel.setStyle("-fx-text-fill: #2f74eb; -fx-font-size: 16px; -fx-alignment: left; -fx-font-family: 'Helvetica';");
                 listLabel.setPrefSize(235.5, 32.5);
                 listLabel.setLayoutX(10);
                 listLabel.setLayoutY(5);
+
+                // TextField để sửa tên
                 TextField textField = new TextField(listLabel.getText());
                 textField.setPrefSize(235.5, 32.5);
                 textField.setLayoutX(10);
                 textField.setLayoutY(5);
-                textField.setStyle(
-                                "-fx-text-fill: #2f74eb; -fx-font-size: 16px; -fx-alignment: left; -fx-font-family: 'Helvetica'; ");
-                textField.setVisible(false); // Ban dau khong hien thi textField
-                // Set effect co the sua ten cho listLabel
+                textField.setStyle("-fx-text-fill: #2f74eb; -fx-font-size: 16px; -fx-alignment: left; -fx-font-family: 'Helvetica';");
+                textField.setVisible(false);
+
                 listLabel.setOnMouseClicked(event -> {
                         if (event.getClickCount() == 2) {
                                 textField.setText(listLabel.getText());
@@ -179,8 +191,11 @@ public class KanbanBoardPage {
                                 textField.selectAll();
                         }
                 });
+
                 textField.setOnAction(e -> {
                         listLabel.setText(textField.getText());
+                        taskList.setName(textField.getText());
+                        DataManager.Instance.updateTaskList(taskList); // Cập nhật tên task list vào DB
                         textField.setVisible(false);
                         listLabel.setVisible(true);
                 });
@@ -192,90 +207,104 @@ public class KanbanBoardPage {
                                 listLabel.setVisible(true);
                         }
                 });
-                // Tao button more
-                Image image = new Image(
-                                "file:src/main/resources/image/MoreIcon2.png");
+
+                // Button more (context menu)
+                Image image = new Image("file:src/main/resources/image/MoreIcon2.png");
                 ImageButtonClass moreButton = new ImageButtonClass(image, 36.2, 32.5, 250, 0);
                 ContextMenu contextMenu = new ContextMenu();
                 MenuItem menuItem1 = new MenuItem("Delete all tasks");
-                menuItem1.setStyle(" -fx-font-size: 14px;"
-                                + " -fx-alignment: center; "
-                                + "-fx-font-family:'Helvetica';");
                 MenuItem menuItem2 = new MenuItem("Delete this task list");
+                menuItem1.setStyle("-fx-font-size: 14px; -fx-alignment: center; -fx-font-family:'Helvetica';");
                 contextMenu.getItems().addAll(menuItem1, menuItem2);
 
                 moreButton.setOnAction(e -> {
                         if (!contextMenu.isShowing()) {
-                                contextMenu.show(moreButton, Side.BOTTOM, 0, 0); // Hiện phía dưới button
+                                contextMenu.show(moreButton, Side.BOTTOM, 0, 0);
                         } else {
                                 contextMenu.hide();
                         }
                 });
-                // Tao pane chua cac thanh phan phia tren
+
                 Pane headerPane = new Pane();
                 headerPane.getChildren().addAll(listLabel, textField, moreButton);
                 headerPane.setPrefSize(286.2, 32.4);
-                // Tao vbox chua cac task
-                VBox taskList = new VBox(10); // Khoang cach giua cac task
-                // taskList.setStyle("-fx-padding: 20px;"); // Them khoang cach xung quanh
-                // taskList.setPadding(new Insets(0, 0, 7, 7)); // Khoang cach xung quanh
-                taskList.setMinHeight(20);
-                taskList.setMinWidth(305.6);
-                if (taskPanes != null) {
-                        taskList.getChildren().addAll(taskPanes);
+
+                // Lấy danh sách Task từ DB
+                List<Task> tasks = DataManager.Instance.getTaskByTaskListId(taskList.getIdTaskList());
+
+                // Tạo VBox chứa các Task
+                VBox taskPanes = new VBox(10);
+                taskPanes.setUserData(taskList);
+                taskPanes.setMinHeight(20);
+                taskPanes.setMinWidth(305.6);
+
+
+                for (Task task : tasks) {
+                        Pane taskPane = taskPane(task); // <-- Sử dụng thông tin task thực sự
+                        taskPane.setUserData(task); // <-- BẮT BUỘC PHẢI CÓ DÒNG NÀY
+                        taskPanes.getChildren().add(taskPane);
                 }
-                setupTaskDropTarget(taskList); // Thiết lập drag target cho task list
-                // taskList.setStyle("-fx-background-color: #eef;");
-                taskList.setPickOnBounds(true); // Cho phép nhận sự kiện chuột
+
+                setupTaskDropTarget(taskPanes);
+                taskPanes.setPickOnBounds(true);
+
+                // Xóa toàn bộ task
                 menuItem1.setOnAction(e -> {
-                        // Xoa tat ca cac task trong list
-                        if (taskList.getChildren().isEmpty()) {
-                                return; // Không làm gì nếu không có task nào
+                        if (!taskPanes.getChildren().isEmpty()) {
+                                DataManager.Instance.deleteTaskListData(taskList.getIdTaskList());
+                                taskPanes.getChildren().clear();
                         }
-                        taskList.getChildren().clear();
                 });
 
-                ScrollPane scrollPane = new ScrollPane(taskList);
+                // ScrollPane chứa danh sách task
+                ScrollPane scrollPane = new ScrollPane(taskPanes);
                 scrollPane.setPrefWidth(305.6);
                 scrollPane.setMinHeight(30);
                 scrollPane.setMaxHeight(550);
                 scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
                 scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-                scrollPane.setStyle(
-                                "-fx-background: transparent; -fx-background-color: transparent; "
-                                                + "-fx-border-color: transparent; -fx-border-width: 0px; ");
+                scrollPane.setStyle("-fx-background: transparent; -fx-background-color: transparent; "
+                        + "-fx-border-color: transparent; -fx-border-width: 0px;");
 
-                // Create a button to add new task
+                // Nút thêm Task mới
                 FancyButtonClass addNewTaskButton = new FancyButtonClass("Add New Task", 305.6, 46.5, 0, 0);
                 addNewTaskButton.setOnAction(e -> {
-                        // xy ly su kien them task moi
-                        Pane newTaskPane = taskPane("New Task", false);
-                        taskList.getChildren().add(newTaskPane);
-                        // taskPanes.add(newTaskPane); // Cập nhật danh sách task
-                        setupTaskDropTarget(taskList); // Thiết lập lại drag target cho task list
+                        // Tạo một task mới và thêm vào danh sách
+                        Task task= new Task();
+                        Random rand = new Random();
+                        int randomNumber = rand.nextInt(100) + 1;
+                        task.setIdTask(randomNumber);
+                        task.setTitle("New Task");
+                        task.setDescription(" ");
+                        task.setStatus(false);
+                        DataManager.Instance.createTask(task,taskList.getIdTaskList());
+                        Pane newTaskPane = taskPane(task); // nếu bạn có hàm này
+                        taskPanes.getChildren().add(newTaskPane);
+                        setupTaskDropTarget(taskPanes);
+
                 });
-                // Tao Vbox chua tat ca cac thanh phan
+
+                // VBox chính chứa mọi thành phần
                 VBox mainPane = new VBox();
                 mainPane.getChildren().addAll(headerPane, scrollPane, addNewTaskButton);
-                mainPane.setStyle(
-                                "-fx-background-color: #ffffff;"
-                                                + "-fx-border-color: #92badd;"
-                                                + "-fx-border-radius: 36px;"
-                                                + "-fx-background-radius: 36px;"
-                                                + "-fx-border-width: 2px;"
-                                                + "-fx-cursor: hand;");
+                mainPane.setStyle("-fx-background-color: #ffffff;"
+                        + "-fx-border-color: #92badd;"
+                        + "-fx-border-radius: 36px;"
+                        + "-fx-background-radius: 36px;"
+                        + "-fx-border-width: 2px;"
+                        + "-fx-cursor: hand;");
                 mainPane.setPadding(new Insets(10, 10, 10, 15));
                 mainPane.setSpacing(10);
                 mainPane.setPrefWidth(345.7);
                 mainPane.setMaxHeight(800);
 
-                // CurrentProjectPage.applyClickEffect(mainPane);
+                // Xóa task list
                 menuItem2.setOnAction(e -> {
-                        // Xoa task list hien tai
+                        DataManager.Instance.deleteTaskList(taskList);
                         taskListContainer.getChildren().remove(mainPane);
-
                 });
-                setupDraggableVBox(mainPane); // Thiết lập drag target cho task list pane
+
+                setupDraggableVBox(mainPane); // thiết lập drag-n-drop
                 return mainPane;
         }
 
@@ -307,7 +336,6 @@ public class KanbanBoardPage {
                         content.putString(taskPane.getChildren().get(1).toString()); // chứa dữ liệu
                         db.setContent(content);
                         db.setDragView(taskPane.snapshot(null, null));
-                        taskPane.setUserData(taskPane); // lưu chính pane vào userData
                         event.consume();
                 });
                 taskPane.setOnDragDone(event -> {
@@ -320,7 +348,7 @@ public class KanbanBoardPage {
         private static void setupTaskDropTarget(VBox vbox) { // Thiết lập drag target cho task list
                 vbox.setOnDragOver(event -> {
                         if (event.getGestureSource() instanceof Pane
-                                        && ((Pane) event.getGestureSource()).getParent() instanceof VBox) {
+                                && ((Pane) event.getGestureSource()).getParent() instanceof VBox) {
                                 event.acceptTransferModes(TransferMode.MOVE);
                         }
                         event.consume();
@@ -335,6 +363,8 @@ public class KanbanBoardPage {
 
                                 // Bước 1: gỡ bỏ taskPane đang kéo ra khỏi VBox gốc
                                 source.getChildren().remove(dragged);
+                               // xóa khỏi DB
+
 
                                 // Bước 2: dự phòng vị trí chèn là cuối cùng
                                 ObservableList<Node> children = vbox.getChildren();
@@ -361,7 +391,16 @@ public class KanbanBoardPage {
 
                                 // Bước 4: thêm dragged vào vị trí đã tính
                                 children.add(insertIndex, dragged);
+                                // Lấy Task từ taskPane
+                                Task task = (Task) dragged.getUserData();
+                                Task newTask=task;
+
+                                TaskList newTaskList = (TaskList) vbox.getUserData();
+                                 DataManager.Instance.deleteTaskData(task.getIdTask());
+                                 DataManager.Instance.createTask(newTask, newTaskList.getIdTaskList());
+//
                                 success = true;
+
                         }
 
                         event.setDropCompleted(success);
@@ -433,3 +472,4 @@ public class KanbanBoardPage {
         }
 
 }
+

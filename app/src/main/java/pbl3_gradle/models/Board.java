@@ -51,7 +51,7 @@ public class Board {
         this.taskLists = taskLists;
     }
 
-    public void loadDataFromDatabase(){
+    public   void loadDataFromDatabase(){
         if (idBoard == -1){
             System.out.println("Board id is not set. Cannot load data from database.");
             return;

@@ -16,12 +16,14 @@ import pbl3_gradle.controllers.DataManager;
 import pbl3_gradle.controllers.ProjectController;
 import pbl3_gradle.models.CurrentProject;
 import pbl3_gradle.models.CurrentUser;
+import pbl3_gradle.models.ProductBacklog;
 import pbl3_gradle.models.Project;
 import pbl3_gradle.util.AppContext;
 import pbl3_gradle.util.CustomMessageBox;
 import pbl3_gradle.util.NavigationManager;
 
 import java.util.List;
+import java.util.Random;
 
 public class CurrentProjectPage {
 
@@ -83,6 +85,29 @@ public class CurrentProjectPage {
                       MenuItem newProject = new MenuItem("New Project");
                       newProject.setStyle("-fx-font-size: 20px; -fx-font-family:'Helvetica';");
                       contextMenu.getItems().add(newProject);
+                        newProject.setOnAction(e1 -> {
+                                Project newProject1 = new Project();
+                                newProject1.setProjectName("New Project");
+                                newProject1.setDescription("This is a new project.");
+                                newProject1.setStatus(false);
+                                newProject1.setDateCreated(new java.util.Date());
+                                Button newProjectButton = createProjectButton(newProject1.getProjectName(), newProject1.getDescription());
+                                DataManager.Instance.addNewProject(newProject1);
+                                ProductBacklog pb = newProject1.getProductBacklog(); // lấy ProductBacklog hiện tại
+
+                                Project prj= DataManager.Instance.getProjectByName("New Project");
+                                pb.setIdProductBacklog(prj.getIdProject()); // set idProject cho ProductBacklog
+                               prj.setProductBacklog(pb);
+                                DataManager.Instance.updateProject(prj); // cập nhật lại project với ProductBacklog mới
+                                Random rand = new Random();
+                                int randomNumber = rand.nextInt(100) + 1; // random từ 1 đến 100
+
+                                NavigationManager.navigateToCurrentProjectPage();
+
+                                GridPane grid = (GridPane) ((ScrollPane) moreButton.getParent().getChildrenUnmodifiable().get(5)).getContent();
+//                                int rowCount = grid.getChildren().size() / 2; // Assuming 2 columns
+//                                grid.add(newProjectButton, 0, rowCount);
+                        });
               }
                 moreButton.setOnAction(e -> {
                         if (!contextMenu.isShowing()) {
@@ -127,7 +152,6 @@ public class CurrentProjectPage {
                 for (int i = 0; i < projects.length; i++) {
                         grid.add(projects[i], i % 2, i / 2);
                 }
-
                 return grid;
         }
 
@@ -239,6 +263,7 @@ public class CurrentProjectPage {
                         redoItem.setOnAction(e -> {
                                 ProjectController.Instance.markUndoneProject(idProject);  // Gọi hàm đánh dấu project là đã redo
                                 CustomMessageBox.show("Success!", "Redo project!");
+                                NavigationManager.navigateToCompeletedProjectPage();
                         });
                         deleteItem.setOnAction(e -> {
                                 ProjectController.Instance.removeProject(idProject);

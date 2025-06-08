@@ -16,6 +16,7 @@ import pbl3_gradle.models.ProductBacklog;
 import pbl3_gradle.util.AppContext;
 import pbl3_gradle.util.NavigationManager;
 
+import java.util.Date;
 import java.util.List;
 
 public class ProductBacklogPage {
@@ -71,7 +72,15 @@ public class ProductBacklogPage {
 
                 // Nút add backlog cuối cùng
                 FancyButtonClass addBacklogBtn = new FancyButtonClass("+Add another backlog item", 899.5, 69.3, 0, 0);
-                vBox.getChildren().add(addBacklogBtn);
+                  addBacklogBtn.setOnAction(e->{
+                          Item newItem = new Item();
+                            newItem.setStatus(false);
+                            newItem.setTitle("New Backlog Item");
+                            newItem.setDescription("Description of the new backlog item");
+                            DataManager.Instance.addNewItemToProductBacklog(productBacklog, newItem);
+                            loadBacklogItems(); // Reload lại sau khi thêm
+                  });
+                vBox.getChildren ().add(addBacklogBtn);
         }
 
         public static Pane MenuBarStyle_Layer3(String text, String page) {

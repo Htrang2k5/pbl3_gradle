@@ -493,8 +493,8 @@ public class DataManager {
                 new SqlParameter(2, item.getBacklogType()),
                 new SqlParameter(3, item.getTitle()),
                 new SqlParameter(4, item.getDescription()),
-                new SqlParameter(5, item.getDateCreated()),
-                new SqlParameter(6, item.getDateModified()),
+                new SqlParameter(5, new Date()),
+                new SqlParameter(6,new Date()),
                 new SqlParameter(7, item.getStatus())
         };
         DBHelper.Instance.ExecuteDB(query, param);
@@ -798,7 +798,7 @@ public class DataManager {
 
     // Xoá task list trong database
     public void deleteTaskList(TaskList taskList) {
-        String query = "DELETE FROM task_list WHERE idList = ?";
+        String query = "DELETE FROM task_list WHERE idTaskList = ?";
         SqlParameter[] param = {
                 new SqlParameter(1, taskList.getIdTaskList())
         };
@@ -1071,6 +1071,14 @@ public class DataManager {
         String query = "DELETE FROM comment WHERE idComment = ?";
         SqlParameter[] param = {
                 new SqlParameter(1, idComment)
+        };
+        DBHelper.Instance.ExecuteDB(query, param);
+    }
+    public void updateComment(Comment comment) {
+        String query = "UPDATE comment SET content = ? WHERE idComment = ?";
+        SqlParameter[] param = {
+                new SqlParameter(1, comment.getContent()),
+                new SqlParameter(2, comment.getIdComment())
         };
         DBHelper.Instance.ExecuteDB(query, param);
     }

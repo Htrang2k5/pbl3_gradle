@@ -1,6 +1,9 @@
 package pbl3_gradle.views;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.List;
 import java.util.function.Consumer;
 
 import javafx.geometry.Insets;
@@ -11,10 +14,21 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import pbl3_gradle.common.*;
+import pbl3_gradle.controllers.DataManager;
+import pbl3_gradle.models.Comment;
+import pbl3_gradle.models.CurrentUser;
+import pbl3_gradle.models.Task;
+import pbl3_gradle.models.User;
 import pbl3_gradle.util.*;
 import javafx.scene.control.*;
 
+import javax.xml.crypto.Data;
+
 public class DetailTaskPage {
+   public  Task task;
+    public DetailTaskPage(Task task) {
+        this.task = task;
+    }
     public Pane getView() {
         // Create MenuBar
         Pane menuBar = ProductBacklogPage.MenuBarStyle_Layer3("Detail Task", "DetailTaskPage");
@@ -29,17 +43,19 @@ public class DetailTaskPage {
             NavigationManager.navigateToKanbanBoardPage();
         });
         // Create a label for the task name
-        HBox taskNameBox = MainLabelOfTask(" Implement Feature X");
+        HBox taskNameBox = MainLabelOfTask(task.getTitle());
         // Create a description area
         VBox descriptionBox = descriptionArea(
-                "This is a detailed description of the task. It can include multiple lines of text, "
-                        + "formatting, and other information relevant to the task.");
+                task.getDescription());
         // Create a member area
         HBox memberBox = memberArea();
         // Create a comment area
         VBox commentBox = commentArea();
         // Create a date area
-        HBox dateBox = dateArea("2023/10/31");
+
+        HBox dateBox = dateArea(
+                task.getDateDue() != null ? task.getDateDue().toString() : "No due date");
+
 
         // Create a Vbox containing the content
         VBox contenBox = new VBox();
@@ -67,7 +83,7 @@ public class DetailTaskPage {
         return mainPane;
     }
 
-    public static HBox MainLabelOfTask(String labelName) {
+    public  HBox MainLabelOfTask(String labelName) {
         // Create a checkbox for the task
         CheckBox checkBox = new CheckBox(null);
         checkBox.setStyle("-fx-mark-color: #2f74eb;" + // Màu của dấu check ✓
@@ -109,13 +125,15 @@ public class DetailTaskPage {
         });
         taskTextField.setOnAction(e -> {
             taskLabel.setText(taskTextField.getText());
+            this.task.setTitle(taskTextField.getText());
+            DataManager.Instance.updateTask(this.task);
             hbox.getChildren().set(1, taskLabel); // Replace text field with label
         });
         hbox.setPrefWidth(685.8);
         return hbox;
     }
 
-    public static VBox descriptionArea(String description) {
+    public  VBox descriptionArea(String description) {
         // Create a desciption icon
         Image image2 = new Image(
                 "file:src/main/resources/image/Description_Icon.png");
@@ -157,7 +175,7 @@ public class DetailTaskPage {
         hbox.setSpacing(10);
         hbox.getChildren().addAll(descriptionIcon, descriptionLabel, moreButton);
         // Create a TextArea for the description
-        VBox descriptionBox = createDescriptionBox(description, 683.9, 10);
+        VBox descriptionBox = createDescriptionBox(description, 683.9, 10,image2);
         // Tao container chua cac thanh phan
         VBox container = new VBox();
         container.setSpacing(5);
@@ -165,8 +183,10 @@ public class DetailTaskPage {
         return container;
     }
 
-    public static VBox createDescriptionBox(String initialText, double width, int lineNumber) {
+    public  VBox createDescriptionBox(String initialText, double width, int lineNumber,Image img) {
         // Container chính
+        Image imgDescription = new Image(
+                "file:src/main/resources/image/Description_Icon.png");
         VBox container = new VBox();
         container.setSpacing(5);
         container.setStyle(
@@ -221,12 +241,14 @@ public class DetailTaskPage {
                 // Đặt caret ở cuối
                 editArea.positionCaret(current.length());
             }
+
             scrollPane.setVisible(false);
             scrollPane.setManaged(false);
 
             editArea.setVisible(true);
             editArea.setManaged(true);
             editArea.requestFocus();
+
         };
 
         // Hàm commit nội dung từ TextArea về Label
@@ -236,6 +258,12 @@ public class DetailTaskPage {
                 displayLabel.setText("Click to add a description...");
             } else {
                 displayLabel.setText(newText);
+                if (imgDescription.getUrl().equals(img.getUrl())) {
+                    task.setDescription(newText);
+                    DataManager.Instance.updateTask(this.task);
+                }    else{
+
+                }
             }
             // Ẩn TextArea, hiện Label
             editArea.setVisible(false);
@@ -274,7 +302,8 @@ public class DetailTaskPage {
         return container;
     }
 
-    public static HBox memberArea() { // Truyen danh sach thanh vien cua task vao day
+    public static HBox memberArea()
+    {
         // Create a label for the members
         Label memberLabel = new Label("Members: ");
         memberLabel.setStyle(
@@ -296,7 +325,7 @@ public class DetailTaskPage {
         return container;
     }
 
-    public static VBox commentArea() {
+    public  VBox commentArea() {
         // Create comment icon
         Image image2 = new Image(
                 "file:src/main/resources/image/Comment_Icon.png");
@@ -320,11 +349,28 @@ public class DetailTaskPage {
         menuItem1.setStyle(" -fx-font-size: 14px;"
                 + " -fx-alignment: center; "
                 + "-fx-font-family:'Helvetica';");
+
+        menuItem1.setOnAction(e->{
+            Comment newComment = new Comment();
+            newComment.setContent("This is a new comment.");
+            newComment.setDateCreated(new Date());
+            newComment.setIdUser(CurrentUser.Instance.getUserID()); //người dùng hiện tại là người tạo comment
+           task.addComment(newComment); //kết quả sẽ được lưu vào database tự động
+            NavigationManager.navigateToDetailTaskPage(task);
+        });
+
         MenuItem menuItem2 = new MenuItem("Delete all comments");
         menuItem2.setStyle(" -fx-font-size: 14px;"
                 + " -fx-alignment: center; "
                 + "-fx-font-family:'Helvetica';");
         contextMenu.getItems().addAll(menuItem1, menuItem2);
+        menuItem2.setOnAction(e->{
+            List<Comment> comments = DataManager.Instance.getCommentsByTaskId(this.task.getIdTask());
+            for (Comment comment : comments) {
+                DataManager.Instance.deleteComment(comment.getIdComment());
+            }
+            NavigationManager.navigateToDetailTaskPage(task);
+        });
 
         moreButton.setOnAction(e -> {
             if (!contextMenu.isShowing()) {
@@ -342,13 +388,15 @@ public class DetailTaskPage {
         totalArea.setSpacing(5);
         totalArea.getChildren().add(hbox);
         // Create list comment box
-        for (int i = 0; i < 5; i++) {
-            totalArea.getChildren().add(commentBox());
+
+        List<Comment> comments=DataManager.Instance.getCommentsByTaskId(this.task.getIdTask());
+        for (Comment comment : comments) {
+            totalArea.getChildren().add(commentBox(comment.getContent(), null));
         }
         return totalArea;
     }
 
-    public static HBox commentBox() {
+    public  HBox commentBox(String des, Image img) {
         HBox comment = new HBox();
         comment.setFillHeight(false); // Không tự động điều chỉnh chiều cao của HBox
         comment.setSpacing(5);
@@ -356,13 +404,12 @@ public class DetailTaskPage {
         Image image = new Image("file:src/main/resources/image/ImageAvatar.png");
         AvatarViewClass avatar = new AvatarViewClass(image, 32, 0);
         // Create a content box for the comment
-        VBox contentBox = createDescriptionBox("This is a comment on the task. It can include multiple lines of text, "
-                + "formatting, and other info relevant to the task.", 639.5, 4);
+        VBox contentBox = createDescriptionBox(des, 639.5, 4,image);
         comment.getChildren().addAll(avatar, contentBox);
         return comment;
     }
 
-    public static VBox listButton() {
+    public VBox listButton() {
         FancyButtonClass joinButton = new FancyButtonClass("Join", 196, 51.2, 0, 0);
         FancyButtonClass memberButton = new FancyButtonClass("Members", 196, 51.2, 0, 0);
         FancyButtonClass dateButton = new FancyButtonClass("Date", 196, 51.2, 0, 0);
@@ -373,9 +420,11 @@ public class DetailTaskPage {
         vbox.getChildren().addAll(joinButton, memberButton, dateButton, deleteButton);
 
         joinButton.setOnAction(e -> {
+            DataManager.Instance.addMemberToTask(CurrentUser.Instance.getUserObject(), this.task.getIdTask());
             vbox.getChildren().set(0, leaveButton);
         });
         leaveButton.setOnAction(e -> {
+            DataManager.Instance.removeMemberFromTask(CurrentUser.Instance.getUserObject(), this.task.getIdTask());
             vbox.getChildren().set(0, joinButton);
         });
         dateButton.setOnAction(e -> {
@@ -385,11 +434,17 @@ public class DetailTaskPage {
                 // Hiện DatePicker
                 VBox datePickerPane = createDueDatePickerPane(LocalDate.now(), selectedDate -> {
                     if (selectedDate != null) {
-                        // dueDateLabel.setText("Due Date: " + selectedDate);
-                        System.out.println("Người dùng chọn ngày: " + selectedDate);
-                        // Xu ly du lieu dua vao db o day///
+
+                        // Cập nhật ngày đến hạn cho task
+                        LocalDate localDate = selectedDate;
+                        Date utilDate = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+                        this.task.setDateDue(utilDate);
+                        DataManager.Instance.updateTask(this.task);
+                        HBox dateArea = dateArea(selectedDate.toString());
+                        vbox.getChildren().add(dateArea);
+
                     } else {
-                        // dueDateLabel.setText("Chưa có Due Date");
+                        System.out.println("No date selected.");
                     }
                 });
                 vbox.getChildren().add(datePickerPane);
@@ -407,6 +462,11 @@ public class DetailTaskPage {
                 memberPane.setVisible(true);
                 memberPane.setManaged(true);
             }
+        });
+
+        deleteButton.setOnAction(e -> {
+            DataManager.Instance.deleteTaskData(this.task.getIdTask());
+            NavigationManager.navigateToKanbanBoardPage();
         });
         return vbox;
 
@@ -480,7 +540,7 @@ public class DetailTaskPage {
         return container;
     }
 
-    public static VBox createMemberOfTaskList() {
+    public  VBox createMemberOfTaskList() {
         VBox container = new VBox();
         container.setSpacing(10);
         container.setStyle(
@@ -507,20 +567,22 @@ public class DetailTaskPage {
         searchField.setPrefSize(160, 40);
         container.getChildren().add(searchField);
 
-        // Add some sample members
-        HBox member1 = members("Alice", true);
-        HBox member2 = members("Bob", false);
-        HBox member3 = members("Charlie", true);
-        HBox member4 = members("David", false);
-        HBox member5 = members("Eve", true);
-        HBox member6 = members("Frank", false);
-        HBox member7 = members("Grace", true);
-        HBox member8 = members("Hannah", false);
-        HBox member9 = members("Ivy", true);
-        HBox member10 = members("Jack", false);
+        List<User> members= DataManager.Instance.getAllUser();
+        List<User> membersOfTask = DataManager.Instance.getMemberByTaskId(this.task.getIdTask());
         VBox memberList = new VBox();
-        memberList.getChildren().addAll(member1, member2, member3, member4, member5,
-                member6, member7, member8, member9, member10);
+
+        for( User member : members) {
+            boolean isMember=false;
+              for (User memberInTask :membersOfTask) {
+
+                  if (memberInTask.getUserID() == member.getUserID()) {
+                      isMember = true;
+                      break;
+                  }
+              }
+            HBox memberBox = members(member, isMember);
+            memberList.getChildren().add(memberBox);
+        }
 
         ScrollPane scrollPane = new ScrollPane(memberList);
         scrollPane.setFitToWidth(true); // Đặt chiều rộng của ScrollPane bằng với VBox
@@ -537,7 +599,7 @@ public class DetailTaskPage {
         return container;
     }
 
-    public static HBox members(String memberName, Boolean isMember) {
+    public  HBox members(User user, Boolean isMember) {
         // Create a HBox to hold the member information
         HBox memberBox = new HBox();
         memberBox.setSpacing(5);
@@ -546,7 +608,7 @@ public class DetailTaskPage {
         // Content
         Image image = new Image("file:src/main/resources/image/ImageAvatar.png");
         AvatarViewClass avatar = new AvatarViewClass(image, 24.7, 0);
-        Label nameLabel = new Label(memberName);
+        Label nameLabel = new Label(user.getUserName());
         nameLabel.setStyle(
                 "-fx-text-fill: #2f74eb; "
                         + "-fx-font-size: 15px;"
@@ -561,7 +623,8 @@ public class DetailTaskPage {
                     "file:src/main/resources/image/X_Icon.png");
             ImageButtonClass removeButton = new ImageButtonClass(xImage, 24.7, 24.7, 0, 0);
             removeButton.setOnAction(e -> {
-                // Xử lý xóa thành viên ở đây
+                 DataManager.Instance.removeMemberFromTask(user, this.task.getIdTask());
+                NavigationManager.navigateToDetailTaskPage(task);
             });
             memberBox.getChildren().add(removeButton);
         } else {
@@ -569,7 +632,8 @@ public class DetailTaskPage {
                     "file:src/main/resources/image/Add_Icon.png");
             ImageButtonClass addButton = new ImageButtonClass(addImage, 24.7, 24.7, 0, 0);
             addButton.setOnAction(e -> {
-                // Xử lý thêm thành viên ở đây
+                DataManager.Instance.addMemberToTask(user, this.task.getIdTask());
+                NavigationManager.navigateToDetailTaskPage(task);
             });
             memberBox.getChildren().add(addButton);
         }
@@ -577,3 +641,4 @@ public class DetailTaskPage {
         return memberBox;
     }
 }
+

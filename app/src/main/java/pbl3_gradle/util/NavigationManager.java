@@ -2,6 +2,7 @@ package pbl3_gradle.util;
 
 import javafx.stage.Stage;
 import pbl3_gradle.models.Item;
+import pbl3_gradle.models.Task;
 import pbl3_gradle.views.*;
 import javafx.scene.layout.Pane;
 
@@ -96,8 +97,8 @@ public class NavigationManager {
         navigateTo(kanbanBoardPage.getView());
     }
 
-    public static void navigateToDetailTaskPage() {
-        DetailTaskPage detailTaskPage = new DetailTaskPage();
+    public static void navigateToDetailTaskPage(Task task) {
+        DetailTaskPage detailTaskPage = new DetailTaskPage(task);
         navigateTo(detailTaskPage.getView());
     }
 
