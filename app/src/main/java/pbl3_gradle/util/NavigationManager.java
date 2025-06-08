@@ -1,6 +1,8 @@
 package pbl3_gradle.util;
 
 import javafx.stage.Stage;
+import pbl3_gradle.models.Item;
+import pbl3_gradle.models.Task;
 import pbl3_gradle.views.*;
 import javafx.scene.layout.Pane;
 
@@ -63,5 +65,55 @@ public class NavigationManager {
     public static void navigateToCommonNotificationsPage() {
         CommonNotificationsPage commonNotificationsPage = new CommonNotificationsPage();
         navigateTo(commonNotificationsPage.getView());
+    }
+
+    public static void navigateToProductBacklogPage() {
+        ProductBacklogPage productBacklogPage = new ProductBacklogPage();
+        navigateTo(productBacklogPage.getView());
+    }
+
+    public static void navigateToDetailBacklogPage(Item item) {
+        DetailBacklogPage detailBacklogPage = new DetailBacklogPage();
+        navigateTo(detailBacklogPage.getView(item));
+    }
+
+    public static void navigateToCurrentSprintPage() {
+        CurrentSprintPage currentSprintPage = new CurrentSprintPage();
+        navigateTo(currentSprintPage.getView());
+    }
+
+    public static void navigateToAddNewSprintPage() {
+        AddNewSprintPage addNewSprintPage = new AddNewSprintPage();
+        navigateTo(addNewSprintPage.getView());
+    }
+
+    public static void navigateToSprintListPage() {
+        SprintListPage sprintListPage = new SprintListPage();
+        navigateTo(sprintListPage.getView());
+    }
+
+    public static void navigateToKanbanBoardPage() {
+        KanbanBoardPage kanbanBoardPage = new KanbanBoardPage();
+        navigateTo(kanbanBoardPage.getView());
+    }
+
+    public static void navigateToDetailTaskPage(Task task) {
+        DetailTaskPage detailTaskPage = new DetailTaskPage(task);
+        navigateTo(detailTaskPage.getView());
+    }
+
+    public static void navigateToEditProjectPage() {
+        EditProjectPage editProjectPage = new EditProjectPage();
+        navigateTo(editProjectPage.getView());
+    }
+
+    public static void navigateToBurndownChartPage() {
+        BurndownChartPage burndownChartPage = new BurndownChartPage();
+        navigateTo(burndownChartPage.getView());
+    }
+
+    public static void navigateToProjectMembersPage() {
+        ProjectMembersPage projectMembersPage = new ProjectMembersPage();
+        navigateTo(projectMembersPage.getView());
     }
 }

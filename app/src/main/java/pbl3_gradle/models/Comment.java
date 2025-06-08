@@ -4,9 +4,16 @@ import java.util.Date;
 
 public class Comment {
     protected int idComment;
-    protected User user;
+    protected int idUser;
     protected String content;
     protected Date dateCreated;
+
+    public Comment(){
+        idComment = -1;
+        idUser = -1;
+        content = "";
+        dateCreated = new Date();
+    }
 
     public int getIdComment() {
         return idComment;
@@ -16,12 +23,12 @@ public class Comment {
         this.idComment = idComment;
     }
 
-    public User getUser() {
-        return user;
+    public int getIdUser() {
+        return idUser;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setIdUser(int idUser) {
+        this.idUser = idUser;
     }
 
     public String getContent() {

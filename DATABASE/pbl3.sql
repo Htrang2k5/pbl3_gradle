@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 05, 2025 at 06:18 AM
+-- Generation Time: Jun 06, 2025 at 12:45 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -68,9 +68,7 @@ CREATE TABLE `board` (
 --
 
 INSERT INTO `board` (`idBoard`, `idProject`, `dateCreated`, `dateModified`) VALUES
-(7, 4, '2025-06-03 20:05:12', '2025-06-03 20:05:12'),
-(8, 5, '2025-06-03 21:16:32', '2025-06-03 21:16:32'),
-(9, 6, '2025-06-03 21:21:27', '2025-06-03 21:21:27');
+(1, 1, '2025-06-06 11:15:23', '2025-06-06 11:15:23');
 
 -- --------------------------------------------------------
 
@@ -111,6 +109,15 @@ CREATE TABLE `comment` (
   `dateCreated` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='idItem references Task (not just any Item)';
 
+--
+-- Dumping data for table `comment`
+--
+
+INSERT INTO `comment` (`idComment`, `idTask`, `idUser`, `content`, `dateCreated`) VALUES
+(1, 5, 9, 'This is a new comment.', '2025-06-06 15:18:45'),
+(2, 5, 9, 'This is a new comment.', '2025-06-06 15:19:40'),
+(3, 5, 9, 'This is a new comment.', '2025-06-06 17:43:54');
+
 -- --------------------------------------------------------
 
 --
@@ -120,13 +127,13 @@ CREATE TABLE `comment` (
 CREATE TABLE `item` (
   `idItem` int(11) NOT NULL,
   `idBacklog` int(11) NOT NULL,
-  `backlogType` tinyint(1) NOT NULL,
+  `backlogType` tinyint(1) NOT NULL COMMENT '0: idProductBacklog\r\n1: idSprint',
   `title` varchar(255) NOT NULL,
   `description` text DEFAULT NULL,
   `dateCreated` datetime NOT NULL,
   `dateModified` datetime NOT NULL,
   `status` tinyint(1) NOT NULL COMMENT '0: Not done\r\n1: Done'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='idBacklog can reference either ProductBacklog.idPBacklog or SprintBacklog.idSBacklog';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='idBacklog can reference either ProductBacklog.idProductBacklog or SprintBacklog.idSBacklog';
 
 -- --------------------------------------------------------
 
@@ -136,6 +143,7 @@ CREATE TABLE `item` (
 
 CREATE TABLE `label` (
   `idLabel` int(11) NOT NULL,
+  `idBoard` int(11) NOT NULL,
   `labelName` varchar(255) DEFAULT NULL,
   `color` varchar(255) NOT NULL DEFAULT '#FFFFFF'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -194,7 +202,7 @@ CREATE TABLE `notification_receiver` (
 --
 
 CREATE TABLE `product_backlog` (
-  `idPBacklog` int(11) NOT NULL,
+  `idProductBacklog` int(11) NOT NULL,
   `idProject` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -210,17 +218,16 @@ CREATE TABLE `project` (
   `description` text DEFAULT NULL,
   `dateCreated` datetime DEFAULT NULL,
   `dateModified` datetime DEFAULT NULL,
-  `status` tinyint(1) DEFAULT NULL COMMENT '0: Not done\r\n1: Done'
+  `status` tinyint(1) DEFAULT NULL COMMENT '0: Not done\r\n1: Done',
+  `isDisabled` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0: false\r\n1: true'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `project`
 --
 
-INSERT INTO `project` (`idProject`, `projectName`, `description`, `dateCreated`, `dateModified`, `status`) VALUES
-(4, 'TestProject', 'This is a test project', '2025-06-03 20:05:12', '2025-06-03 20:05:12', 0),
-(5, 'TestProject', 'This is a test project', '2025-06-03 21:16:32', '2025-06-03 21:16:32', 0),
-(6, 'TestProject', 'This is a test project', '2025-06-03 21:21:27', '2025-06-03 21:21:27', 0);
+INSERT INTO `project` (`idProject`, `projectName`, `description`, `dateCreated`, `dateModified`, `status`, `isDisabled`) VALUES
+(1, 'Test project 1', '', '2025-06-06 11:15:23', '2025-06-06 00:00:00', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -241,24 +248,13 @@ CREATE TABLE `sprint` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sprint_backlog`
---
-
-CREATE TABLE `sprint_backlog` (
-  `idSBacklog` int(11) NOT NULL,
-  `idSprint` int(11) DEFAULT NULL,
-  `idProject` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `task`
 --
 
 CREATE TABLE `task` (
   `idTask` int(11) NOT NULL,
   `idTaskList` int(11) DEFAULT NULL,
+  `idLabel` int(11) DEFAULT NULL,
   `title` varchar(255) NOT NULL,
   `description` text DEFAULT NULL,
   `dateCreated` datetime NOT NULL,
@@ -267,6 +263,21 @@ CREATE TABLE `task` (
   `status` tinyint(1) DEFAULT NULL COMMENT '0: false\r\n1: true',
   `position` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='idItem is both PK and FK to Item';
+
+--
+-- Dumping data for table `task`
+--
+
+INSERT INTO `task` (`idTask`, `idTaskList`, `idLabel`, `title`, `description`, `dateCreated`, `dateModified`, `dateDue`, `status`, `position`) VALUES
+(1, 1, NULL, 'Task 1', '', '2025-06-06 11:15:23', '2025-06-06 11:15:23', NULL, 0, 0),
+(2, 1, NULL, 'Task 2', '', '2025-06-06 11:15:23', '2025-06-06 11:15:23', NULL, 0, 1),
+(3, 1, NULL, 'Task 3', '', '2025-06-06 11:15:23', '2025-06-06 11:15:23', NULL, 0, 2),
+(4, 2, NULL, 'Task 1', '', '2025-06-06 11:15:23', '2025-06-06 11:15:23', NULL, 0, 0),
+(5, 2, NULL, 'Updated Task Name', 'Updated Task Description', '2025-06-06 11:15:23', '2025-06-06 15:02:07', '2025-06-06 15:02:07', 1, 1),
+(6, 2, NULL, 'Task 3', '', '2025-06-06 11:15:23', '2025-06-06 11:15:23', NULL, 0, 2),
+(7, 3, NULL, 'Task 1', '', '2025-06-06 11:15:23', '2025-06-06 11:15:23', NULL, 0, 0),
+(8, 3, NULL, 'Task 2', '', '2025-06-06 11:15:23', '2025-06-06 11:15:23', NULL, 0, 1),
+(9, 3, NULL, 'Task 3', '', '2025-06-06 11:15:23', '2025-06-06 11:15:23', NULL, 0, 2);
 
 -- --------------------------------------------------------
 
@@ -290,8 +301,17 @@ CREATE TABLE `task_list` (
   `idBoard` int(11) DEFAULT NULL,
   `title` varchar(255) NOT NULL,
   `position` int(11) NOT NULL,
-  `dateCreated` datetime NOT NULL
+  `dateCreated` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `task_list`
+--
+
+INSERT INTO `task_list` (`idTaskList`, `idBoard`, `title`, `position`, `dateCreated`) VALUES
+(1, 1, 'To Do', 0, '2025-06-06 11:15:23'),
+(2, 1, 'In Progress', 1, '2025-06-06 11:15:23'),
+(3, 1, 'Done', 2, '2025-06-06 11:15:23');
 
 -- --------------------------------------------------------
 
@@ -310,18 +330,19 @@ CREATE TABLE `user` (
   `englishName` varchar(255) DEFAULT NULL,
   `address` varchar(255) DEFAULT NULL,
   `phone` varchar(255) DEFAULT NULL,
-  `avatar` varchar(255) DEFAULT 'src/main/resources/ImageAvatar.png'
+  `avatar` varchar(255) DEFAULT 'src/main/resources/ImageAvatar.png',
+  `isDisabled` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0: false\r\n1: true'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`idUser`, `username`, `password`, `email`, `fullName`, `role`, `birthday`, `englishName`, `address`, `phone`, `avatar`) VALUES
-(1, 'System', '', '', '', 0, '0000-00-00', '', '', '', ''),
-(2, 'admin', 'admin', '', '', 1, '0000-00-00', '', '', '', ''),
-(3, 'testuser', '123456789', 'testemail@gmail.com', 'Test User', 2, '0000-00-00', 'testuser', '1 testuser St.', '0000111222', ''),
-(9, 'testingagain', 'EF797C8118F02DFB649607DD5D3F8C7623048C9C063D532CC95C5ED7A898A64F', NULL, NULL, 2, '0000-00-00', NULL, NULL, NULL, 'src/main/resources/ImageAvatar.png');
+INSERT INTO `user` (`idUser`, `username`, `password`, `email`, `fullName`, `role`, `birthday`, `englishName`, `address`, `phone`, `avatar`, `isDisabled`) VALUES
+(1, 'System', '', '', '', 0, '0000-00-00', '', '', '', '', 0),
+(2, 'admin', 'admin', '', '', 1, '0000-00-00', '', '', '', '', 0),
+(3, 'testuser', '123456789', 'testemail@gmail.com', 'Test User', 2, '0000-00-00', 'testuser', '1 testuser St.', '0000111222', '', 0),
+(9, 'testingagain', 'EF797C8118F02DFB649607DD5D3F8C7623048C9C063D532CC95C5ED7A898A64F', NULL, NULL, 2, '0000-00-00', NULL, NULL, NULL, 'src/main/resources/ImageAvatar.png', 0);
 
 -- --------------------------------------------------------
 
@@ -330,10 +351,18 @@ INSERT INTO `user` (`idUser`, `username`, `password`, `email`, `fullName`, `role
 --
 
 CREATE TABLE `user_project` (
+  `idUserProject` int(11) NOT NULL,
   `idUser` int(11) DEFAULT NULL,
   `idProject` int(11) DEFAULT NULL,
   `relationship` tinyint(1) DEFAULT 0 COMMENT '0: creator\r\n1: member'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Composite PK (idUser, idProject)';
+
+--
+-- Dumping data for table `user_project`
+--
+
+INSERT INTO `user_project` (`idUserProject`, `idUser`, `idProject`, `relationship`) VALUES
+(9, 9, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -342,10 +371,18 @@ CREATE TABLE `user_project` (
 --
 
 CREATE TABLE `user_task` (
+  `idUserTask` int(11) NOT NULL,
   `idUser` int(11) DEFAULT NULL,
   `idTask` int(11) DEFAULT NULL,
-  `relationship` tinyint(1) DEFAULT 0 COMMENT '0: assignor\r\n1: assignee'
+  `relationship` tinyint(1) DEFAULT 1 COMMENT '0: assignor\r\n1: assignee'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Composite PK (idUser, idTask)';
+
+--
+-- Dumping data for table `user_task`
+--
+
+INSERT INTO `user_task` (`idUserTask`, `idUser`, `idTask`, `relationship`) VALUES
+(6, 9, 5, 1);
 
 --
 -- Indexes for dumped tables
@@ -406,7 +443,8 @@ ALTER TABLE `item`
 -- Indexes for table `label`
 --
 ALTER TABLE `label`
-  ADD PRIMARY KEY (`idLabel`);
+  ADD PRIMARY KEY (`idLabel`),
+  ADD KEY `label_ibfk_1` (`idBoard`);
 
 --
 -- Indexes for table `meeting`
@@ -439,7 +477,7 @@ ALTER TABLE `notification_receiver`
 -- Indexes for table `product_backlog`
 --
 ALTER TABLE `product_backlog`
-  ADD PRIMARY KEY (`idPBacklog`),
+  ADD PRIMARY KEY (`idProductBacklog`),
   ADD KEY `idProject` (`idProject`);
 
 --
@@ -456,20 +494,13 @@ ALTER TABLE `sprint`
   ADD KEY `idProject` (`idProject`);
 
 --
--- Indexes for table `sprint_backlog`
---
-ALTER TABLE `sprint_backlog`
-  ADD PRIMARY KEY (`idSBacklog`),
-  ADD KEY `idProject` (`idProject`),
-  ADD KEY `idSprint` (`idSprint`);
-
---
 -- Indexes for table `task`
 --
 ALTER TABLE `task`
   ADD PRIMARY KEY (`idTask`),
   ADD KEY `task_ibfk_2` (`idTask`),
-  ADD KEY `idList` (`idTaskList`);
+  ADD KEY `idList` (`idTaskList`),
+  ADD KEY `task_ibfk_3` (`idLabel`);
 
 --
 -- Indexes for table `task_label`
@@ -495,6 +526,7 @@ ALTER TABLE `user`
 -- Indexes for table `user_project`
 --
 ALTER TABLE `user_project`
+  ADD PRIMARY KEY (`idUserProject`),
   ADD KEY `idUser` (`idUser`),
   ADD KEY `idProject` (`idProject`);
 
@@ -502,6 +534,7 @@ ALTER TABLE `user_project`
 -- Indexes for table `user_task`
 --
 ALTER TABLE `user_task`
+  ADD PRIMARY KEY (`idUserTask`),
   ADD KEY `idUser` (`idUser`),
   ADD KEY `usertask_ibfk_2` (`idTask`);
 
@@ -519,7 +552,7 @@ ALTER TABLE `activity_log`
 -- AUTO_INCREMENT for table `board`
 --
 ALTER TABLE `board`
-  MODIFY `idBoard` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `idBoard` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `checklist`
@@ -532,6 +565,12 @@ ALTER TABLE `checklist`
 --
 ALTER TABLE `checklist_item`
   MODIFY `idCLItem` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `comment`
+--
+ALTER TABLE `comment`
+  MODIFY `idComment` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `item`
@@ -561,7 +600,7 @@ ALTER TABLE `notification`
 -- AUTO_INCREMENT for table `project`
 --
 ALTER TABLE `project`
-  MODIFY `idProject` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `idProject` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `sprint`
@@ -570,16 +609,34 @@ ALTER TABLE `sprint`
   MODIFY `idSprint` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `task`
+--
+ALTER TABLE `task`
+  MODIFY `idTask` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
 -- AUTO_INCREMENT for table `task_list`
 --
 ALTER TABLE `task_list`
-  MODIFY `idTaskList` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idTaskList` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
   MODIFY `idUser` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT for table `user_project`
+--
+ALTER TABLE `user_project`
+  MODIFY `idUserProject` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT for table `user_task`
+--
+ALTER TABLE `user_task`
+  MODIFY `idUserTask` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Constraints for dumped tables
@@ -627,8 +684,14 @@ ALTER TABLE `comment`
 -- Constraints for table `item`
 --
 ALTER TABLE `item`
-  ADD CONSTRAINT `item_ibfk_1` FOREIGN KEY (`idBacklog`) REFERENCES `product_backlog` (`idPBacklog`),
-  ADD CONSTRAINT `item_ibfk_2` FOREIGN KEY (`idBacklog`) REFERENCES `sprint_backlog` (`idSBacklog`);
+  ADD CONSTRAINT `item_ibfk_1` FOREIGN KEY (`idBacklog`) REFERENCES `product_backlog` (`idProductBacklog`),
+  ADD CONSTRAINT `item_ibfk_2` FOREIGN KEY (`idBacklog`) REFERENCES `sprint` (`idSprint`);
+
+--
+-- Constraints for table `label`
+--
+ALTER TABLE `label`
+  ADD CONSTRAINT `label_ibfk_1` FOREIGN KEY (`idBoard`) REFERENCES `board` (`idBoard`);
 
 --
 -- Constraints for table `meeting_user`
@@ -663,17 +726,11 @@ ALTER TABLE `sprint`
   ADD CONSTRAINT `sprint_ibfk_1` FOREIGN KEY (`idProject`) REFERENCES `project` (`idProject`);
 
 --
--- Constraints for table `sprint_backlog`
---
-ALTER TABLE `sprint_backlog`
-  ADD CONSTRAINT `sprint_backlog_ibfk_1` FOREIGN KEY (`idProject`) REFERENCES `project` (`idProject`),
-  ADD CONSTRAINT `sprint_backlog_ibfk_2` FOREIGN KEY (`idSprint`) REFERENCES `sprint` (`idSprint`);
-
---
 -- Constraints for table `task`
 --
 ALTER TABLE `task`
-  ADD CONSTRAINT `task_ibfk_1` FOREIGN KEY (`idTaskList`) REFERENCES `task_list` (`idTaskList`);
+  ADD CONSTRAINT `task_ibfk_1` FOREIGN KEY (`idTaskList`) REFERENCES `task_list` (`idTaskList`),
+  ADD CONSTRAINT `task_ibfk_3` FOREIGN KEY (`idLabel`) REFERENCES `label` (`idLabel`);
 
 --
 -- Constraints for table `task_label`

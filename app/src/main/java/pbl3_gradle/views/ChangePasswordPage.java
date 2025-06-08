@@ -2,9 +2,9 @@ package pbl3_gradle.views;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import pbl3_gradle.common.PasswordTextFieldClass;
 import pbl3_gradle.common.RoundedRect;
 import pbl3_gradle.common.FancyButtonClass;
 import pbl3_gradle.controllers.Account;
@@ -50,9 +50,9 @@ public class ChangePasswordPage {
                 vbox.setLayoutY(236.1);
                 vbox.setPrefSize(328.4, 234.9);
                 // Tao group 3 textfield
-                PasswordTextFieldClass tf1 = new PasswordTextFieldClass();
-                PasswordTextFieldClass tf2 = new PasswordTextFieldClass();
-                PasswordTextFieldClass tf3 = new PasswordTextFieldClass();
+                PasswordField tf1 = new PasswordField();
+                PasswordField tf2 = new PasswordField();
+                PasswordField tf3 = new PasswordField();
                 AdminAddAccPage.TextFieldStyle(tf1, "#2f74eb", 495.8, 54.5);
                 AdminAddAccPage.PwTextFieldStyle(tf2, "#2f74eb", 495.8, 54.5);
                 AdminAddAccPage.PwTextFieldStyle(tf3, "#2f74eb", 495.8, 54.5);
@@ -65,9 +65,9 @@ public class ChangePasswordPage {
                 // Tao button save
                 FancyButtonClass saveBtn = new FancyButtonClass("SAVE", 213.1, 59.8, 726, 553.1);
                 saveBtn.setOnAction(e -> {
-                        String currentPw = tf1.getPassword();
-                        String newPw = tf2.getPassword();
-                        String confirmPw = tf3.getPassword();
+                        String currentPw = tf1.getText();
+                        String newPw = tf2.getText();
+                        String confirmPw = tf3.getText();
 
                         // Lấy username hiện tại
                         String currentUsername = CurrentUser.Instance.getUserName();

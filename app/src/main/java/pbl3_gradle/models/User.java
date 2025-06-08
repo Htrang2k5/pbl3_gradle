@@ -34,7 +34,7 @@ public class User {
 
     public User() {
         super();
-        this.userID = 0;
+        this.userID = -1;
         this.userName = "";
         this.userPassword = "";
         this.email = "";

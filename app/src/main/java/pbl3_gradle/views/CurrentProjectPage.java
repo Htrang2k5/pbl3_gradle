@@ -1,179 +1,288 @@
 package pbl3_gradle.views;
 
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.animation.ScaleTransition;
-import javafx.scene.control.Button;
-import javafx.scene.control.ContextMenu;
-import pbl3_gradle.common.AvatarViewClass;
-import pbl3_gradle.common.ImageButtonClass;
-import pbl3_gradle.util.NavigationManager;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Side;
+import javafx.scene.Node;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.*;
 import javafx.util.Duration;
-import javafx.scene.control.ScrollPane;
+import pbl3_gradle.common.AvatarViewClass;
+import pbl3_gradle.common.ImageButtonClass;
+import pbl3_gradle.controllers.DataManager;
+import pbl3_gradle.controllers.ProjectController;
+import pbl3_gradle.models.CurrentProject;
+import pbl3_gradle.models.CurrentUser;
+import pbl3_gradle.models.ProductBacklog;
+import pbl3_gradle.models.Project;
+import pbl3_gradle.util.AppContext;
+import pbl3_gradle.util.CustomMessageBox;
+import pbl3_gradle.util.NavigationManager;
+
+import java.util.List;
+import java.util.Random;
 
 public class CurrentProjectPage {
+
         public Pane getView() {
-                // Create menu bar
-                Pane menuBar = ProfileMemberPage.MenuBarStyle_Layer2(
-                                "file:src/main/resources/image/ImageAvatar.png", "Nguyễn Thị Huyền Trang",
-                                "Scrum Master",
-                                "CurrentProjectPage");
-                // Create a main label
-                Label mainLb = new Label("CURRENT PROJECTS");
-                mainLb.setStyle(
-                                "-fx-text-fill: #2f74eb;"
-                                                + " -fx-font-size: 26px;"
-                                                + " -fx-alignment: center; "
-                                                + "-fx-font-family:'Arial';"
-                                                + "-fx-font-weight: bold;");
-                mainLb.setPrefSize(290.2, 41.1);
-                mainLb.setLayoutX(678.6);
-                mainLb.setLayoutY(43.3);
-                // Create a more button
-                Image image1 = new Image(
-                                "file:src/main/resources/image/MoreIcon.png");
-                ImageButtonClass moreButton = new ImageButtonClass(image1, 44.4, 44.4, 1244.8, 41.2);
+                Pane root = new Pane();
+                root.setPrefSize(1366, 768);
+                root.setStyle("-fx-background-color: #ffffff;");
+
+                Pane menuBar = createMenuBar();
+                Label titleLabel = createTitleLabel();
+                ImageButtonClass moreButton = createMoreButton();
+                TextField searchField = createSearchField();
+                AvatarViewClass searchIcon = createSearchIcon();
+
+                GridPane projectsGrid = createProjectsGrid();
+                ScrollPane scrollPane = createScrollPane(projectsGrid);
+
+                root.getChildren().addAll(menuBar, titleLabel, moreButton, searchField, searchIcon, scrollPane);
+                return root;
+        }
+
+        private Pane createMenuBar() {
+                return ProfileMemberPage.MenuBarStyle_Layer2(
+                        "file:src/main/resources/image/ImageAvatar.png",
+                        CurrentUser.Instance.getFullName(),
+                        ProfileMemberPage.getRoleName(CurrentUser.Instance.getRole()),
+                        "CurrentProjectPage");
+        }
+
+        private Label createTitleLabel() {
+                Label label = new Label("CURRENT PROJECTS");
+                label.setLayoutX(678.6);
+                label.setLayoutY(43.3);
+                label.setPrefSize(290.2, 41.1);
+                label.setStyle("""
+                -fx-text-fill: #2f74eb;
+                -fx-font-size: 26px;
+                -fx-alignment: center;
+                -fx-font-family: 'Arial';
+                -fx-font-weight: bold;
+                """);
+                return label;
+        }
+
+        private ImageButtonClass createMoreButton() {
+                Image moreIcon = new Image("file:src/main/resources/image/MoreIcon.png");
+                ImageButtonClass moreButton = new ImageButtonClass(moreIcon, 44.4, 44.4, 1244.8, 41.2);
+
                 ContextMenu contextMenu = new ContextMenu();
-                MenuItem menuItem1 = new MenuItem("Completed Projects");
-                menuItem1.setStyle(" -fx-font-size: 20px;"
-                                + " -fx-alignment: center; "
-                                + "-fx-font-family:'Helvetica';");
-                contextMenu.getItems().addAll(menuItem1);
-                contextMenu.setPrefSize(283.3, 089.8);
+                MenuItem completedItem = new MenuItem("Completed Projects");
+                completedItem.setStyle("-fx-font-size: 20px; -fx-font-family:'Helvetica';");
+                contextMenu.getItems().add(completedItem);
+
+                completedItem.setOnAction(e -> {
+                        AppContext.set("currentPage", "CompeletedProjectPage");
+                        NavigationManager.navigateToCompeletedProjectPage();
+                });
+              if(CurrentUser.Instance.getRole()==2) {
+                      MenuItem newProject = new MenuItem("New Project");
+                      newProject.setStyle("-fx-font-size: 20px; -fx-font-family:'Helvetica';");
+                      contextMenu.getItems().add(newProject);
+                        newProject.setOnAction(e1 -> {
+                                Project newProject1 = new Project();
+                                newProject1.setProjectName("New Project");
+                                newProject1.setDescription("This is a new project.");
+                                newProject1.setStatus(false);
+                                newProject1.setDateCreated(new java.util.Date());
+                                Button newProjectButton = createProjectButton(newProject1.getProjectName(), newProject1.getDescription());
+                                DataManager.Instance.addNewProject(newProject1);
+                                ProductBacklog pb = newProject1.getProductBacklog(); // lấy ProductBacklog hiện tại
+
+                                Project prj= DataManager.Instance.getProjectByName("New Project");
+                                pb.setIdProductBacklog(prj.getIdProject()); // set idProject cho ProductBacklog
+                               prj.setProductBacklog(pb);
+                                DataManager.Instance.updateProject(prj); // cập nhật lại project với ProductBacklog mới
+                                Random rand = new Random();
+                                int randomNumber = rand.nextInt(100) + 1; // random từ 1 đến 100
+
+                                NavigationManager.navigateToCurrentProjectPage();
+
+                                GridPane grid = (GridPane) ((ScrollPane) moreButton.getParent().getChildrenUnmodifiable().get(5)).getContent();
+//                                int rowCount = grid.getChildren().size() / 2; // Assuming 2 columns
+//                                grid.add(newProjectButton, 0, rowCount);
+                        });
+              }
                 moreButton.setOnAction(e -> {
                         if (!contextMenu.isShowing()) {
-                                contextMenu.show(moreButton, Side.BOTTOM, 0, 0); // Hiện phía dưới button
+                                contextMenu.show(moreButton, Side.BOTTOM, 0, 0);
                         } else {
                                 contextMenu.hide();
                         }
                 });
-                menuItem1.setOnAction(e -> {
-                        // Navigate to CompletedProjectPage
-                        NavigationManager.navigateToCompeletedProjectPage();
-                });
-                // Tao text field tim kiem
-                Image findImage = new Image("file:src/main/resources/image/FindImage.png");
-                AvatarViewClass findAvatar = new AvatarViewClass(findImage, 46.8, 0);
-                findAvatar.setLayoutX(379.7);
-                findAvatar.setLayoutY(134.3);
-                TextField findtext = new TextField();
-                EditAcc_ShowAccPage.setStyleFindText(findtext, 981.8, 65.9, 338.1, 124.7);
-                // Tao list current project
-                String projectTitle = "Chicken learn to Fly fasjdfjsadfasldkfasdifjasp";
-                String projectDescription = "This is a project about chicken learn to fly nasdkfjaosidfjasdfnasjdfnasdjfndsofnsaoifdjaoisdjasdjfasidfjaosdifoasdjnfsaofhs";
-                Button projectBtn1 = projectButton(projectTitle, projectDescription);
-                Button projectBtn2 = projectButton("", "");
-                Button projectBtn3 = projectButton("", "");
-                Button projectBtn4 = projectButton("", "");
-                Button projectBtn5 = projectButton("", "");
-                Button projectBtn6 = projectButton("", "");
-                GridPane gridPane = new GridPane();
-                gridPane.setHgap(24); // Set horizontal gap between buttons
-                gridPane.setVgap(24); // Set vertical gap between buttons
-                gridPane.setPadding(new Insets(5, 5, 5, 5));
-                gridPane.add(projectBtn1, 0 % 2, 0 / 2);
-                gridPane.add(projectBtn2, 1 % 2, 1 / 2);
-                gridPane.add(projectBtn3, 2 % 2, 2 / 2);
-                gridPane.add(projectBtn4, 3 % 2, 3 / 2);
-                gridPane.add(projectBtn5, 4 % 2, 4 / 2);
-                gridPane.add(projectBtn6, 5 % 2, 5 / 2);
 
-                ScrollPane scrollPane = new ScrollPane(gridPane);
+                return moreButton;
+        }
+
+        private TextField createSearchField() {
+                TextField searchField = new TextField();
+                EditAcc_ShowAccPage.setStyleFindText(searchField, 981.8, 65.9, 338.1, 124.7);
+                return searchField;
+        }
+
+        private AvatarViewClass createSearchIcon() {
+                Image findImage = new Image("file:src/main/resources/image/FindImage.png");
+                AvatarViewClass icon = new AvatarViewClass(findImage, 46.8, 0);
+                icon.setLayoutX(379.7);
+                icon.setLayoutY(134.3);
+                return icon;
+        }
+
+        private GridPane createProjectsGrid() {
+                GridPane grid = new GridPane();
+                grid.setHgap(24);
+                grid.setVgap(24);
+                grid.setPadding(new Insets(5));
+
+                // Sample Projects
+
+                List<Project> allProjects = DataManager.Instance.getAllProject();
+                Button[] projects = new Button[allProjects.size()];
+                for (int i = 0; i < allProjects.size() ; i++) {
+                        Project project = allProjects.get(i);
+                        projects[i] = createProjectButton(project.getProjectName(), project.getDescription());
+                }
+
+                for (int i = 0; i < projects.length; i++) {
+                        grid.add(projects[i], i % 2, i / 2);
+                }
+                return grid;
+        }
+
+        private ScrollPane createScrollPane(GridPane content) {
+                ScrollPane scrollPane = new ScrollPane(content);
                 scrollPane.setPrefSize(1050, 530);
                 scrollPane.setLayoutX(310);
                 scrollPane.setLayoutY(220);
-                scrollPane.setStyle(
-                                "-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent;");
-                scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS); // luon luon hien thi thanh cuon
-                // Create Pane
-                Pane pane = new Pane();
-                pane.getChildren().addAll(menuBar, mainLb, moreButton, findtext, findAvatar,
-                                scrollPane);
-                pane.setStyle(
-                                "-fx-background-color: #ffffff; -fx-background-sdize: cover; ");
-                pane.setPrefSize(1366, 768);
-                pane.setLayoutX(0);
-                pane.setLayoutY(0);
-                return pane;
+                scrollPane.setStyle("-fx-background-color: transparent; -fx-border-color: transparent;");
+                scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+                return scrollPane;
         }
 
-        public static Button projectButton(String title, String description) {
+        public static Button createProjectButton(String title, String description) {
                 Pane projectPane = new Pane();
                 projectPane.setPrefSize(469.9, 166);
-                Label titleLbb = new Label(title);
-                titleLbb.setStyle(
-                                "-fx-text-fill: #2f74eb;"
-                                                + " -fx-font-size: 20px;"
-                                                + " -fx-alignment: center; "
-                                                + "-fx-font-family:'Helvetica';"
-                                                + "-fx-font-weight: bold;");
-                titleLbb.setPrefSize(361.4, 34.7);
-                titleLbb.setLayoutX(37.1);
-                titleLbb.setLayoutY(10.3);
-                Label descriptionLb = new Label(description);
-                descriptionLb.setStyle(
-                                "-fx-text-fill: #2f74eb;"
-                                                + " -fx-font-size: 15px;"
-                                                + " -fx-alignment: TOP_LEFT; "
-                                                + "-fx-font-family:'Helvetica';");
-                descriptionLb.setPrefSize(448.8, 82.7);
-                descriptionLb.setLayoutX(10.5);
-                descriptionLb.setLayoutY(59.4);
-                descriptionLb.setWrapText(true);
-                descriptionLb.setMaxSize(448.8, 82.7);
 
-                Image image = new Image(
-                                "file:src/main/resources/image/MoreIcon2.png");
-                ImageButtonClass moreButton = new ImageButtonClass(image, 36.2, 36.2, 412.8, 9.4);
+                Label titleLabel = new Label(title);
+                titleLabel.setId("projectTitle");
+                titleLabel.setLayoutX(37.1);
+                titleLabel.setLayoutY(10.3);
+                titleLabel.setPrefSize(361.4, 34.7);
+                titleLabel.setStyle("""
+                -fx-text-fill: #2f74eb;
+                -fx-font-size: 20px;
+                -fx-font-family:'Helvetica';
+                -fx-font-weight: bold;
+                """);
 
-                projectPane.getChildren().addAll(titleLbb, descriptionLb, moreButton);
-                projectPane.setPrefSize(469.9, 166);
+                Label descLabel = new Label(description);
+                descLabel.setLayoutX(10.5);
+                descLabel.setLayoutY(59.4);
+                descLabel.setPrefSize(448.8, 82.7);
+                descLabel.setWrapText(true);
+                descLabel.setStyle("""
+                -fx-text-fill: #2f74eb;
+                -fx-font-size: 15px;
+                -fx-font-family:'Helvetica';
+                """);
 
-                Button projectBtn = new Button();
-                projectBtn.setGraphic(projectPane);
-                projectBtn.setStyle(
-                                "-fx-background-color: #c4dff8;"
-                                                + " -fx-border-color: #92badd;"
-                                                + " -fx-border-width: 2px;"
-                                                + "-fx-border-radius: 36px;"
-                                                + "-fx-background-radius: 36px;"
-                                                + "-fx-cursor: hand;");
-                ContextMenu contextMenu = new ContextMenu();
-                MenuItem menuItem1 = new MenuItem("Done");
-                MenuItem menuItem2 = new MenuItem("Delete");
-                menuItem1.setStyle(" -fx-font-size: 14px;"
-                                + " -fx-alignment: center; "
-                                + "-fx-font-family:'Helvetica';");
-                menuItem2.setStyle(" -fx-font-size: 14px;"
-                                + " -fx-alignment: center; "
-                                + "-fx-font-family:'Helvetica';");
+                Image moreImg = new Image("file:src/main/resources/image/MoreIcon2.png");
+                ImageButtonClass moreBtn = new ImageButtonClass(moreImg, 36.2, 36.2, 412.8, 9.4);
 
-                contextMenu.getItems().addAll(menuItem1, menuItem2);
-                moreButton.setOnMouseClicked(e -> {
-                        if (!contextMenu.isShowing()) {
-                                contextMenu.show(moreButton, Side.BOTTOM, 0, 0); // Hiện phía dưới button
+                projectPane.getChildren().addAll(titleLabel, descLabel, moreBtn);
+
+                Button projectButton = new Button();
+                projectButton.setGraphic(projectPane);
+                projectButton.setStyle("""
+                -fx-background-color: #c4dff8;
+                -fx-border-color: #92badd;
+                -fx-border-width: 2px;
+                -fx-border-radius: 36px;
+                -fx-background-radius: 36px;
+                -fx-cursor: hand;
+                """);
+
+                applyContextMenu(projectButton, moreBtn);
+                applyClickEffect(projectButton);
+
+                projectButton.setOnMouseClicked(e -> {
+                        AppContext.set("currentPage", "ProductBacklogPage");
+                     Project prj= DataManager.Instance.getProjectByName(title);
+                     DataManager.Instance.setCurrentProject(prj);
+                        NavigationManager.navigateToProductBacklogPage();
+                });
+
+                return projectButton;
+        }
+
+        private static void applyContextMenu(Button button, ImageButtonClass moreBtn) {
+                ContextMenu menu = new ContextMenu();
+                MenuItem doneItem = new MenuItem("Done");
+                MenuItem deleteItem = new MenuItem("Delete");
+                MenuItem redoItem = new MenuItem("Redo");
+
+                doneItem.setStyle("-fx-font-size: 14px; -fx-font-family:'Helvetica';");
+                deleteItem.setStyle("-fx-font-size: 14px; -fx-font-family:'Helvetica';");
+                redoItem.setStyle("-fx-font-size: 14px; -fx-font-family:'Helvetica';");
+
+                Project prj= new Project();
+                Node graphic = button.getGraphic(); // Đây là projectPane
+                if (graphic instanceof Pane projectPane) {
+                        Label titleLabel = (Label) projectPane.lookup("#projectTitle");
+                        if (titleLabel != null) {
+                                //in ra
+                                System.out.println("Project Title: " + titleLabel.getText());
+                              prj= DataManager.Instance.getProjectByName(titleLabel.getText());
+                        }
+                }
+                 int idProject = prj.getIdProject();
+                System.out.println("Project ID: " + idProject);
+
+                String currentPage = (String) AppContext.get("currentPage");
+
+                if ("CurrentProjectPage".equals(currentPage)) {
+                        menu.getItems().addAll(doneItem, deleteItem);
+
+                        doneItem.setOnAction(e -> {
+                                ProjectController.Instance.markDoneProject(idProject);  // Gọi hàm đánh dấu project là đã hoàn thành
+                                CustomMessageBox.show("Success!", "Done project!");
+                        });
+                        deleteItem.setOnAction(e -> {
+                                ProjectController.Instance.removeProject(idProject);
+                                CustomMessageBox.show("Success!", "Deleted project!");
+                        });
+
+                } else {
+                        menu.getItems().addAll(redoItem, deleteItem);
+                        redoItem.setOnAction(e -> {
+                                ProjectController.Instance.markUndoneProject(idProject);  // Gọi hàm đánh dấu project là đã redo
+                                CustomMessageBox.show("Success!", "Redo project!");
+                                NavigationManager.navigateToCompeletedProjectPage();
+                        });
+                        deleteItem.setOnAction(e -> {
+                                ProjectController.Instance.removeProject(idProject);
+                                CustomMessageBox.show("Success!", "Deleted project!");
+                        });
+                }
+
+                moreBtn.setOnMouseClicked(e -> {
+                        if (!menu.isShowing()) {
+                                menu.show(moreBtn, Side.BOTTOM, 0, 0);
                         } else {
-                                contextMenu.hide();
+                                menu.hide();
                         }
                 });
-                applyClickEffect(projectBtn);
-                return projectBtn;
         }
 
         public static void applyClickEffect(Button button) {
-                EventHandler<MouseEvent> clickPressedHandler = e -> animateScale(button, 0.95);
-                EventHandler<MouseEvent> clickReleasedHandler = e -> animateScale(button, 1.00);
-
-                button.addEventHandler(MouseEvent.MOUSE_PRESSED, clickPressedHandler);
-                button.addEventHandler(MouseEvent.MOUSE_RELEASED, clickReleasedHandler);
+                button.addEventHandler(MouseEvent.MOUSE_PRESSED, e -> animateScale(button, 0.95));
+                button.addEventHandler(MouseEvent.MOUSE_RELEASED, e -> animateScale(button, 1.00));
         }
 
         private static void animateScale(Button button, double scale) {
@@ -182,4 +291,5 @@ public class CurrentProjectPage {
                 st.setToY(scale);
                 st.play();
         }
+
 }

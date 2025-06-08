@@ -5,8 +5,8 @@ import pbl3_gradle.models.*;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.sql.*;
+import java.util.Date;
 import java.time.*;
-
 
 public class DataManager {
     public static final DataManager Instance = new DataManager();
@@ -14,10 +14,10 @@ public class DataManager {
     private DataManager() {
         // Private constructor to prevent instantiation
     }
-    //Phần User
-    //kiểm tra xem username đã tồn tại trong DB chưa
+    //------------------Phần User-------------------
+    //kiểm tra xem username đã tồn tại trong DB chưa, và phải không bị disabled mới được
     public boolean verifyUsername(String username) {
-        String query = "SELECT * FROM user WHERE BINARY username = ?";
+        String query = "SELECT * FROM user WHERE BINARY username = ? AND isDisabled = false";
         SqlParameter[] param = {
                 new SqlParameter(1, username)
         };
@@ -79,6 +79,7 @@ public class DataManager {
                 CurrentUser.Instance.setPhone(rs.getString("phone"));
                 CurrentUser.Instance.setAddress(rs.getString("address"));
                 CurrentUser.Instance.setAvatar(rs.getString("avatar"));
+                CurrentUser.Instance.setBirthday(rs.getDate("birthday"));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -105,6 +106,22 @@ public class DataManager {
         return userList;
     }
 
+    public void disableUser(int idUser) {
+        String query = "UPDATE user SET isDisabled = true WHERE idUser = ?";
+        SqlParameter[] param = {
+                new SqlParameter(1, idUser)
+        };
+        DBHelper.Instance.ExecuteDB(query, param);
+    }
+
+    public void enableUser(int idUser) {
+        String query = "UPDATE user SET isDisabled = false WHERE idUser = ?";
+        SqlParameter[] param = {
+                new SqlParameter(1, idUser)
+        };
+        DBHelper.Instance.ExecuteDB(query, param);
+    }
+
     public User getUserInfoByID(int userID){
         String query = "SELECT * FROM user WHERE idUser = ?";
         SqlParameter[] param = {
@@ -121,7 +138,7 @@ public class DataManager {
                 user.setEmail(rs.getString("email"));
                 user.setFullName(rs.getString("fullName"));
                 user.setRole(rs.getInt("role"));
-                user.setBirthday(rs.getDate("birthday"));
+//                user.setBirthday(rs.getDate("birthday"));
                 user.setEnglishName(rs.getString("englishName"));
                 user.setPhone(rs.getString("phone"));
                 user.setAddress(rs.getString("address"));
@@ -168,6 +185,7 @@ public class DataManager {
         DBHelper.Instance.ExecuteDB(query, param);
     }
 
+    //-----------------Phần Project-----------------
     //Kiểm tra project đã có trong DB chưa
     public Boolean verifyProjectName (String projectName){
         String query = "SELECT * FROM project WHERE BINARY projectName = ?";
@@ -184,7 +202,6 @@ public class DataManager {
         }
     }
 
-    //Phần Project
     //Thêm mới một project
     public void addNewProject(Project project){
         String query = "INSERT INTO project (projectName, description, dateCreated, dateModified, status) VALUES (?, ?, ?, ?, ?)";
@@ -198,8 +215,28 @@ public class DataManager {
         int newProjectId = DBHelper.Instance.ExecuteInsertAndGetId(query, param);
         project.setIdProject(newProjectId);
 
+        //thêm người tạo project vào bảng user_project
+        //relationship có giá trị 0 hoặc 1, 0 là creator, 1 là member
+        String query2 = "INSERT INTO user_project (idUser, idProject, relationship) VALUES (?, ?, ?)";
+        SqlParameter[] param2 = {
+                new SqlParameter(1, CurrentUser.Instance.getUserID()),
+                new SqlParameter(2, project.getIdProject()),
+                new SqlParameter(3, 0) //0 là creator
+        };
+        DBHelper.Instance.ExecuteDB(query2, param2);
+
         //sau khi tạo project, thêm cho project đó 1 kanban board
         addNewBoard(project);
+    }
+
+    public void addMemberToProject(int idUser, int idProject){
+        String query = "INSERT INTO user_project (idUser, idProject, relationship) VALUES (?, ?, ?)";
+        SqlParameter[] param = {
+                new SqlParameter(1, idUser),
+                new SqlParameter(2, idProject),
+                new SqlParameter(3, 1) //1 là member
+        };
+        DBHelper.Instance.ExecuteDB(query, param);
     }
 
     //Cập nhật trạng thái project: Undone -> Done
@@ -213,7 +250,7 @@ public class DataManager {
     }
 
     //Xoá một project
-    public void deleteProject(int idProject){
+    public void deleteProject(int idProject) {
         String query = "DELETE FROM project WHERE idProject = ?";
         SqlParameter[] param = {
                 new SqlParameter(1, idProject)
@@ -259,7 +296,7 @@ public class DataManager {
 
     //Trả về project theo ID
     public Project getProjectByID(int idProject) {
-        String query = "SELECT * FROM project WHERE idProject = ?";
+        String query = "SELECT * FROM project WHERE idProject = ? AND isDisabled = false"; // Chỉ lấy project không bị vô hiệu hóa
         SqlParameter[] param = {
                 new SqlParameter(1, idProject)
         };
@@ -281,9 +318,46 @@ public class DataManager {
         return project;
     }
 
+    //vô hiệu hóa Project, một khi đã bị vô hiệu hóa là không thể sử dụng được nữa
+    public void disableProject(int idProject) {
+        String query = "UPDATE project SET isDisabled = true WHERE idProject = ?";
+        SqlParameter[] param = {
+                new SqlParameter(1, idProject)
+        };
+        DBHelper.Instance.ExecuteDB(query, param);
+    }
+
+    //Lấy tất cả project có liên quan tới CurrentUser
+    public List<Project> getProjectsByUser(int idUser) {
+        //Tìm list idProject mà CurrentUser đang tham gia
+        String query1 = "SELECT idProject FROM user_project WHERE idUser = ?";
+        SqlParameter[] param1 = {
+                new SqlParameter(1, CurrentUser.Instance.getUserID())
+        };
+        ResultSet rs1 = DBHelper.Instance.GetRecords(query1, param1);
+        List<Integer> projectIds = new ArrayList<>();
+        try {
+            while (rs1.next()) {
+                projectIds.add(rs1.getInt("idProject"));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        //Lấy thông tin của các project theo idProject
+        List<Project> projects = new ArrayList<>();
+        for (int idProject : projectIds) {
+            Project project = getProjectByID(idProject);
+            if (project != null) {
+                projects.add(project);
+            }
+        }
+        return projects;
+    }
+
     //Lấy toàn bộ project
     public List<Project> getAllProject() {
-        String query = "SELECT * FROM project";
+        String query = "SELECT * FROM project WHERE isDisabled = false"; // Chỉ lấy project không bị vô hiệu hóa
         ResultSet rs = DBHelper.Instance.GetRecords(query);
 
         List<Project> projectList = new ArrayList<>();
@@ -305,6 +379,29 @@ public class DataManager {
         return projectList;
     }
 
+    //Tìm thành viên của một project theo idProject
+    public List<User> getMemberByProject(int idProject) {
+        String query = "SELECT u.idUser FROM user u " +
+                       "JOIN user_project up ON u.idUser = up.idUser " +
+                       "WHERE up.idProject = ?"; // all member included creator
+        SqlParameter[] param = {
+                new SqlParameter(1, idProject)
+        };
+        ResultSet rs = DBHelper.Instance.GetRecords(query, param);
+
+        List<User> members = new ArrayList<>();
+        try {
+            while (rs.next()) {
+                int userId = rs.getInt("idUser");
+                User user = getUserInfoByID(userId); // Lấy thông tin người dùng từ idUser
+                members.add(user);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return members;
+    }
+  
     //Phần Current Project
     //Khi chọn một project, lưu thông tin vào CurrentProject
     public void setCurrentProject(Project project) {
@@ -339,14 +436,16 @@ public class DataManager {
     //Lấy thông tin của Product Backlog hiện tại, trả về ProductBacklog
     public ProductBacklog getCurrentProductBacklog() {
         int idProject = CurrentProject.Instance.getIdProject();
-        String query = "SELECT * FROM productBacklog WHERE idProject = ?";
+        String query = "SELECT * FROM product_backlog WHERE idProject = ?";
         SqlParameter[] param = { new SqlParameter(1, idProject) };
         ResultSet rs = DBHelper.Instance.GetRecords(query, param);
 
         try {
             if (rs != null && rs.next()) {
                 int idProductBacklog = rs.getInt("idProductBacklog");
+
                 List<Item> items = DataManager.Instance.getAllItemByBacklog(idProductBacklog, true);
+
                 return new ProductBacklog(idProductBacklog, idProject, items);
             }
         } catch (SQLException e) {
@@ -411,8 +510,8 @@ public class DataManager {
                 new SqlParameter(2, item.getBacklogType()),
                 new SqlParameter(3, item.getTitle()),
                 new SqlParameter(4, item.getDescription()),
-                new SqlParameter(5, item.getDateCreated()),
-                new SqlParameter(6, item.getDateModified()),
+                new SqlParameter(5, new Date()),
+                new SqlParameter(6,new Date()),
                 new SqlParameter(7, item.getStatus())
         };
         DBHelper.Instance.ExecuteDB(query, param);
@@ -420,7 +519,6 @@ public class DataManager {
         productBacklog.addItem(item);
         return productBacklog;
     }
-
 
     //Xoá một item khỏi Product Backlog, cập nhật lại Product Backlog, trả về Product Backlog đã cập nhật
     public ProductBacklog removeItemFromProductBacklog(ProductBacklog productBacklog, Item item) {
@@ -433,19 +531,6 @@ public class DataManager {
         productBacklog.removeItem(item);
         return productBacklog;
     }
-
-    //Phần Board
-    //Hàm thêm một bảng mới cho project sau khi project đó được tạo
-    public void addNewBoard(Project project){
-        String query = "INSERT INTO board (idProject, dateCreated, dateModified) VALUES (?, ?, ?)";
-        SqlParameter[] param = {
-                new SqlParameter(1, project.getIdProject()),
-                new SqlParameter(2, project.getDateCreated()),
-                new SqlParameter(3, project.getDateModified())
-        };
-        DBHelper.Instance.ExecuteDB(query, param);
-    }
-
 
     //Cập nhật thông tin của một item trong Product Backlog, cập nhật lại Product Backlog, trả về Product Backlog đã cập nhật
     public ProductBacklog updateItemInProductBacklog(ProductBacklog productBacklog, Item item) {
@@ -482,6 +567,7 @@ public class DataManager {
                 sprint.setStatus(rs.getBoolean("status"));
 
                 List<Item> items = DataManager.Instance.getAllItemByBacklog(sprint.getIdSprint(), false);
+
                 sprint.setItems(items);
                 sprintList.addSprint(sprint);
             }
@@ -505,7 +591,9 @@ public class DataManager {
                 sprint.setIdSprint(rs.getInt("idSprint"));
                 sprint.setIdProject(rs.getInt("idProject"));
                 sprint.setTitle(rs.getString("title"));
+
                 sprint.setDateStart(rs.getDate("dateStart"));
+
                 sprint.setEstimatedEndDate(rs.getDate("estimatedEndDate"));
                 sprint.setActualEndDate(rs.getDate("actualEndDate"));
                 sprint.setStatus(rs.getBoolean("status"));
@@ -534,7 +622,9 @@ public class DataManager {
                 sprint.setIdSprint(rs.getInt("idSprint"));
                 sprint.setIdProject(rs.getInt("idProject"));
                 sprint.setTitle(rs.getString("title"));
+
                 sprint.setDateStart(rs.getDate("dateStart"));
+
                 sprint.setEstimatedEndDate(rs.getDate("estimatedEndDate"));
                 sprint.setActualEndDate(rs.getDate("actualEndDate"));
                 sprint.setStatus(rs.getBoolean("status"));
@@ -585,6 +675,7 @@ public class DataManager {
                 new SqlParameter(1, sprint.getTitle()),
                 new SqlParameter(2, sprint.getIdSprint())
         };
+
         DBHelper.Instance.ExecuteDB(query, param);
 
         sprintList.updateSprint(sprint);
@@ -650,6 +741,18 @@ public class DataManager {
         return 0;
     }
 
+    //----------------Phần Board--------------------
+    //Hàm thêm một bảng mới cho project sau khi project đó được tạo
+    private void addNewBoard(Project project){
+        String query = "INSERT INTO board (idProject, dateCreated, dateModified) VALUES (?, ?, ?)";
+        SqlParameter[] param = {
+                new SqlParameter(1, project.getIdProject()),
+                new SqlParameter(2, project.getDateCreated()),
+                new SqlParameter(3, project.getDateModified())
+        };
+        DBHelper.Instance.ExecuteDB(query, param);
+    }
+
     //Lấy id của board theo idProject
     public int getBoardIdByProject(int idProject) {
         String query = "SELECT * FROM board WHERE idProject = ?";
@@ -668,7 +771,341 @@ public class DataManager {
         return boardId;
     }
 
-    //Phần List
+    public void deleteBoardData(int idBoard){
+        List<TaskList> taskListsToDelete = getTaskListByBoardId(idBoard);
+        for (TaskList taskList : taskListsToDelete) {
+            deleteTaskListData(taskList.getIdTaskList());
+        }
 
+        // Xoá board
+        String query = "DELETE FROM board WHERE idBoard = ?";
+        SqlParameter[] param = {
+                new SqlParameter(1, idBoard)
+        };
+        DBHelper.Instance.ExecuteDB(query, param);
+    }
+
+    //-----------------Phần List--------------------
+    public List<TaskList> getTaskListByBoardId(int idBoard) {
+        String query = "SELECT * FROM task_list WHERE idBoard = ? ORDER BY position";
+        SqlParameter[] param = {
+                new SqlParameter(1, idBoard)
+        };
+        ResultSet rs = DBHelper.Instance.GetRecords(query, param);
+
+        List<TaskList> resTaskList = new ArrayList<>();
+        try {
+            while (rs.next()) {
+                TaskList taskList = new TaskList();
+                taskList.setIdTaskList(rs.getInt("idTaskList"));
+                taskList.setName(rs.getString("title"));
+                taskList.setPosition(rs.getInt("position"));
+                resTaskList.add(taskList);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return resTaskList;
+    }
+
+    //Tạo task list mới trong database thuộc về board có idBoard
+    public TaskList createTaskList(TaskList taskList, int idBoard) {
+        String query = "INSERT INTO task_list (idBoard, title, position, dateCreated) VALUES (?, ?, ?, ?)";
+        SqlParameter[] param = {
+                new SqlParameter(1, idBoard),
+                new SqlParameter(2, taskList.getName()),
+                new SqlParameter(3, taskList.getPosition()),
+                new SqlParameter(4, new Date())
+        };
+        int newTaskListId = DBHelper.Instance.ExecuteInsertAndGetId(query, param);
+        taskList.setIdTaskList(newTaskListId);
+        return taskList;
+    }
+
+    // Xoá task list trong database
+    public void deleteTaskList(TaskList taskList) {
+        String query = "DELETE FROM task_list WHERE idTaskList = ?";
+        SqlParameter[] param = {
+                new SqlParameter(1, taskList.getIdTaskList())
+        };
+        DBHelper.Instance.ExecuteDB(query, param);
+    }
+
+    public void updateTaskListPosition(TaskList taskList) {
+        String query = "UPDATE task_list SET position = ? WHERE idTaskList = ?";
+        SqlParameter[] param = {
+                new SqlParameter(1, taskList.getPosition()),
+                new SqlParameter(2, taskList.getIdTaskList())
+        };
+        DBHelper.Instance.ExecuteDB(query, param);
+    }
+
+    public void updateTaskList(TaskList taskList) {
+        String query = "UPDATE task_list SET title = ? WHERE idTaskList = ?";
+        SqlParameter[] param = {
+                new SqlParameter(1, taskList.getName()),
+                new SqlParameter(2, taskList.getIdTaskList())
+        };
+        DBHelper.Instance.ExecuteDB(query, param);
+    }
+
+    public void deleteTaskListData(int idTaskList) {
+        // Xóa tất cả data của task thuộc tasklist trước
+        String getTasksQuery = "SELECT idTask FROM task WHERE idTaskList = ?";
+        SqlParameter[] getTasksParam = {
+                new SqlParameter(1, idTaskList)
+        };
+        ResultSet rs = DBHelper.Instance.GetRecords(getTasksQuery, getTasksParam);
+        try {
+            while (rs.next()) {
+                int idTask = rs.getInt("idTask");
+                deleteTaskData(idTask);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        // Xoá task list
+        String deleteTaskListQuery = "DELETE FROM task_list WHERE idTaskList = ?";
+        SqlParameter[] deleteTaskListParam = {
+                new SqlParameter(1, idTaskList)
+        };
+        DBHelper.Instance.ExecuteDB(deleteTaskListQuery, deleteTaskListParam);
+    }
+
+    //-----------------Phần Task--------------------
+    public Task createTask(Task task, int idTaskList) {
+        String query = "INSERT INTO task (idTaskList, title, description, status, position, dateCreated, dateModified) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        SqlParameter[] param = {
+                new SqlParameter(1, idTaskList),
+                new SqlParameter(2, task.getTitle()),
+                new SqlParameter(3, task.getDescription()),
+                new SqlParameter(4, task.getStatus()),
+                new SqlParameter(5, task.getPosition()),
+                new SqlParameter(6, new Date()),
+                new SqlParameter(7, new Date())
+        };
+        int newTaskId = DBHelper.Instance.ExecuteInsertAndGetId(query, param);
+        task.setIdTask(newTaskId);
+        return task;
+    }
+
+    public void addMemberToTask(User user, int idTask) {
+        String query = "INSERT INTO user_task (idUser, idTask) VALUES (?, ?)";
+        SqlParameter[] param = {
+                new SqlParameter(1, user.getUserID()),
+                new SqlParameter(2, idTask)
+        };
+        DBHelper.Instance.ExecuteDB(query, param);
+    }
+
+    public void removeMemberFromTask(User user, int idTask) {
+        String query = "DELETE FROM user_task WHERE idUser = ? AND idTask = ?";
+        SqlParameter[] param = {
+                new SqlParameter(1, user.getUserID()),
+                new SqlParameter(2, idTask)
+        };
+        DBHelper.Instance.ExecuteDB(query, param);
+    }
+
+    public List<Task> getTaskByTaskListId(int idTaskList) {
+        String query = "SELECT * FROM task WHERE idTaskList = ? ORDER BY position";
+        SqlParameter[] param = {
+                new SqlParameter(1, idTaskList)
+        };
+        ResultSet rs = DBHelper.Instance.GetRecords(query, param);
+
+        List<Task> resTaskList = new ArrayList<>();
+        try {
+            while (rs.next()) {
+                Task task = new Task();
+                task.setIdTask(rs.getInt("idTask"));
+                task.setTitle(rs.getString("title"));
+                task.setDescription(rs.getString("description"));
+                task.setStatus(rs.getBoolean("status"));
+                task.setPosition(rs.getInt("position"));
+                task.setDateCreated(rs.getDate("dateCreated"));
+                task.setDateModified(rs.getDate("dateModified"));
+                task.setDateDue(rs.getDate("dateDue"));
+                task.setComments(getCommentsByTaskId(rs.getInt("idTask")));
+                task.setMembers(getMemberByTaskId(rs.getInt("idTask")));
+                resTaskList.add(task);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return resTaskList;
+    }
+
+    public List<User> getMemberByTaskId(int idTask) {
+        String query = "SELECT u.idUser FROM user u " +
+                       "JOIN user_task ut ON u.idUser = ut.idUser " +
+                       "WHERE ut.idTask = ?";
+        SqlParameter[] param = {
+                new SqlParameter(1, idTask)
+        };
+        ResultSet rs = DBHelper.Instance.GetRecords(query, param);
+
+        List<User> members = new ArrayList<User>();
+        try {
+            while (rs.next()) {
+                int userId = rs.getInt("idUser");
+                members.add(getUserInfoInTask(userId));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return members;
+    }
+
+    public void updateTaskDueDate(int idTask, Date dateDue) {
+        String query = "UPDATE task SET dateDue = ? WHERE idTask = ?";
+        SqlParameter[] param = {
+                new SqlParameter(1, dateDue),
+                new SqlParameter(2, idTask)
+        };
+        DBHelper.Instance.ExecuteDB(query, param);
+    }
+
+    public void updateTaskPosition(Task task) {
+        String query = "UPDATE task SET position = ?, dateModified = ? WHERE idTask = ?";
+        SqlParameter[] param = {
+                new SqlParameter(1, task.getPosition()),
+                new SqlParameter(2, new Date()),
+                new SqlParameter(3, task.getIdTask())
+        };
+        DBHelper.Instance.ExecuteDB(query, param);
+    }
+
+    public void updateTask(Task task) {
+        String query = "UPDATE task SET title = ?, description = ?, status = ?, dateModified = ?, dateDue = ? WHERE idTask = ?";
+        SqlParameter[] param = {
+                new SqlParameter(1, task.getTitle()),
+                new SqlParameter(2, task.getDescription()),
+                new SqlParameter(3, task.getStatus()),
+                new SqlParameter(4, new Date()),
+                new SqlParameter(5, task.getDateDue()),
+                new SqlParameter(6, task.getIdTask())
+        };
+        DBHelper.Instance.ExecuteDB(query, param);
+    }
+
+    public Task getTaskById(int idTask) {
+        String query = "SELECT * FROM task WHERE idTask = ?";
+        SqlParameter[] param = {
+                new SqlParameter(1, idTask)
+        };
+        ResultSet rs = DBHelper.Instance.GetRecords(query, param);
+
+        Task task = new Task();
+        try {
+            if (rs.next()) {
+                task.setIdTask(rs.getInt("idTask"));
+                task.setTitle(rs.getString("title"));
+                task.setDescription(rs.getString("description"));
+                task.setStatus(rs.getBoolean("status"));
+                task.setPosition(rs.getInt("position"));
+                task.setDateCreated(rs.getDate("dateCreated"));
+                task.setDateModified(rs.getDate("dateModified"));
+                task.setDateDue(rs.getDate("dateDue"));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return task;
+    }
+
+    public User getUserInfoInTask(int idUser) {
+        String query = "SELECT * FROM user WHERE idUser = ?";
+        SqlParameter[] param = {
+                new SqlParameter(1, idUser)
+        };
+        ResultSet rs = DBHelper.Instance.GetRecords(query, param);
+
+        User user = new User();
+        try {
+            if (rs.next()) {
+                user.setUserID(rs.getInt("idUser"));
+                user.setUserName(rs.getString("username"));
+                user.setEmail(rs.getString("email"));
+                user.setFullName(rs.getString("fullName"));
+                user.setRole(rs.getInt("role"));
+                user.setEnglishName(rs.getString("englishName"));
+                user.setPhone(rs.getString("phone"));
+                user.setAvatar(rs.getString("avatar"));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return user;
+    }
+
+    public void deleteTaskData(int idTask) {
+        //delete task appearance in table comment and user_task
+        String query = "DELETE FROM comment WHERE idTask = ?";
+        String query2 = "DELETE FROM user_task WHERE idTask = ?";
+        SqlParameter[] param = {
+                new SqlParameter(1, idTask)
+        };
+        DBHelper.Instance.ExecuteDB(query, param);
+        DBHelper.Instance.ExecuteDB(query2, param);
+
+        //delete task in table task
+        String query3 = "DELETE FROM task WHERE idTask = ?";
+        DBHelper.Instance.ExecuteDB(query3, param);
+    }
+
+    //----------------Phần Comment------------------
+    public Comment createComment(Comment comment, int idTask) {
+        String query = "INSERT INTO comment (idTask, content, dateCreated, idUser) VALUES (?, ?, ?, ?)";
+        SqlParameter[] param = {
+                new SqlParameter(1, idTask),
+                new SqlParameter(2, comment.getContent()),
+                new SqlParameter(3, comment.getDateCreated()),
+                new SqlParameter(4, comment.getIdUser())
+        };
+        int newCommentId = DBHelper.Instance.ExecuteInsertAndGetId(query, param);
+        comment.setIdComment(newCommentId);
+        return comment;
+    }
+
+    public List<Comment> getCommentsByTaskId(int idTask) {
+        String query = "SELECT * FROM comment WHERE idTask = ? ORDER BY dateCreated DESC";
+        SqlParameter[] param = {
+                new SqlParameter(1, idTask)
+        };
+        ResultSet rs = DBHelper.Instance.GetRecords(query, param);
+
+        List<Comment> comments = new ArrayList<>();
+        try {
+            while (rs.next()) {
+                Comment comment = new Comment();
+                comment.setIdComment(rs.getInt("idComment"));
+                comment.setIdUser(rs.getInt("idUser"));
+                comment.setContent(rs.getString("content"));
+                comment.setDateCreated(rs.getDate("dateCreated"));
+
+                comments.add(comment);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return comments;
+    }
+
+    public void deleteComment(int idComment) {
+        String query = "DELETE FROM comment WHERE idComment = ?";
+        SqlParameter[] param = {
+                new SqlParameter(1, idComment)
+        };
+        DBHelper.Instance.ExecuteDB(query, param);
+    }
+    public void updateComment(Comment comment) {
+        String query = "UPDATE comment SET content = ? WHERE idComment = ?";
+        SqlParameter[] param = {
+                new SqlParameter(1, comment.getContent()),
+                new SqlParameter(2, comment.getIdComment())
+        };
+        DBHelper.Instance.ExecuteDB(query, param);
+    }
 }
-

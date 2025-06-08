@@ -1,5 +1,6 @@
 package pbl3_gradle.models;
 
+import java.util.Date;
 import java.util.List;
 
 public class CurrentUser{
@@ -51,6 +52,7 @@ public class CurrentUser{
         return currentUser.fullName;
     }
 
+
     public void setFullName(String fullName) {
         currentUser.fullName = fullName;
     }
@@ -73,6 +75,12 @@ public class CurrentUser{
 
     public String getPhone() {
         return currentUser.phone;
+    }
+    public Date getBirthday() {
+        return currentUser.birthday;
+    }
+    public void setBirthday(Date birthday) {
+        currentUser.birthday = birthday;
     }
 
     public void setPhone(String phone) {
@@ -101,5 +109,9 @@ public class CurrentUser{
 
     public void setProjectIDList(List<Integer> projectIDList) {
         currentUser.projectIDList = projectIDList;
+    }
+
+    public User getUserObject(){
+        return currentUser;
     }
 }

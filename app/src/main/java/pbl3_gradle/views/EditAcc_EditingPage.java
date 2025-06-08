@@ -3,6 +3,7 @@ package pbl3_gradle.views;
 import javafx.geometry.Pos;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
@@ -10,7 +11,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import pbl3_gradle.common.AvatarViewClass;
 import pbl3_gradle.common.FancyButtonClass;
-import pbl3_gradle.common.PasswordTextFieldClass;
 import pbl3_gradle.common.RoundedRect;
 import pbl3_gradle.common.ImageButtonClass;
 import pbl3_gradle.controllers.DataManager;
@@ -93,8 +93,10 @@ public class EditAcc_EditingPage {
                 vbox.setPrefSize(276.1, 310.8);
                 // Tao group 3 textfield
                 TextField tf1 = new TextField(user.getUserName());
-                PasswordTextFieldClass tf2 = new PasswordTextFieldClass(user.getUserPassword());
-                PasswordTextFieldClass tf3 = new PasswordTextFieldClass(user.getUserPassword());
+                PasswordField tf2 = new PasswordField();
+                tf2.setPromptText("Enter new password");
+                PasswordField tf3 = new PasswordField();
+                tf3.setPromptText("Re-enter new password");
                 ComboBox<String> cbb = new ComboBox<>();
                 cbb.getItems().addAll("Scrum Master", "Developer", "Product Owner", "Project Owner");
                 cbb.setValue(String.valueOf(user.getRole()));

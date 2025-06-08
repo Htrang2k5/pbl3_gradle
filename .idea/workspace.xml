@@ -5,12 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9f9a53cc-b0fb-4c6d-bf00-9210d3307d97" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/ETC/CLASS DESCRIPTION.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/controllers/ProjectController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/models/CurrentProject.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_5_21_2025_9_52_AM_[Changes]/shelved.patch" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_5_21_2025_9_52_AM_[Changes]/shelved.patch" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_5_21_2025_9_52_AM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_5_21_2025_9_52_AM__Changes_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/controllers/DataManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/controllers/DataManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/models/Project.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/models/Project.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/views/ProductBacklogPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/views/ProductBacklogPage.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -76,7 +74,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="phat" />
+        <entry key="$PROJECT_DIR$" value="main" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -105,23 +103,46 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Gradle.pbl3_gradle [build].executor": "Run",
-    "Gradle.pbl3_gradle [runJavaFX].executor": "Run",
-    "Gradle.pbl3_gradle [run].executor": "Run",
-    "Gradle.pbl3_gradle.executor": "Run",
-    "Gradle.pbl3_gradle:app [:app:pbl3_gradle.App.main()].executor": "Run",
-    "Gradle.pbl3_gradle:app [build].executor": "Run",
-    "Gradle.pbl3_gradle:app [runJavaFX].executor": "Run",
-    "Gradle.pbl3_gradle:app [run].executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "Merging main",
-    "kotlin-language-version-configured": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.App.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.pbl3_gradle [build].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.pbl3_gradle [runJavaFX].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.pbl3_gradle [run].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.pbl3_gradle.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.pbl3_gradle:app [:app:pbl3_gradle.App.main()].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.pbl3_gradle:app [build].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.pbl3_gradle:app [runJavaFX].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.pbl3_gradle:app [run].executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;#11 on phat&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Gradle.pbl3_gradle [runJavaFX]">
+    <configuration name="pbl3_gradle [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="build" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
     <configuration name="pbl3_gradle [runJavaFX]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -156,28 +177,6 @@
         <option name="taskNames">
           <list>
             <option value="run" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>false</RunAsTest>
-      <method v="2" />
-    </configuration>
-    <configuration name="pbl3_gradle:app [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$/app" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="build" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -245,9 +244,9 @@
       <list>
         <item itemvalue="Gradle.pbl3_gradle [runJavaFX]" />
         <item itemvalue="Gradle.pbl3_gradle [run]" />
+        <item itemvalue="Gradle.pbl3_gradle [build]" />
         <item itemvalue="Gradle.pbl3_gradle:app [runJavaFX]" />
         <item itemvalue="Gradle.pbl3_gradle:app [run]" />
-        <item itemvalue="Gradle.pbl3_gradle:app [build]" />
       </list>
     </recent_temporary>
   </component>
@@ -261,5 +260,45 @@
       <updated>1746686224262</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/app/src/main/java/pbl3_gradle/controllers/DataManager.java</url>
+          <line>88</line>
+          <properties class="pbl3_gradle.controllers.DataManager" method="getAllUser">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/app/src/main/java/pbl3_gradle/views/KanbanBoardPage.java</url>
+          <line>425</line>
+          <properties class="pbl3_gradle.views.KanbanBoardPage" method="setupVBoxDropTarget">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="15" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/pbl3_gradle/controllers/DataManager.java</url>
+          <line>876</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
