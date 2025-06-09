@@ -13,18 +13,26 @@ import pbl3_gradle.common.AvatarViewClass;
 import pbl3_gradle.common.FancyButtonClass;
 import pbl3_gradle.common.RoundedRect;
 import pbl3_gradle.common.ImageButtonClass;
+import pbl3_gradle.controllers.Account;
 import pbl3_gradle.controllers.DataManager;
+import pbl3_gradle.controllers.Validator;
 import pbl3_gradle.models.User;
 import pbl3_gradle.util.AppContext;
 import javafx.geometry.Insets;
 import pbl3_gradle.models.UserClass;
 import pbl3_gradle.util.NavigationManager;
 
+import javax.swing.*;
+
 public class EditAcc_EditingPage {
 
         public Pane getView() {
                 // Lay du lieu
-                User user = (User) AppContext.get("userSelected");
+                User userFromView = (User) AppContext.get("userSelected");
+                User user = DataManager.Instance.getUserInfoByID(userFromView.getUserID());
+                String oldUsername = user.getUserName();
+                System.out.println(user.getUserID() + " " + user.getUserName() + " " + user.getRole());
+                System.out.flush();
                 // Tap menu Bar
                 Pane menuBar = AdminAddAccPage.MenuBarStyle_Layer1(
                                 "file:src/main/resources/image/ImageAvatar.png", "Administrator",
@@ -92,14 +100,20 @@ public class EditAcc_EditingPage {
                 vbox.setLayoutY(214.3);
                 vbox.setPrefSize(276.1, 310.8);
                 // Tao group 3 textfield
-                TextField tf1 = new TextField(user.getUserName());
+                TextField tf1 = new TextField(oldUsername);
                 PasswordField tf2 = new PasswordField();
                 tf2.setPromptText("Enter new password");
                 PasswordField tf3 = new PasswordField();
                 tf3.setPromptText("Re-enter new password");
                 ComboBox<String> cbb = new ComboBox<>();
-                cbb.getItems().addAll("Scrum Master", "Developer", "Product Owner", "Project Owner");
-                cbb.setValue(String.valueOf(user.getRole()));
+                cbb.getItems().addAll( "Product Owner", "Scrum Master", "Development Team");
+                String userRole = switch (user.getRole()) {
+                        case 2 -> "Product Owner";
+                        case 3 -> "Scrum Master";
+                        case 4 -> "Development Team";
+                        default -> "";
+                };
+                cbb.setValue(userRole);
                 AdminAddAccPage.TextFieldStyle(tf1, "#2f74eb", 637.2, 60.1);
                 AdminAddAccPage.PwTextFieldStyle(tf2, "#2f74eb", 637.2, 60.1);
                 AdminAddAccPage.PwTextFieldStyle(tf3, "#2f74eb", 637.2, 60.1);
@@ -117,16 +131,44 @@ public class EditAcc_EditingPage {
                         String newUsername = tf1.getText();
                         String newPassword = tf2.getText();
                         String retypePassword = tf3.getText();
-                        int newRole = cbb.getSelectionModel().getSelectedIndex(); // hoặc getValue()
+                        int newRole = cbb.getSelectionModel().getSelectedIndex() + 2; // hoặc getValue()
+
+                        if (newUsername.isEmpty()) {
+                                // báo lỗi
+                                System.out.println("Tên đăng nhập không được để trống");
+                                JOptionPane.showMessageDialog(null, "Tên đăng nhập không được để trống.", "Thông báo", JOptionPane.ERROR_MESSAGE);
+                                return;
+                        }
+
+                        // kiểm tra tên đăng nhập có hợp lệ không
+                        // chỉ kiểm tra khi đổi tên đăng nhập
+                        if (!oldUsername.equals(newUsername)) {
+                                if (DataManager.Instance.verifyUsername(newUsername)) {
+                                        System.out.println("Tên đăng nhập đã tồn tại. Vui lòng chọn tên khác.");
+                                        JOptionPane.showMessageDialog(null, "Tên đăng nhập đã tồn tại. Vui lòng chọn tên khác.", "Thông báo", JOptionPane.ERROR_MESSAGE);
+                                        return;
+                                }
+                        }
+
+                        // kiểm tra mật khẩu có hợp lệ không
+                        if (!Validator.Instance.validatePasswordFormat(newPassword)) {
+                                System.out.println("Mật khẩu không hợp lệ");
+                                JOptionPane.showMessageDialog(null, "Mật khẩu không hợp lệ. Vui lòng nhập lại.", "Thông báo", JOptionPane.ERROR_MESSAGE);
+                                return;
+                        }
 
                         if (!newPassword.equals(retypePassword)) {
                                 // báo lỗi
                                 System.out.println("Passwords do not match");
+                                JOptionPane.showMessageDialog(null, "Mật khẩu không khớp. Vui lòng nhập lại.", "Thông báo", JOptionPane.ERROR_MESSAGE);
                                 return;
                         }
-                        ;
+
                         user.setUserName(newUsername);
-                        user.setUserPassword(newPassword);
+                        if (!newPassword.isEmpty()) {
+                                newPassword = Account.hashPassword(newPassword);
+                                user.setUserPassword(newPassword);
+                        }
                         user.setRole(newRole);
                         DataManager.Instance.updateUserInfoByID(user);
                         AppContext.remove("userSelected");

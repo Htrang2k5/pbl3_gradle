@@ -76,7 +76,7 @@ public class ChangePasswordPage {
                         // Hash password cũ để kiểm tra
 
                         String hashedCurrentPw = Account.hashPassword(currentPw);
-                         System.out.println("Hashed current password: " + currentPw);
+                        System.out.println("Hashed current password: " + currentPw);
                         System.out.println("Hashed current password: " + hashedCurrentPw);
                         if (!DataManager.Instance.verifyLogin(currentUsername, hashedCurrentPw)) {
                                 showAlert(Alert.AlertType.ERROR, "Current password is incorrect.");
@@ -88,12 +88,18 @@ public class ChangePasswordPage {
                                 showAlert(Alert.AlertType.ERROR, Validator.Instance.getValidatePasswordRes());
                                 return;
                         }
-User admin = DataManager.Instance.getUserInfoByID(CurrentUser.Instance.getUserID());
+                        User admin = DataManager.Instance.getUserInfoByID(CurrentUser.Instance.getUserID());
                         // Hash mật khẩu mới
-                     admin.setUserPassword(Account.hashPassword(newPw));
+                        admin.setUserPassword(Account.hashPassword(newPw));
 
-                   DataManager.Instance.updateUserInfoByID(admin);
+                        DataManager.Instance.updateUserInfoByID(admin);
 
+                        // Hiển thị thông báo thành công
+                        showAlert(Alert.AlertType.INFORMATION, "Password changed successfully.");
+                        // Xóa nội dung các trường nhập
+                        tf1.clear();
+                        tf2.clear();
+                        tf3.clear();
                 });
 
                 // Tao pane

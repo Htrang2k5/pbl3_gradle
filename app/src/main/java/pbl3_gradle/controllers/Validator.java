@@ -64,6 +64,20 @@ public class Validator {
         return true;
     }
 
+    public Boolean validatePasswordFormat(String pass) {
+        //kiểm tra mật khẩu có hợp lệ hay không
+        if (pass == null || pass.isEmpty()) {
+            return false;
+        }
+
+        //kiểm tra mật khẩu đúng cú pháp không
+        if (!pass.matches("^[a-zA-Z0-9!@#$%^&*]{8,32}$")) {
+            return false;
+        }
+
+        return true;
+    }
+
     //lấy kết quả của hàm validateUsername
     public String getValidateUsernameRes() {
         return validateUsernameRes;

@@ -10,6 +10,8 @@ import pbl3_gradle.common.MenuBarClass;
 import pbl3_gradle.common.RoundedRect;
 import javafx.scene.Cursor;
 import pbl3_gradle.controllers.Account;
+import pbl3_gradle.controllers.DataManager;
+import pbl3_gradle.controllers.Validator;
 
 import javax.swing.*;
 
@@ -53,7 +55,7 @@ public class AdminAddAccPage {
                 PasswordField tf2 = new PasswordField();
                 PasswordField tf3 = new PasswordField();
                 ComboBox<String> cbb = new ComboBox<>();
-                cbb.getItems().addAll("Scrum Master", "Developer", "Product Owner" );
+                cbb.getItems().addAll("Scrum Master", "Development Team", "Product Owner" );
 
                 tf1.setPromptText("Enter username");
                 TextFieldStyle(tf1, "#2f74eb", 577.1, 54.5);
@@ -78,13 +80,28 @@ public class AdminAddAccPage {
 
                         if (username.isEmpty() || pw.isEmpty() || rePw.isEmpty() || selectedRole == null) {
                                 System.out.println("Vui lòng điền đầy đủ thông tin."); // hoặc dùng Alert nếu bạn đã dùng JavaFX Dialogs
+                                JOptionPane.showMessageDialog(null, "Vui lòng điền đầy đủ thông tin.", "Thông báo", JOptionPane.ERROR_MESSAGE);
+                                return;
+                        }
+
+                        if (DataManager.Instance.verifyUsername(username)) {
+                                System.out.println("Tên đăng nhập đã tồn tại. Vui lòng chọn tên khác.");
+                                JOptionPane.showMessageDialog(null, "Tên đăng nhập đã tồn tại. Vui lòng chọn tên khác.", "Thông báo", JOptionPane.ERROR_MESSAGE);
+                                return;
+                        }
+
+                        if (!Validator.Instance.validatePasswordFormat(pw)) {
+                                System.out.println("Mật khẩu không hợp lệ. Vui lòng nhập lại.");
+                                JOptionPane.showMessageDialog(null, "Mật khẩu không hợp lệ. Vui lòng nhập lại.", "Thông báo", JOptionPane.ERROR_MESSAGE);
                                 return;
                         }
 
                         if (!pw.equals(rePw)) {
                                 System.out.println("Mật khẩu nhập lại không khớp.");
+                                JOptionPane.showMessageDialog(null, "Mật khẩu nhập lại không khớp.", "Thông báo", JOptionPane.ERROR_MESSAGE);
                                 return;
                         }
+
 
                         int role = switch (selectedRole) {
                                 case "Scrum Master" -> 3;

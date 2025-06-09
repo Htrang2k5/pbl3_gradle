@@ -49,6 +49,7 @@ public class LoginPage {
                         System.out.println("Username: " + user);
                         System.out.println("Password: " + pass);
                         System.out.println(Account.hashPassword(pass));
+                        System.out.flush();
                         if (user.isEmpty() || pass.isEmpty()) {
                                 showAlert("Please enter both username and password.");
                                 return;

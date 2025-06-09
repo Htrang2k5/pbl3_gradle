@@ -79,7 +79,7 @@ public class DataManager {
                 CurrentUser.Instance.setPhone(rs.getString("phone"));
                 CurrentUser.Instance.setAddress(rs.getString("address"));
                 CurrentUser.Instance.setAvatar(rs.getString("avatar"));
-                CurrentUser.Instance.setBirthday(rs.getDate("birthday"));
+//                CurrentUser.Instance.setBirthday(rs.getDate("birthday"));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -87,7 +87,8 @@ public class DataManager {
     }
 
     public List<User> getAllUser(){
-        String query = "SELECT idUser, username FROM user WHERE role NOT IN (0, 1);";
+        // Lấy tất cả người dùng trừ admin và system, và không bị vô hiệu hóa
+        String query = "SELECT idUser, username FROM user WHERE role NOT IN (0, 1) AND isDisabled = false";
         ResultSet rs = DBHelper.Instance.GetRecords(query);
 
         List<User> userList = new ArrayList<>();

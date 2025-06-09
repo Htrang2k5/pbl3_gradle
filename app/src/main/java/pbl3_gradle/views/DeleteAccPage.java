@@ -71,7 +71,8 @@ public class DeleteAccPage {
                         confirm.showAndWait().ifPresent(response -> {
                                 if (response == ButtonType.YES) {
                                         for (User user : selectedUsers) {
-                                                DataManager.Instance.deleteUserByID(user.getUserID());
+//                                                DataManager.Instance.deleteUserByID(user.getUserID());
+                                                DataManager.Instance.disableUser(user.getUserID());
                                         }
                                         selectedUsers.clear();
                                         scrollPane.setContent(loadUsers()); // Refresh lại
