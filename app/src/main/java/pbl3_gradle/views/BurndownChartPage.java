@@ -7,6 +7,9 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import pbl3_gradle.controllers.DataManager;
+import pbl3_gradle.models.Sprint;
+import pbl3_gradle.models.SprintList;
 
 public class BurndownChartPage {
     public Pane getView() {
@@ -36,44 +39,30 @@ public class BurndownChartPage {
     }
 
     public static VBox burndownChartView() {
-        // Trục X là Sprint ngày (hoặc số sprint)
-        CategoryAxis xAxis = new CategoryAxis();
-        xAxis.setLabel("Sprint Day");
+        NumberAxis xAxis = new NumberAxis();
+        xAxis.setLabel("Sprint");
 
-        // Trục Y là story points còn lại
         NumberAxis yAxis = new NumberAxis();
-        yAxis.setLabel("Remaining Story Points");
+        yAxis.setLabel("Days");
 
-        // Tạo LineChart
-        LineChart<String, Number> lineChart = new LineChart<>(xAxis, yAxis);
-        // lineChart.setTitle("Burndown Chart");
-        lineChart.setPrefSize(910.8, 569.2);
+        LineChart<Number, Number> lineChart = new LineChart<>(xAxis, yAxis);
+        lineChart.setTitle("Sprint Days");
 
-        // Estimated line (đường dự kiến)
-        XYChart.Series<String, Number> estimatedSeries = new XYChart.Series<>();
+        XYChart.Series<Number, Number> estimatedSeries = new XYChart.Series<>();
         estimatedSeries.setName("Estimated");
 
-        // Actual line (đường thực tế)
-        XYChart.Series<String, Number> actualSeries = new XYChart.Series<>();
+        XYChart.Series<Number, Number> actualSeries = new XYChart.Series<>();
         actualSeries.setName("Actual");
 
-        // Giả sử sprint kéo dài 7 ngày, bắt đầu với 30 story points
-        estimatedSeries.getData().add(new XYChart.Data<>("Day 1", 30));
-        estimatedSeries.getData().add(new XYChart.Data<>("Day 2", 25));
-        estimatedSeries.getData().add(new XYChart.Data<>("Day 3", 20));
-        estimatedSeries.getData().add(new XYChart.Data<>("Day 4", 15));
-        estimatedSeries.getData().add(new XYChart.Data<>("Day 5", 10));
-        estimatedSeries.getData().add(new XYChart.Data<>("Day 6", 5));
-        estimatedSeries.getData().add(new XYChart.Data<>("Day 7", 0));
-
-        // Dữ liệu thực tế
-        actualSeries.getData().add(new XYChart.Data<>("Day 1", 30));
-        actualSeries.getData().add(new XYChart.Data<>("Day 2", 28));
-        actualSeries.getData().add(new XYChart.Data<>("Day 3", 24));
-        actualSeries.getData().add(new XYChart.Data<>("Day 4", 18));
-        actualSeries.getData().add(new XYChart.Data<>("Day 5", 10));
-        actualSeries.getData().add(new XYChart.Data<>("Day 6", 4));
-        actualSeries.getData().add(new XYChart.Data<>("Day 7", 0));
+        SprintList sprintList = DataManager.Instance.getCurrentSprintList();
+        int count = 1;
+        for (Sprint sprint : sprintList.getSprintList()) {
+            long estimatedDay = DataManager.Instance.getEstimatedTimeForSprint(sprint);
+            long actualDay = DataManager.Instance.getActualTimeForSprint(sprint);
+            estimatedSeries.getData().add(new XYChart.Data<>(count, estimatedDay));
+            actualSeries.getData().add(new XYChart.Data<>(count, actualDay));
+            count++;
+        }
 
         // Thêm dữ liệu vào biểu đồ
         lineChart.getData().add(estimatedSeries);

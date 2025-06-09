@@ -544,8 +544,8 @@ public class DataManager {
                 Sprint sprint = new Sprint();
                 sprint.setIdSprint(rs.getInt("idSprint"));
                 sprint.setIdProject(rs.getInt("idProject"));
-                sprint.setStartDate(rs.getDate("startDate"));
-                sprint.setActualEndDate(rs.getDate("endDate"));
+                sprint.setStartDate(rs.getDate("dateStart"));
+                sprint.setActualEndDate(rs.getDate("estimatedEndDate"));
                 sprint.setStatus(rs.getBoolean("status"));
 
                 List<Item> items = DataManager.Instance.getAllItemByBacklog(sprint.getIdSprint(), 0);
@@ -683,7 +683,7 @@ public class DataManager {
         ResultSet rs = DBHelper.Instance.GetRecords(query, param);
         try {
             if (rs.next()) {
-                LocalDate startDate = rs.getDate("startDate").toLocalDate();
+                LocalDate startDate = rs.getDate("dateStart").toLocalDate();
                 LocalDate estimatedEndDate = rs.getDate("estimatedEndDate").toLocalDate();
                 if (startDate != null && estimatedEndDate != null) {
                     return ChronoUnit.DAYS.between(startDate, estimatedEndDate);
@@ -697,14 +697,14 @@ public class DataManager {
 
     //Lấy khoảng thời gian thực tế của một sprint
     public long getActualTimeForSprint(Sprint sprint) {
-        String query = "SELECT startDate, actualEndDate FROM sprint WHERE idSprint = ?";
+        String query = "SELECT dateStart, actualEndDate FROM sprint WHERE idSprint = ?";
         SqlParameter[] param = {
                 new SqlParameter(1, sprint.getIdSprint())
         };
         ResultSet rs = DBHelper.Instance.GetRecords(query, param);
         try {
             if (rs.next()) {
-                LocalDate startDate = rs.getDate("startDate").toLocalDate();
+                LocalDate startDate = rs.getDate("dateStart").toLocalDate();
                 LocalDate actualEndDate = rs.getDate("actualEndDate").toLocalDate();
                 if (startDate != null && actualEndDate != null) {
                     return ChronoUnit.DAYS.between(startDate, actualEndDate);

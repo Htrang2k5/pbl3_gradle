@@ -7,9 +7,7 @@
     <list default="true" id="9f9a53cc-b0fb-4c6d-bf00-9210d3307d97" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/controllers/DataManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/controllers/DataManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/models/Item.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/models/Item.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/views/DetailBacklogPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/views/DetailBacklogPage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/views/ProductBacklogPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/views/ProductBacklogPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/views/BurndownChartPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/views/BurndownChartPage.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
