@@ -20,7 +20,7 @@ public class ProjectController {
 //    private List<Item> items = new ArrayList<>();
 
     //Load toàn bộ project từ db, chia thành 2 list: Undone và Completed
-    private void loadProjectsFromDatabase() {
+    public void loadProjectsFromDatabase() {
         List<Project> allProjects = DataManager.Instance.getProjectsByUser(CurrentUser.Instance.getUserID());
         projectsUndone.clear();
         projectsComplete.clear();

@@ -12,14 +12,24 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import pbl3_gradle.common.AvatarViewClass;
 import pbl3_gradle.common.ImageButtonClass;
+import pbl3_gradle.controllers.*;
+import pbl3_gradle.models.*;
 
 public class CommonNotificationsPage {
         public Pane getView() {
                 // Create menu bar
+                String userRole = "";
+                if (CurrentUser.Instance.getRole() == 2) {
+                        userRole = "Product Owner";
+                } else if (CurrentUser.Instance.getRole() == 3) {
+                        userRole = "Scrum Master";
+                } else if (CurrentUser.Instance.getRole() == 4) {
+                        userRole = "Development Team";
+                }
                 Pane menuBar = ProfileMemberPage.MenuBarStyle_Layer2(
-                                "file:src/main/resources/image/ImageAvatar.png", "Nguyễn Thị Huyền Trang",
-                                "Scrum Master",
-                                "CommonNotificationsPage");
+                        "file:src/main/resources/image/ImageAvatar.png", CurrentUser.Instance.getFullName(),
+                        userRole,
+                        "CommonNotificationsPage");
                 // Create a main label
                 Label mainLb = new Label("NOTIFICATIONS");
                 mainLb.setStyle(

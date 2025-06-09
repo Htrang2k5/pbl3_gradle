@@ -31,6 +31,7 @@ import org.checkerframework.checker.units.qual.A;
 public class CurrentProjectPage {
 
         public Pane getView() {
+                ProjectController.Instance.loadProjectsFromDatabase();
                 Pane root = new Pane();
                 root.setPrefSize(1366, 768);
                 root.setStyle("-fx-background-color: #ffffff;");
@@ -283,9 +284,10 @@ public class CurrentProjectPage {
                                 ProjectController.Instance.markDoneProject(idProject); // Gọi hàm đánh dấu project là đã
                                                                                        // hoàn thành
                                 CustomMessageBox.show("Success!", "Done project!");
+                                NavigationManager.navigateToCurrentProjectPage(); // Quay lại trang CurrentProjectPage
                         });
                         deleteItem.setOnAction(e -> {
-                                ProjectController.Instance.removeProject(idProject);
+                                DataManager.Instance.disableProject(idProject);
                                 CustomMessageBox.show("Success!", "Deleted project!");
                                 NavigationManager.navigateToCurrentProjectPage(); // Quay lại trang CurrentProjectPage
                         });
@@ -305,8 +307,9 @@ public class CurrentProjectPage {
                                 NavigationManager.navigateToCompeletedProjectPage();
                         });
                         deleteItem.setOnAction(e -> {
-                                ProjectController.Instance.removeProject(idProject);
+                                DataManager.Instance.disableProject(idProject);
                                 CustomMessageBox.show("Success!", "Deleted project!");
+                                NavigationManager.navigateToCompeletedProjectPage();
                         });
                 }
 

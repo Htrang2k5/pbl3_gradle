@@ -21,6 +21,7 @@ import java.util.List;
 
 public class CompeletedProjectPage {
         public Pane getView() {
+                ProjectController.Instance.loadProjectsFromDatabase();
                 // Create menu bar
                 Pane menuBar = ProfileMemberPage.MenuBarStyle_Layer2(
                                 "file:src/main/resources/image/ImageAvatar.png",
