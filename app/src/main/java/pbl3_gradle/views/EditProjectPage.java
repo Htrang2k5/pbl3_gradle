@@ -1,5 +1,6 @@
 package pbl3_gradle.views;
 
+import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -9,11 +10,16 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import pbl3_gradle.common.ImageButtonClass;
 import pbl3_gradle.common.RoundedRect;
+import pbl3_gradle.controllers.DataManager;
 import pbl3_gradle.util.AppContext;
 import pbl3_gradle.util.NavigationManager;
+import pbl3_gradle.models.Project;
 
 public class EditProjectPage {
     public Pane getView() {
+        // final Project selectedProject = new Project();
+        int idProject = (int) AppContext.get("selectedProject");
+        final Project selectedProject = DataManager.Instance.getProjectByID(idProject);
         // Tao MenuBar
         Pane menuBar = ProfileMemberPage.MenuBarStyle_Layer2(
                 "file:src/main/resources/image/ImageAvatar.png", "Nguyễn Thị Huyền Trang",
@@ -27,14 +33,10 @@ public class EditProjectPage {
                 AppContext.remove("lastPage");
                 AppContext.set("currentPage", "CurrentProjectPage");
                 NavigationManager.navigateToCurrentProjectPage();
-            } else if (AppContext.get("lastPage") == "CompeletedProjectPage") {
-                AppContext.remove("lastPage");
-                AppContext.set("currentPage", "CompeletedProjectPage");
-                NavigationManager.navigateToCompeletedProjectPage();
             }
         });
         // Tao text Field lam tieu de
-        TextField titleProject = new TextField("Project Title");
+        TextField titleProject = new TextField(selectedProject.getProjectName());
         titleProject.setPrefSize(894.4, 68.8);
         titleProject.setLayoutX(386.2);
         titleProject.setLayoutY(63.9);
@@ -48,15 +50,23 @@ public class EditProjectPage {
                         + "-fx-border-width: 2px; "
                         + "-fx-border-radius: 36px; "
                         + "-fx-background-radius: 36px;");
+        // Tao action cho textField titleProject
+        titleProject.setOnAction(e -> {
+            String newTitle = titleProject.getText().trim(); // Lấy nội dung từ TextField
+            if (!newTitle.isEmpty()) { // Kiểm tra nếu không rỗng
+                selectedProject.setProjectName(newTitle);
+                DataManager.Instance.updateProject(selectedProject);
+                titleProject.getParent().requestFocus();
+            }
+        });
         // Tao hop chua description
         RoundedRect rect = new RoundedRect(339.2, 156.1, 988.5, 570.4, "#c4dff8", "#ffffff", 0, 36);
         // Tao label description
-        Label description = new Label(
-                "Description: This is a detailed description of the backlog item. It includes all the necessary information that the team needs to understand the requirements and expectations for this item.");
+        Label description = new Label(selectedProject.getDescription());
         description.setStyle(
                 "-fx-text-fill: #2f74eb; -fx-font-size: 18px; -fx-alignment: TOP_LEFT; -fx-font-family: 'Helvetica';");
         description.setPrefWidth(903);
-        description.setMaxHeight(519.9);
+        description.setPrefHeight(519.9);
         description.setLayoutX(386.2);
         description.setLayoutY(182);
         description.setWrapText(true);
@@ -91,12 +101,14 @@ public class EditProjectPage {
 
         // Hàm commit nội dung từ TextArea về Label
         Runnable commitEdit = () -> {
-            String newText = textAreaDescription.getText().trim();
+            String newText = textAreaDescription.getText().trim(); // Lấy nội dung từ TextArea
             if (newText.isEmpty()) {
                 description.setText("Click to add a description...");
             } else {
                 description.setText(newText);
             }
+            selectedProject.setDescription(description.getText());
+            DataManager.Instance.updateProject(selectedProject);
             // Ẩn TextArea, hiện Label
             textAreaDescription.setVisible(false);
             textAreaDescription.setManaged(false);
@@ -124,6 +136,7 @@ public class EditProjectPage {
                 commitEdit.run();
             }
         });
+
         // Tao pane chinh
         Pane pane = new Pane();
         pane.getChildren().addAll(menuBar, btnBack, titleProject, rect, description, textAreaDescription);

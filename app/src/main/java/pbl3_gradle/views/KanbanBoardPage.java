@@ -38,7 +38,7 @@ public class KanbanBoardPage {
                 // Create the main label
                 Label mainLabel = new Label("KANBAN BOARD");
                 mainLabel.setStyle(
-                        "-fx-text-fill: #2f74eb; -fx-font-size: 26px; -fx-alignment: center; -fx-font-family: 'Arial'; -fx-font-weight: bold;");
+                                "-fx-text-fill: #2f74eb; -fx-font-size: 26px; -fx-alignment: center; -fx-font-family: 'Arial'; -fx-font-weight: bold;");
                 mainLabel.setPrefSize(216.9, 44.6);
                 mainLabel.setLayoutX(339.8);
                 mainLabel.setLayoutY(25.8);
@@ -51,7 +51,7 @@ public class KanbanBoardPage {
 
                 // Lấy danh sách TaskList
                 List<TaskList> taskList = DataManager.Instance.getTaskListByBoardId(
-                        DataManager.Instance.getBoardIdByProject(CurrentProject.Instance.getIdProject()));
+                                DataManager.Instance.getBoardIdByProject(CurrentProject.Instance.getIdProject()));
 
                 for (TaskList taskListItem : taskList) {
                         VBox tl = listTasks(taskListItem, taskListsContainer);
@@ -66,7 +66,8 @@ public class KanbanBoardPage {
                         Random rand = new Random();
                         int randomNumber = rand.nextInt(100) + 1;
                         newtl.setIdTaskList(randomNumber);
-                        DataManager.Instance.createTaskList(newtl, DataManager.Instance.getBoardIdByProject(CurrentProject.Instance.getIdProject()));
+                        DataManager.Instance.createTaskList(newtl, DataManager.Instance
+                                        .getBoardIdByProject(CurrentProject.Instance.getIdProject()));
                         VBox newTaskList = listTasks(newtl, taskListsContainer);
                         taskListsContainer.getChildren().remove(addNewTaskListButton);
                         taskListsContainer.getChildren().add(newTaskList);
@@ -77,7 +78,7 @@ public class KanbanBoardPage {
                 // ScrollPane chứa taskListsContainer
                 ScrollPane scrollPane = new ScrollPane(taskListsContainer);
                 scrollPane.setStyle("-fx-background: transparent; -fx-background-color: transparent; "
-                        + "-fx-border-color: transparent; -fx-border-width: 0px;");
+                                + "-fx-border-color: transparent; -fx-border-width: 0px;");
                 scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
                 scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
                 scrollPane.setPrefSize(1000, 1000);
@@ -98,26 +99,26 @@ public class KanbanBoardPage {
                 taskPane.setPrefSize(305.6, 118.4);
                 if (task.getStatus()) {
                         taskPane.setStyle(
-                                "-fx-background-color: #c4dff8;"
-                                        + "-fx-border-radius: 10px;"
-                                        + "-fx-background-radius: 10px;"
-                                        + "-fx-border-color: #92badd;"
-                                        + "-fx-border-width: 2px;"
-                                        + "-fx-cursor: hand;");
+                                        "-fx-background-color: #c4dff8;"
+                                                        + "-fx-border-radius: 10px;"
+                                                        + "-fx-background-radius: 10px;"
+                                                        + "-fx-border-color: #92badd;"
+                                                        + "-fx-border-width: 2px;"
+                                                        + "-fx-cursor: hand;");
                 } else
                         // Neu task chua hoan thanh
                         taskPane.setStyle(
-                                "-fx-background-color: #c4dff8;"
-                                        + "-fx-border-radius: 10px;"
-                                        + "-fx-background-radius: 10px;"
-                                        + "-fx-cursor: hand;");
+                                        "-fx-background-color: #c4dff8;"
+                                                        + "-fx-border-radius: 10px;"
+                                                        + "-fx-background-radius: 10px;"
+                                                        + "-fx-cursor: hand;");
                 // Tao label ten cho task
                 Label taskLabel = new Label(task.getTitle());
                 taskLabel.setStyle(
-                        "-fx-text-fill: #2f74eb;"
-                                + "-fx-font-size: 18px;"
-                                + "-fx-alignment: TOP_LEFT;"
-                                + "-fx-font-family: 'Helvetica';");
+                                "-fx-text-fill: #2f74eb;"
+                                                + "-fx-font-size: 18px;"
+                                                + "-fx-alignment: TOP_LEFT;"
+                                                + "-fx-font-family: 'Helvetica';");
                 taskLabel.setWrapText(true);
                 taskLabel.setPrefSize(244.1, 100.3);
                 taskLabel.setLayoutX(48);
@@ -126,8 +127,8 @@ public class KanbanBoardPage {
                 CheckBox checkBox = new CheckBox(null);
                 checkBox.setPrefSize(50, 70);
                 checkBox.setStyle("-fx-mark-color: #2f74eb;" + // Màu của dấu check ✓
-                        "-fx-box-border: #2f74eb;" + // Màu viền hộp
-                        "-fx-background-color: transparent;");
+                                "-fx-box-border: #2f74eb;" + // Màu viền hộp
+                                "-fx-background-color: transparent;");
                 checkBox.setPrefSize(30.1, 30.1);
                 // checkBox.setScaleX(1.1); // Phóng to theo chiều ngang
                 // checkBox.setScaleY(1.1); // Phóng to theo chiều dọc
@@ -138,18 +139,18 @@ public class KanbanBoardPage {
                         // Xu ly su kien
                         if (checkBox.isSelected()) {
                                 taskPane.setStyle(
-                                        "-fx-background-color: #c4dff8;"
-                                                + "-fx-border-radius: 10px;"
-                                                + "-fx-background-radius: 10px;"
-                                                + "-fx-border-color: #92badd;"
-                                                + "-fx-border-width: 2px;"
-                                                + "-fx-cursor: hand;");
+                                                "-fx-background-color: #c4dff8;"
+                                                                + "-fx-border-radius: 10px;"
+                                                                + "-fx-background-radius: 10px;"
+                                                                + "-fx-border-color: #92badd;"
+                                                                + "-fx-border-width: 2px;"
+                                                                + "-fx-cursor: hand;");
                         } else {
                                 taskPane.setStyle(
-                                        "-fx-background-color: #c4dff8;"
-                                                + "-fx-border-radius: 10px;"
-                                                + "-fx-background-radius: 10px;"
-                                                + "-fx-cursor: hand;");
+                                                "-fx-background-color: #c4dff8;"
+                                                                + "-fx-border-radius: 10px;"
+                                                                + "-fx-background-radius: 10px;"
+                                                                + "-fx-cursor: hand;");
                         }
                         // Xu ly thay doi trang thai cua task ve controller o day he Phat
                         task.setStatus(checkBox.isSelected());
@@ -169,7 +170,8 @@ public class KanbanBoardPage {
         public static VBox listTasks(TaskList taskList, HBox taskListContainer) {
                 // Label hiển thị tên task list
                 Label listLabel = new Label(taskList.getName());
-                listLabel.setStyle("-fx-text-fill: #2f74eb; -fx-font-size: 16px; -fx-alignment: left; -fx-font-family: 'Helvetica';");
+                listLabel.setStyle(
+                                "-fx-text-fill: #2f74eb; -fx-font-size: 16px; -fx-alignment: left; -fx-font-family: 'Helvetica';");
                 listLabel.setPrefSize(235.5, 32.5);
                 listLabel.setLayoutX(10);
                 listLabel.setLayoutY(5);
@@ -179,7 +181,8 @@ public class KanbanBoardPage {
                 textField.setPrefSize(235.5, 32.5);
                 textField.setLayoutX(10);
                 textField.setLayoutY(5);
-                textField.setStyle("-fx-text-fill: #2f74eb; -fx-font-size: 16px; -fx-alignment: left; -fx-font-family: 'Helvetica';");
+                textField.setStyle(
+                                "-fx-text-fill: #2f74eb; -fx-font-size: 16px; -fx-alignment: left; -fx-font-family: 'Helvetica';");
                 textField.setVisible(false);
 
                 listLabel.setOnMouseClicked(event -> {
@@ -238,7 +241,6 @@ public class KanbanBoardPage {
                 taskPanes.setMinHeight(20);
                 taskPanes.setMinWidth(305.6);
 
-
                 for (Task task : tasks) {
                         Pane taskPane = taskPane(task); // <-- Sử dụng thông tin task thực sự
                         taskPane.setUserData(task); // <-- BẮT BUỘC PHẢI CÓ DÒNG NÀY
@@ -264,20 +266,20 @@ public class KanbanBoardPage {
                 scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
                 scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
                 scrollPane.setStyle("-fx-background: transparent; -fx-background-color: transparent; "
-                        + "-fx-border-color: transparent; -fx-border-width: 0px;");
+                                + "-fx-border-color: transparent; -fx-border-width: 0px;");
 
                 // Nút thêm Task mới
                 FancyButtonClass addNewTaskButton = new FancyButtonClass("Add New Task", 305.6, 46.5, 0, 0);
                 addNewTaskButton.setOnAction(e -> {
                         // Tạo một task mới và thêm vào danh sách
-                        Task task= new Task();
+                        Task task = new Task();
                         Random rand = new Random();
                         int randomNumber = rand.nextInt(100) + 1;
                         task.setIdTask(randomNumber);
                         task.setTitle("New Task");
                         task.setDescription(" ");
                         task.setStatus(false);
-                        DataManager.Instance.createTask(task,taskList.getIdTaskList());
+                        DataManager.Instance.createTask(task, taskList.getIdTaskList());
                         Pane newTaskPane = taskPane(task); // nếu bạn có hàm này
                         taskPanes.getChildren().add(newTaskPane);
                         setupTaskDropTarget(taskPanes);
@@ -288,11 +290,11 @@ public class KanbanBoardPage {
                 VBox mainPane = new VBox();
                 mainPane.getChildren().addAll(headerPane, scrollPane, addNewTaskButton);
                 mainPane.setStyle("-fx-background-color: #ffffff;"
-                        + "-fx-border-color: #92badd;"
-                        + "-fx-border-radius: 36px;"
-                        + "-fx-background-radius: 36px;"
-                        + "-fx-border-width: 2px;"
-                        + "-fx-cursor: hand;");
+                                + "-fx-border-color: #92badd;"
+                                + "-fx-border-radius: 36px;"
+                                + "-fx-background-radius: 36px;"
+                                + "-fx-border-width: 2px;"
+                                + "-fx-cursor: hand;");
                 mainPane.setPadding(new Insets(10, 10, 10, 15));
                 mainPane.setSpacing(10);
                 mainPane.setPrefWidth(345.7);
@@ -348,7 +350,7 @@ public class KanbanBoardPage {
         private static void setupTaskDropTarget(VBox vbox) { // Thiết lập drag target cho task list
                 vbox.setOnDragOver(event -> {
                         if (event.getGestureSource() instanceof Pane
-                                && ((Pane) event.getGestureSource()).getParent() instanceof VBox) {
+                                        && ((Pane) event.getGestureSource()).getParent() instanceof VBox) {
                                 event.acceptTransferModes(TransferMode.MOVE);
                         }
                         event.consume();
@@ -363,8 +365,7 @@ public class KanbanBoardPage {
 
                                 // Bước 1: gỡ bỏ taskPane đang kéo ra khỏi VBox gốc
                                 source.getChildren().remove(dragged);
-                               // xóa khỏi DB
-
+                                // xóa khỏi DB
 
                                 // Bước 2: dự phòng vị trí chèn là cuối cùng
                                 ObservableList<Node> children = vbox.getChildren();
@@ -393,12 +394,12 @@ public class KanbanBoardPage {
                                 children.add(insertIndex, dragged);
                                 // Lấy Task từ taskPane
                                 Task task = (Task) dragged.getUserData();
-                                Task newTask=task;
+                                Task newTask = task;
 
                                 TaskList newTaskList = (TaskList) vbox.getUserData();
-                                 DataManager.Instance.deleteTaskData(task.getIdTask());
-                                 DataManager.Instance.createTask(newTask, newTaskList.getIdTaskList());
-//
+                                DataManager.Instance.deleteTaskData(task.getIdTask());
+                                DataManager.Instance.createTask(newTask, newTaskList.getIdTaskList());
+                                //
                                 success = true;
 
                         }
@@ -472,4 +473,3 @@ public class KanbanBoardPage {
         }
 
 }
-

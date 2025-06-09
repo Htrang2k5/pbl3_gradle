@@ -19,19 +19,17 @@ public class EditAcc_ShowAccPage {
         public Pane getView() {
                 // Thanh menu bar
                 Pane menuBar = AdminAddAccPage.MenuBarStyle_Layer1(
-                        "file:src/main/resources/image/ImageAvatar.png",
-                        "Administrator",
-                        "EditAcc_ShowAccPage"
-                );
+                                "file:src/main/resources/image/ImageAvatar.png",
+                                "Administrator",
+                                "EditAcc_ShowAccPage");
 
                 // Tiêu đề chính
                 Label mainLb = new Label("EDIT ACCOUNT");
                 mainLb.setStyle(
-                        "-fx-text-fill: #2f74eb;"
-                                + " -fx-font-size: 26px;"
-                                + " -fx-font-family: Arial;"
-                                + " -fx-font-weight: bold;"
-                );
+                                "-fx-text-fill: #2f74eb;"
+                                                + " -fx-font-size: 26px;"
+                                                + " -fx-font-family: Arial;"
+                                                + " -fx-font-weight: bold;");
                 mainLb.setAlignment(Pos.CENTER);
                 mainLb.setPrefSize(257.2, 44.6);
                 mainLb.setLayoutX(698.9);
@@ -39,11 +37,10 @@ public class EditAcc_ShowAccPage {
 
                 // Khung hình chữ nhật trang trí
                 RoundedRect rect1 = new RoundedRect(
-                        344.3, 190.7,
-                        980, 547.4,
-                        "transparent", "#92badd",
-                        2, 36
-                );
+                                344.3, 190.7,
+                                980, 547.4,
+                                "transparent", "#92badd",
+                                2, 36);
 
                 // ScrollPane chứa danh sách người dùng
                 ScrollPane scrollPane = loadUserListScrollPane();
@@ -78,14 +75,13 @@ public class EditAcc_ShowAccPage {
                         int index = i;
                         // Dùng avatar mặc định nếu chưa có
                         Image image1 = new Image("file:src/main/resources/image/ImageAvatar.png");
-                        AvatarViewClass avatar1 = new AvatarViewClass(image1, 62.4, 62.4);
+                        AvatarViewClass avatar1 = new AvatarViewClass(image1, 62.4, 2);
 
                         FancyButtonClass profileBtn = new FancyButtonClass(
-                                avatar1,
-                                userList.get(i).getUserName(),
-                                286.6, 82.6,
-                                "#c4dff8", "#2f74eb"
-                        );
+                                        avatar1,
+                                        userList.get(i).getUserName(),
+                                        286.6, 82.6,
+                                        "#c4dff8", "#2f74eb");
 
                         profileBtn.setOnAction(e -> {
                                 AppContext.set("userSelected", userList.get(index));
@@ -101,28 +97,27 @@ public class EditAcc_ShowAccPage {
                 scrollPane.setLayoutX(357.0);
                 scrollPane.setLayoutY(208.0);
                 scrollPane.setStyle(
-                        "-fx-background-color: transparent;"
-                                + " -fx-background: transparent;"
-                                + " -fx-border-color: transparent;"
-                );
+                                "-fx-background-color: transparent;"
+                                                + " -fx-background: transparent;"
+                                                + " -fx-border-color: transparent;");
                 scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
 
                 return scrollPane;
         }
+
         public static void setStyleFindText(TextField findtext,
-                                            Double width, Double height,
-                                            Double x, Double y) {
+                        Double width, Double height,
+                        Double x, Double y) {
                 findtext.setStyle(
-                        "-fx-background-color: #ffffff;"
-                                + " -fx-text-fill: #2f74eb;"
-                                + " -fx-font-size: 23px;"
-                                + " -fx-border-radius: 36px;"
-                                + " -fx-background-radius: 36px;"
-                                + " -fx-border-color: #92badd;"
-                                + " -fx-border-width: 2px;"
-                                + " -fx-font-family: Helvetica;"
-                                + " -fx-padding: 0 0 0 100;"
-                );
+                                "-fx-background-color: #ffffff;"
+                                                + " -fx-text-fill: #2f74eb;"
+                                                + " -fx-font-size: 23px;"
+                                                + " -fx-border-radius: 36px;"
+                                                + " -fx-background-radius: 36px;"
+                                                + " -fx-border-color: #92badd;"
+                                                + " -fx-border-width: 2px;"
+                                                + " -fx-font-family: Helvetica;"
+                                                + " -fx-padding: 0 0 0 100;");
                 findtext.setPrefSize(width, height);
                 findtext.setLayoutX(x);
                 findtext.setLayoutY(y);
