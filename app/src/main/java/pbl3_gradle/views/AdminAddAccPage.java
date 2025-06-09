@@ -231,8 +231,8 @@ public class AdminAddAccPage {
                                         setText(item);
                                         setStyle("-fx-text-fill: #92badd;" +
                                                         "-fx-font-size: 16px;" +
-                                                        "-fx-font-family: 'Helvetica';"
-                                                        + "-fx");
+                                                        "-fx-font-family: 'Helvetica';");
+//                                                        + "-fx");
                                 }
                         }
                 });
@@ -251,7 +251,7 @@ public class AdminAddAccPage {
                 // Tao Label cho avatar
                 Label avarLb = new Label(text);
                 avarLb.setStyle(
-                                "-fx-text-fill: #2f74eb; -fx-font-size: 20 px; -fx-alignment: center; -fx-font-family: :'Helvetica';");
+                                "-fx-text-fill: #2f74eb; -fx-font-size: 20 px; -fx-alignment: center; -fx-font-family: 'Helvetica';");
                 avarLb.setPrefSize(195.1, 31.7);
                 avarLb.setLayoutX(50.5);
                 avarLb.setLayoutY(218.7);
