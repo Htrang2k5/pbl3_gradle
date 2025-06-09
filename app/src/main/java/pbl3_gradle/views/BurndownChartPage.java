@@ -46,7 +46,7 @@ public class BurndownChartPage {
         yAxis.setLabel("Days");
 
         LineChart<Number, Number> lineChart = new LineChart<>(xAxis, yAxis);
-        lineChart.setTitle("Sprint Days");
+        // lineChart.setTitle("Sprint Days");
 
         XYChart.Series<Number, Number> estimatedSeries = new XYChart.Series<>();
         estimatedSeries.setName("Estimated");
@@ -79,7 +79,7 @@ public class BurndownChartPage {
                         + "-fx-border-width: 2;"
                         + "-fx-border-radius: 36;"
                         + "-fx-background-radius: 36;");
-        // root.setPrefSize(910.8, 569.2);
+        root.setPrefSize(910.8, 569.2);
         return root;
     }
 }

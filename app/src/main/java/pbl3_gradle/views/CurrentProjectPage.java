@@ -26,6 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.checkerframework.checker.units.qual.A;
+
 public class CurrentProjectPage {
 
         public Pane getView() {
@@ -48,10 +50,10 @@ public class CurrentProjectPage {
 
         private Pane createMenuBar() {
                 return ProfileMemberPage.MenuBarStyle_Layer2(
-                        "file:src/main/resources/image/ImageAvatar.png",
-                        CurrentUser.Instance.getFullName(),
-                        ProfileMemberPage.getRoleName(CurrentUser.Instance.getRole()),
-                        "CurrentProjectPage");
+                                "file:src/main/resources/image/ImageAvatar.png",
+                                CurrentUser.Instance.getFullName(),
+                                ProfileMemberPage.getRoleName(CurrentUser.Instance.getRole()),
+                                "CurrentProjectPage");
         }
 
         private Label createTitleLabel() {
@@ -60,12 +62,12 @@ public class CurrentProjectPage {
                 label.setLayoutY(43.3);
                 label.setPrefSize(290.2, 41.1);
                 label.setStyle("""
-                -fx-text-fill: #2f74eb;
-                -fx-font-size: 26px;
-                -fx-alignment: center;
-                -fx-font-family: 'Arial';
-                -fx-font-weight: bold;
-                """);
+                                -fx-text-fill: #2f74eb;
+                                -fx-font-size: 26px;
+                                -fx-alignment: center;
+                                -fx-font-family: 'Arial';
+                                -fx-font-weight: bold;
+                                """);
                 return label;
         }
 
@@ -82,34 +84,36 @@ public class CurrentProjectPage {
                         AppContext.set("currentPage", "CompeletedProjectPage");
                         NavigationManager.navigateToCompeletedProjectPage();
                 });
-              if(CurrentUser.Instance.getRole()==2) {
-                      MenuItem newProject = new MenuItem("New Project");
-                      newProject.setStyle("-fx-font-size: 20px; -fx-font-family:'Helvetica';");
-                      contextMenu.getItems().add(newProject);
+                if (CurrentUser.Instance.getRole() == 2) {
+                        MenuItem newProject = new MenuItem("New Project");
+                        newProject.setStyle("-fx-font-size: 20px; -fx-font-family:'Helvetica';");
+                        contextMenu.getItems().add(newProject);
                         newProject.setOnAction(e1 -> {
                                 Project newProject1 = new Project();
                                 newProject1.setProjectName("New Project");
                                 newProject1.setDescription("This is a new project.");
                                 newProject1.setStatus(false);
                                 newProject1.setDateCreated(new java.util.Date());
-                                Button newProjectButton = createProjectButton(newProject1.getProjectName(), newProject1.getDescription());
+                                Button newProjectButton = createProjectButton(newProject1.getProjectName(),
+                                                newProject1.getDescription());
                                 DataManager.Instance.addNewProject(newProject1);
                                 ProductBacklog pb = newProject1.getProductBacklog(); // lấy ProductBacklog hiện tại
 
-                                Project prj= DataManager.Instance.getProjectByName("New Project");
+                                Project prj = DataManager.Instance.getProjectByName("New Project");
                                 pb.setIdProductBacklog(prj.getIdProject()); // set idProject cho ProductBacklog
-                               prj.setProductBacklog(pb);
+                                prj.setProductBacklog(pb);
                                 DataManager.Instance.updateProject(prj); // cập nhật lại project với ProductBacklog mới
                                 Random rand = new Random();
                                 int randomNumber = rand.nextInt(100) + 1; // random từ 1 đến 100
 
                                 NavigationManager.navigateToCurrentProjectPage();
 
-                                GridPane grid = (GridPane) ((ScrollPane) moreButton.getParent().getChildrenUnmodifiable().get(5)).getContent();
-//                                int rowCount = grid.getChildren().size() / 2; // Assuming 2 columns
-//                                grid.add(newProjectButton, 0, rowCount);
+                                GridPane grid = (GridPane) ((ScrollPane) moreButton.getParent()
+                                                .getChildrenUnmodifiable().get(5)).getContent();
+                                // int rowCount = grid.getChildren().size() / 2; // Assuming 2 columns
+                                // grid.add(newProjectButton, 0, rowCount);
                         });
-              }
+                }
                 moreButton.setOnAction(e -> {
                         if (!contextMenu.isShowing()) {
                                 contextMenu.show(moreButton, Side.BOTTOM, 0, 0);
@@ -139,8 +143,8 @@ public class CurrentProjectPage {
                         return;
                 }
                 Project project = DataManager.Instance.getProjectByName(projectName);
-                        if (project != null) {
-                                GridPane grid = createProjectsGrid();
+                if (project != null) {
+                        GridPane grid = createProjectsGrid();
 
                 } else {
                         CustomMessageBox.show("Error", "No project found with the name: " + projectName);
@@ -169,15 +173,9 @@ public class CurrentProjectPage {
                 // Sample Projects
 
                 List<Project> allProjects = DataManager.Instance.getAllProject();
-                List<Project> currentProjects = new ArrayList<>();
-                for (Project project : allProjects) {
-                        if (!project.isStatus()) {
-                                currentProjects.add(project);
-                        }
-                }
-                Button[] projects = new Button[currentProjects.size()];
-                for (int i = 0; i < currentProjects.size() ; i++) {
-                        Project project = currentProjects.get(i);
+                Button[] projects = new Button[allProjects.size()];
+                for (int i = 0; i < allProjects.size(); i++) {
+                        Project project = allProjects.get(i);
                         projects[i] = createProjectButton(project.getProjectName(), project.getDescription());
                         grid.add(projects[i], i % 2, i / 2);
                 }
@@ -205,11 +203,10 @@ public class CurrentProjectPage {
                 titleLabel.setLayoutY(10.3);
                 titleLabel.setPrefSize(361.4, 34.7);
                 titleLabel.setStyle("""
-                -fx-text-fill: #2f74eb;
-                -fx-font-size: 20px;
-                -fx-font-family:'Helvetica';
-                -fx-font-weight: bold;
-                """);
+                                -fx-text-fill: #2f74eb;
+                                -fx-font-size: 20px;
+                                -fx-font-family:'Helvetica';
+                                """);
 
                 Label descLabel = new Label(description);
                 descLabel.setLayoutX(10.5);
@@ -217,10 +214,11 @@ public class CurrentProjectPage {
                 descLabel.setPrefSize(448.8, 82.7);
                 descLabel.setWrapText(true);
                 descLabel.setStyle("""
-                -fx-text-fill: #2f74eb;
-                -fx-font-size: 15px;
-                -fx-font-family:'Helvetica';
-                """);
+                                -fx-text-fill: #2f74eb;
+                                -fx-font-size: 15px;
+                                -fx-font-family:'Helvetica';
+                                -fx-alignment: TOP_LEFT;
+                                """);
 
                 Image moreImg = new Image("file:src/main/resources/image/MoreIcon2.png");
                 ImageButtonClass moreBtn = new ImageButtonClass(moreImg, 36.2, 36.2, 412.8, 9.4);
@@ -230,21 +228,21 @@ public class CurrentProjectPage {
                 Button projectButton = new Button();
                 projectButton.setGraphic(projectPane);
                 projectButton.setStyle("""
-                -fx-background-color: #c4dff8;
-                -fx-border-color: #92badd;
-                -fx-border-width: 2px;
-                -fx-border-radius: 36px;
-                -fx-background-radius: 36px;
-                -fx-cursor: hand;
-                """);
+                                -fx-background-color: #c4dff8;
+                                -fx-border-color: #92badd;
+                                -fx-border-width: 2px;
+                                -fx-border-radius: 36px;
+                                -fx-background-radius: 36px;
+                                -fx-cursor: hand;
+                                """);
 
                 applyContextMenu(projectButton, moreBtn);
                 applyClickEffect(projectButton);
 
                 projectButton.setOnMouseClicked(e -> {
                         AppContext.set("currentPage", "ProductBacklogPage");
-                     Project prj= DataManager.Instance.getProjectByName(title);
-                     DataManager.Instance.setCurrentProject(prj);
+                        Project prj = DataManager.Instance.getProjectByName(title);
+                        DataManager.Instance.setCurrentProject(prj);
                         NavigationManager.navigateToProductBacklogPage();
                 });
 
@@ -256,31 +254,34 @@ public class CurrentProjectPage {
                 MenuItem doneItem = new MenuItem("Done");
                 MenuItem deleteItem = new MenuItem("Delete");
                 MenuItem redoItem = new MenuItem("Redo");
+                MenuItem editItem = new MenuItem("Edit");
 
                 doneItem.setStyle("-fx-font-size: 14px; -fx-font-family:'Helvetica';");
                 deleteItem.setStyle("-fx-font-size: 14px; -fx-font-family:'Helvetica';");
                 redoItem.setStyle("-fx-font-size: 14px; -fx-font-family:'Helvetica';");
+                editItem.setStyle("-fx-font-size: 14px; -fx-font-family:'Helvetica';");
 
-                Project prj= new Project();
+                Project prj = new Project();
                 Node graphic = button.getGraphic(); // Đây là projectPane
                 if (graphic instanceof Pane projectPane) {
-                        Label titleLabel = (Label) projectPane.lookup("#projectTitle");
+                        Label titleLabel = (Label) projectPane.lookup("#projectTitle"); //
                         if (titleLabel != null) {
-                                //in ra
+                                // in ra
                                 System.out.println("Project Title: " + titleLabel.getText());
-                              prj= DataManager.Instance.getProjectByName(titleLabel.getText());
+                                prj = DataManager.Instance.getProjectByName(titleLabel.getText());
                         }
                 }
-                 int idProject = prj.getIdProject();
+                int idProject = prj.getIdProject();
                 System.out.println("Project ID: " + idProject);
 
                 String currentPage = (String) AppContext.get("currentPage");
 
                 if ("CurrentProjectPage".equals(currentPage)) {
-                        menu.getItems().addAll(doneItem, deleteItem);
+                        menu.getItems().addAll(doneItem, deleteItem, editItem);
 
                         doneItem.setOnAction(e -> {
-                                ProjectController.Instance.markDoneProject(idProject);  // Gọi hàm đánh dấu project là đã hoàn thành
+                                ProjectController.Instance.markDoneProject(idProject); // Gọi hàm đánh dấu project là đã
+                                                                                       // hoàn thành
                                 CustomMessageBox.show("Success!", "Done project!");
                         });
                         deleteItem.setOnAction(e -> {
@@ -288,11 +289,18 @@ public class CurrentProjectPage {
                                 CustomMessageBox.show("Success!", "Deleted project!");
                                 NavigationManager.navigateToCurrentProjectPage(); // Quay lại trang CurrentProjectPage
                         });
-
+                        editItem.setOnAction(e -> {
+                                AppContext.set("currentPage", "EditProjectPage");
+                                AppContext.set("lastPage", "CurrentProjectPage");
+                                AppContext.set("selectedProject", idProject);
+                                // DataManager.Instance.setCurrentProject(prj);
+                                NavigationManager.navigateToEditProjectPage();
+                        });
                 } else {
                         menu.getItems().addAll(redoItem, deleteItem);
                         redoItem.setOnAction(e -> {
-                                ProjectController.Instance.markUndoneProject(idProject);  // Gọi hàm đánh dấu project là đã redo
+                                ProjectController.Instance.markUndoneProject(idProject); // Gọi hàm đánh dấu project là
+                                                                                         // đã redo
                                 CustomMessageBox.show("Success!", "Redo project!");
                                 NavigationManager.navigateToCompeletedProjectPage();
                         });

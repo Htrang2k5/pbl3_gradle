@@ -89,8 +89,9 @@ public class MenuBarClass extends VBox {
                 btnNotifications.removeEffects();
                 btnNotifications.setOnAction(null);
             }
-            this.getChildren().addAll(btnProfile, btnProject, btnNotifications, btnLogout);
-            this.setPrefSize(265.9, 257.2);
+            this.getChildren().addAll(btnProfile, btnProject, btnLogout);
+            // this.setPrefSize(265.9, 257.2);
+            this.setPrefWidth(265.9);
             this.setSpacing(21);
         } else {
             FancyButtonClass btnProductBacklog = new FancyButtonClass("Product Backlog", 265.9, 50.2, "#92badd",
@@ -155,9 +156,9 @@ public class MenuBarClass extends VBox {
                 btnMembers.removeEffects();
                 btnMembers.setOnAction(null);
             }
-            this.getChildren().addAll(btnProductBacklog, btnSprint, btnKanbanBoard, btnBurndown_Chart,
-                    btnMeetingPlan, btnMembers, btnNotifications);
-            this.setPrefSize(269.5, 456.8);
+            this.getChildren().addAll(btnProductBacklog, btnSprint, btnKanbanBoard, btnBurndown_Chart, btnMembers);
+            // this.setPrefSize(269.5, 456.8);
+            this.setPrefWidth(265.9);
             this.setSpacing(17.8);
         }
     }

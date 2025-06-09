@@ -25,8 +25,8 @@ public class DeleteAccPage {
 
                 // Thanh menu
                 Pane menuBar = AdminAddAccPage.MenuBarStyle_Layer1(
-                        "file:src/main/resources/image/ImageAvatar.png", "Administrator",
-                        "DeleteAccPage");
+                                "file:src/main/resources/image/ImageAvatar.png", "Administrator",
+                                "DeleteAccPage");
 
                 // Tiêu đề chính
                 Label mainLb = new Label("DELETE ACCOUNT");
@@ -53,25 +53,27 @@ public class DeleteAccPage {
                 scrollPane.setPrefSize(961.9, 414.0);
                 scrollPane.setLayoutX(353.0);
                 scrollPane.setLayoutY(204.0);
-                scrollPane.setStyle("-fx-background-color: transparent; -fx-border-color: transparent;");
+                scrollPane.setStyle(
+                                "-fx-background-color: transparent; -fx-border-color: transparent; -fx-padding: 0; -fx-background: transparent;");
                 scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
 
                 // Nút Delete
                 FancyButtonClass btnDelete = new FancyButtonClass("Delete", 536.2, 59.8, 559.4, 667.5);
                 btnDelete.setOnAction(e -> {
                         if (selectedUsers.isEmpty()) {
-                                Alert alert = new Alert(Alert.AlertType.WARNING, "Please select at least one user to delete.");
+                                Alert alert = new Alert(Alert.AlertType.WARNING,
+                                                "Please select at least one user to delete.");
                                 alert.showAndWait();
                                 return;
                         }
 
                         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
-                                "Are you sure you want to delete the selected users?",
-                                ButtonType.YES, ButtonType.NO);
+                                        "Are you sure you want to delete the selected users?",
+                                        ButtonType.YES, ButtonType.NO);
                         confirm.showAndWait().ifPresent(response -> {
                                 if (response == ButtonType.YES) {
                                         for (User user : selectedUsers) {
-//                                                DataManager.Instance.deleteUserByID(user.getUserID());
+                                                // DataManager.Instance.deleteUserByID(user.getUserID());
                                                 DataManager.Instance.disableUser(user.getUserID());
                                         }
                                         selectedUsers.clear();
@@ -101,15 +103,14 @@ public class DeleteAccPage {
                         int index = i;
                         User user = userList.get(i);
 
-                        Image image = new Image("file:src/main/resources/image/FindImage.png");
+                        Image image = new Image("file:src/main/resources/image/ImageAvatar.png");
                         AvatarViewClass avatar = new AvatarViewClass(image, 62.4, 0);
 
                         FancyButtonClass profileBtn = new FancyButtonClass(
-                                avatar,
-                                user.getUserName(),
-                                286.6, 82.6,
-                                "#c4dff8", "#2f74eb"
-                        );
+                                        avatar,
+                                        user.getUserName(),
+                                        286.6, 82.6,
+                                        "#c4dff8", "#2f74eb");
 
                         profileBtn.setOnAction(e -> {
                                 if (selectedUsers.contains(user)) {
