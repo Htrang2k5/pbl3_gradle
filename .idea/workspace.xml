@@ -5,9 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9f9a53cc-b0fb-4c6d-bf00-9210d3307d97" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_5_21_2025_9_52_AM_[Changes]/shelved.patch" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_5_21_2025_9_52_AM_[Changes]/shelved.patch" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_5_21_2025_9_52_AM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_5_21_2025_9_52_AM__Changes_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/controllers/DataManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/controllers/DataManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/models/Item.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/models/Item.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/views/DetailBacklogPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/views/DetailBacklogPage.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/views/ProductBacklogPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/pbl3_gradle/views/ProductBacklogPage.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -74,7 +75,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="main" />
+        <entry key="$PROJECT_DIR$" value="phat" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -116,7 +117,7 @@
     &quot;Gradle.pbl3_gradle:app [run].executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;#11 on phat&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;
   }
 }</component>
@@ -243,10 +244,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Gradle.pbl3_gradle [runJavaFX]" />
-        <item itemvalue="Gradle.pbl3_gradle [run]" />
-        <item itemvalue="Gradle.pbl3_gradle [build]" />
         <item itemvalue="Gradle.pbl3_gradle:app [runJavaFX]" />
         <item itemvalue="Gradle.pbl3_gradle:app [run]" />
+        <item itemvalue="Gradle.pbl3_gradle [run]" />
+        <item itemvalue="Gradle.pbl3_gradle [build]" />
       </list>
     </recent_temporary>
   </component>
@@ -276,27 +277,13 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/app/src/main/java/pbl3_gradle/controllers/DataManager.java</url>
-          <line>88</line>
-          <properties class="pbl3_gradle.controllers.DataManager" method="getAllUser">
+          <url>file://$PROJECT_DIR$/app/src/main/java/pbl3_gradle/views/DetailTaskPage.java</url>
+          <line>31</line>
+          <properties class="pbl3_gradle.views.DetailTaskPage" method="getView">
             <option name="EMULATED" value="true" />
             <option name="WATCH_EXIT" value="false" />
           </properties>
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/app/src/main/java/pbl3_gradle/views/KanbanBoardPage.java</url>
-          <line>425</line>
-          <properties class="pbl3_gradle.views.KanbanBoardPage" method="setupVBoxDropTarget">
-            <option name="EMULATED" value="true" />
-            <option name="WATCH_EXIT" value="false" />
-          </properties>
-          <option name="timeStamp" value="15" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/pbl3_gradle/controllers/DataManager.java</url>
-          <line>876</line>
-          <option name="timeStamp" value="6" />
+          <option name="timeStamp" value="3" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

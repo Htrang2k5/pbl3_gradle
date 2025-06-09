@@ -7,7 +7,7 @@ import java.util.Date;
 public class Item {
     protected int idItem;
     protected int idBacklog;
-    protected Boolean backlogType; // true for ProductBacklog, false for SprintBacklog
+    protected int backlogType; // true for ProductBacklog, false for SprintBacklog
     protected String title;
     protected String description;
     protected Date dateCreated;
@@ -30,8 +30,8 @@ public class Item {
     public int getIdBacklog() { return idBacklog; }
     public void setIdBacklog(int idBacklog) { this.idBacklog = idBacklog; }
 
-    public Boolean getBacklogType() { return backlogType; }
-    public void setBacklogType(Boolean backlogType) { this.backlogType = backlogType; }
+    public int getBacklogType() { return backlogType; }
+    public void setBacklogType(int backlogType) { this.backlogType = backlogType; }
 
     public String getTitle() { return title;}
     public void setTitle(String title) { this.title = title; }

@@ -48,7 +48,8 @@ public class ProductBacklogPage {
                 scrollPane.setLayoutX(357.9);
                 scrollPane.setLayoutY(103.3);
                 scrollPane.setVbarPolicy(ScrollBarPolicy.NEVER);
-                scrollPane.setStyle("-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent");
+                scrollPane.setStyle(
+                        "-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent");
 
                 // Pane chính
                 Pane pane = new Pane(menuBar, mainLb, rect1, scrollPane);
@@ -72,15 +73,15 @@ public class ProductBacklogPage {
 
                 // Nút add backlog cuối cùng
                 FancyButtonClass addBacklogBtn = new FancyButtonClass("+Add another backlog item", 899.5, 69.3, 0, 0);
-                  addBacklogBtn.setOnAction(e->{
-                          Item newItem = new Item();
-                            newItem.setStatus(false);
-                            newItem.setTitle("New Backlog Item");
-                            newItem.setDescription("Description of the new backlog item");
-                            DataManager.Instance.addNewItemToProductBacklog(productBacklog, newItem);
-                            loadBacklogItems(); // Reload lại sau khi thêm
-                  });
-                vBox.getChildren ().add(addBacklogBtn);
+                addBacklogBtn.setOnAction(e -> {
+                        Item newItem = new Item();
+                        newItem.setStatus(false);
+                        newItem.setTitle("New Backlog Item");
+                        newItem.setDescription("Description of the new backlog item");
+                        DataManager.Instance.addNewItemToProductBacklog(productBacklog, newItem);
+                        loadBacklogItems(); // Reload lại sau khi thêm
+                });
+                vBox.getChildren().add(addBacklogBtn);
         }
 
         public static Pane MenuBarStyle_Layer3(String text, String page) {
@@ -91,14 +92,16 @@ public class ProductBacklogPage {
                 lbProject.setPrefSize(197, 18.8);
                 lbProject.setLayoutX(31.3);
                 lbProject.setLayoutY(35.4);
-                lbProject.setStyle("-fx-text-fill: #2f74eb; -fx-font-family: 'Arial'; -fx-font-size: 14px; -fx-font-weight: bold;");
+                lbProject.setStyle(
+                        "-fx-text-fill: #2f74eb; -fx-font-family: 'Arial'; -fx-font-size: 14px; -fx-font-weight: bold;");
 
                 Label lbDescription = new Label("Project description");
                 lbDescription.setPrefWidth(233.4);
                 lbDescription.setMaxHeight(103.3);
                 lbDescription.setLayoutX(31.3);
                 lbDescription.setLayoutY(59.6);
-                lbDescription.setStyle("-fx-text-fill: #2f74eb; -fx-font-family: 'Helvetica'; -fx-font-size: 12px; -fx-alignment: TOP_LEFT;");
+                lbDescription.setStyle(
+                        "-fx-text-fill: #2f74eb; -fx-font-family: 'Helvetica'; -fx-font-size: 12px; -fx-alignment: TOP_LEFT;");
 
                 Image image = new Image("file:src/main/resources/image/MoreIcon2.png");
                 ImageButtonClass moreButton = new ImageButtonClass(image, 36.2, 32.5, 230, 25);
@@ -150,6 +153,18 @@ public class ProductBacklogPage {
                 lbText.setPrefSize(691.4, 24.7);
                 lbText.setLayoutX(35.7);
                 lbText.setLayoutY(17.3);
+                // Tao textField click 2 lan chuot vao de sua label
+                TextField textField = new TextField(lbText.getText());
+                textField.setPrefSize(691.4, 24.7);
+                textField.setLayoutX(35.7);
+                textField.setLayoutY(17.3);
+                textField.setStyle(
+                        "-fx-text-fill: #2f74eb;"
+                                + "-fx-font-family: 'Helvetica';"
+                                + "-fx-font-size: 16px;"
+                                + "-fx-background-color: #ffffff;"
+                                + "-fx-border-color: #92badd;");
+                textField.setVisible(false);
 
                 Image image = new Image("file:src/main/resources/image/MoreIcon2.png");
                 ImageButtonClass moreButton = new ImageButtonClass(image, 36.2, 32.5, 742.2, 10);
@@ -167,7 +182,11 @@ public class ProductBacklogPage {
                 menuItem2.setStyle(" -fx-font-size: 14px; -fx-alignment: center; -fx-font-family:'Helvetica';");
 
                 menuItem2.setOnAction(e -> {
-                        item.setBacklogType(false);
+
+                        item.setBacklogType(0);
+                        ProductBacklog productBacklog= DataManager.Instance.getCurrentProductBacklog();
+                        DataManager.Instance.updateItemInProductBacklog(productBacklog, item);
+
                 });
 
                 contextMenu.getItems().addAll(menuItem1, menuItem2);
@@ -180,19 +199,46 @@ public class ProductBacklogPage {
                         }
                 });
 
-                Pane pane1 = new Pane(lbText);
+                Pane pane1 = new Pane(lbText, textField);
                 pane1.setPrefSize(795.2, 60);
 
-                if (!item.getStatus().equals("Not Set")) {
-                        pane1.getChildren().add(moreButton);
-                }
+
+
                 Button button = new Button();
                 button.setGraphic(pane1);
                 button.setStyle("-fx-background-color: #c4dff8; -fx-background-radius: 36; -fx-border-radius: 36; -fx-cursor: hand;");
+                CurrentProjectPage.applyClickEffect(button);
+                if (AppContext.get("currentPage").equals("DetailBacklogPage")) {
+                        button.setOnMouseClicked(event -> {
+                                if (event.getClickCount() == 2) {
+                                        textField.setText(lbText.getText());
+                                        lbText.setVisible(false);
+                                        textField.setVisible(true);
+                                        textField.requestFocus();
+                                        textField.selectAll();
+                                }
+                        });
+                        textField.setOnAction(e -> {
+                                lbText.setText(textField.getText());
+                                item.setTitle( textField.getText());
+                                ProductBacklog productBacklog= DataManager.Instance.getCurrentProductBacklog();
+                                DataManager.Instance.updateItemInProductBacklog(productBacklog, item);
+                                textField.setVisible(false);
+                                lbText.setVisible(true);
+                        });
+                } else if (AppContext.get("currentPage").equals("ProductBacklogPage")) {
+                        pane1.getChildren().add(moreButton);
+                        button.setOnMouseClicked(e -> {
+                                AppContext.set("lastPage", "ProductBacklogPage");
+                                AppContext.set("currentPage", "DetailBacklogPage");
+                                NavigationManager.navigateToDetailBacklogPage(item);
+                        });
+                } else if (AppContext.get("currentPage").equals("CurrentSprintPage")) {
 
-                if (!item.getStatus().equals("Not Set")) {
-                        CurrentProjectPage.applyClickEffect(button);
-                        button.setOnMouseClicked(e -> NavigationManager.navigateToDetailBacklogPage(item));
+                        button.setOnMouseClicked(e -> {NavigationManager.navigateToDetailBacklogPage(item);
+                                AppContext.set("lastPage", "CurrentSprintPage");
+                                AppContext.set("currentPage", "DetailBacklogPage");
+                        });
                 }
 
                 CheckBox checkBox = new CheckBox();

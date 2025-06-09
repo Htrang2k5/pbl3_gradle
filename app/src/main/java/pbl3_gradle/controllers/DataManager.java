@@ -472,7 +472,7 @@ public class DataManager {
                 item.setDateModified(rs.getDate("dateModified"));
                 item.setStatus(rs.getBoolean("status"));
                 item.setIdBacklog(rs.getInt("idBacklog"));
-                item.setBacklogType(rs.getBoolean("backlogType"));
+                item.setBacklogType(rs.getInt("backlogType"));
 
                 itemList.add(item);
             }
@@ -485,7 +485,7 @@ public class DataManager {
     //Thêm một item vào Product Backlog, cập nhật lại Product Backlog, trả về Product Backlog đã cập nhật
     public ProductBacklog addNewItemToProductBacklog(ProductBacklog productBacklog, Item item) {
         item.setIdBacklog(productBacklog.getIdProductBacklog());
-        item.setBacklogType(true); // Product backlog
+        item.setBacklogType(1); // Product backlog
 
         String query = "INSERT INTO item (idBacklog, backlogType, title, description, dateCreated, dateModified, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
         SqlParameter[] param = {
@@ -517,12 +517,13 @@ public class DataManager {
 
     //Cập nhật thông tin của một item trong Product Backlog, cập nhật lại Product Backlog, trả về Product Backlog đã cập nhật
     public ProductBacklog updateItemInProductBacklog(ProductBacklog productBacklog, Item item) {
-        String query = "UPDATE item SET title = ?, description = ?, dateModified = ? WHERE idItem = ?";
+        String query = "UPDATE item SET title = ?, description = ?, dateModified = ?, backlogType = ? WHERE idItem = ?";
         SqlParameter[] param = {
                 new SqlParameter(1, item.getTitle()),
                 new SqlParameter(2, item.getDescription()),
                 new SqlParameter(3, item.getDateModified()),
-                new SqlParameter(4, item.getIdItem())
+                new SqlParameter(4, item.getBacklogType()),
+                new SqlParameter(5, item.getIdItem())
         };
         DBHelper.Instance.ExecuteDB(query, param);
 
