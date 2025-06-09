@@ -126,21 +126,12 @@ public class ProjectController {
 
     //Trả về project tìm kiếm theo tên
     public Project searchProject(String projectName) {
-        try {
-            for (Project p : projectsUndone) {
-                if (p.getProjectName().equals(projectName)) {
-                    return p;
-                }
-            }
-            for (Project p : projectsComplete) {
-                if (p.getProjectName().equals(projectName)) {
-                    return p;
-                }
-            }
-        } catch (Exception e) {
-            System.out.println("Project not found!");
+        Project p = DataManager.Instance.getProjectByName(projectName);
+        if (p != null) {
+            return p; // Trả về project nếu tìm thấy
+        } else {
+            return null; // Không tìm thấy project
         }
-        return null;
     }
 
     //Thay đổi trạng thái từ Completed -> Undone

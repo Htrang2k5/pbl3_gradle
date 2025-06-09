@@ -6,6 +6,7 @@ import pbl3_gradle.common.AvatarViewClass;
 import pbl3_gradle.common.ImageButtonClass;
 import pbl3_gradle.controllers.DataManager;
 import pbl3_gradle.controllers.ProjectController;
+import pbl3_gradle.models.CurrentUser;
 import pbl3_gradle.models.Project;
 import pbl3_gradle.util.AppContext;
 import pbl3_gradle.util.NavigationManager;
@@ -22,8 +23,9 @@ public class CompeletedProjectPage {
         public Pane getView() {
                 // Create menu bar
                 Pane menuBar = ProfileMemberPage.MenuBarStyle_Layer2(
-                                "file:src/main/resources/image/ImageAvatar.png", "Nguyễn Thị Huyền Trang",
-                                "Scrum Master",
+                                "file:src/main/resources/image/ImageAvatar.png",
+                                CurrentUser.Instance.getFullName(),
+                                ProfileMemberPage.getRoleName(CurrentUser.Instance.getRole()),
                                 "CompeletedProjectPage");
                 // Create a main label
                 Label mainLb = new Label("COMPLETED PROJECTS");

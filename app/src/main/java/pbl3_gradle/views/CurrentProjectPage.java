@@ -22,6 +22,7 @@ import pbl3_gradle.util.AppContext;
 import pbl3_gradle.util.CustomMessageBox;
 import pbl3_gradle.util.NavigationManager;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -123,7 +124,27 @@ public class CurrentProjectPage {
         private TextField createSearchField() {
                 TextField searchField = new TextField();
                 EditAcc_ShowAccPage.setStyleFindText(searchField, 981.8, 65.9, 338.1, 124.7);
+                searchField.setOnKeyPressed(keyEvent -> {
+                        if (keyEvent.getCode().toString().equals("ENTER")) {
+                                getProjectByName(searchField);
+                        }
+                });
                 return searchField;
+        }
+
+        public void getProjectByName(TextField searchField) {
+                String projectName = searchField.getText().trim();
+                if (projectName.isEmpty()) {
+                        CustomMessageBox.show("Error", "Please enter a project name to search.");
+                        return;
+                }
+                Project project = DataManager.Instance.getProjectByName(projectName);
+                        if (project != null) {
+                                GridPane grid = createProjectsGrid();
+
+                } else {
+                        CustomMessageBox.show("Error", "No project found with the name: " + projectName);
+                }
         }
 
         private AvatarViewClass createSearchIcon() {
@@ -131,6 +152,11 @@ public class CurrentProjectPage {
                 AvatarViewClass icon = new AvatarViewClass(findImage, 46.8, 0);
                 icon.setLayoutX(379.7);
                 icon.setLayoutY(134.3);
+                icon.setOnMouseClicked(e -> {
+                        TextField searchField = (TextField) icon.getParent().lookup("#searchField");
+                        getProjectByName(searchField);
+
+                });
                 return icon;
         }
 
@@ -143,15 +169,19 @@ public class CurrentProjectPage {
                 // Sample Projects
 
                 List<Project> allProjects = DataManager.Instance.getAllProject();
-                Button[] projects = new Button[allProjects.size()];
-                for (int i = 0; i < allProjects.size() ; i++) {
-                        Project project = allProjects.get(i);
-                        projects[i] = createProjectButton(project.getProjectName(), project.getDescription());
+                List<Project> currentProjects = new ArrayList<>();
+                for (Project project : allProjects) {
+                        if (!project.isStatus()) {
+                                currentProjects.add(project);
+                        }
                 }
-
-                for (int i = 0; i < projects.length; i++) {
+                Button[] projects = new Button[currentProjects.size()];
+                for (int i = 0; i < currentProjects.size() ; i++) {
+                        Project project = currentProjects.get(i);
+                        projects[i] = createProjectButton(project.getProjectName(), project.getDescription());
                         grid.add(projects[i], i % 2, i / 2);
                 }
+
                 return grid;
         }
 
@@ -256,6 +286,7 @@ public class CurrentProjectPage {
                         deleteItem.setOnAction(e -> {
                                 ProjectController.Instance.removeProject(idProject);
                                 CustomMessageBox.show("Success!", "Deleted project!");
+                                NavigationManager.navigateToCurrentProjectPage(); // Quay lại trang CurrentProjectPage
                         });
 
                 } else {

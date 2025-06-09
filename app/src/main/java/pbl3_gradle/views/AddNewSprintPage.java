@@ -133,6 +133,11 @@ public class AddNewSprintPage {
                 mainPane.getChildren().addAll(nameSprint, createButton, clearButton);
                 mainPane.setStyle("-fx-background-color: #ffffff; -fx-background-size: cover;");
                 mainPane.setPrefSize(1366, 768);
+                clearButton.setOnAction(e -> {
+                        startDatePicker.setValue(LocalDate.now());
+                        endDatePicker.setValue(LocalDate.now().plusDays(14));
+                        nameSprint.clear();
+                });
                 return mainPane;
         }
 }

@@ -558,6 +558,19 @@ public class DataManager {
         return sprintList;
     }
 
+    //Kiểm tra xem có current sprint nào đang diễn ra không
+    public Boolean checkCurrentSprint(int idProject) {
+        String query = "SELECT * FROM sprint WHERE idProject = ? AND status = false";
+        SqlParameter[] param = { new SqlParameter(1, idProject) };
+        ResultSet rs = DBHelper.Instance.GetRecords(query, param);
+        try {
+            return rs.next(); // Nếu có kết quả, nghĩa là có sprint đang diễn ra
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false; // Nếu có lỗi, coi như không có sprint đang diễn ra
+        }
+    }
+
     //Lấy danh sách sprint đã hoàn thành, trả về một danh sách sprint
     public List<Sprint> getFinishedSprints() {
         int idProject = CurrentProject.Instance.getIdProject();
