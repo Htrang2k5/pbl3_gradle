@@ -1,10 +1,12 @@
 package pbl3_gradle.views;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.*;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Side;
@@ -25,7 +27,7 @@ import javafx.scene.control.*;
 import javax.xml.crypto.Data;
 
 public class DetailTaskPage {
-   public  Task task;
+    public  Task task;
     public DetailTaskPage(Task task) {
         this.task = task;
     }
@@ -434,14 +436,15 @@ public class DetailTaskPage {
                 // Hiện DatePicker
                 VBox datePickerPane = createDueDatePickerPane(LocalDate.now(), selectedDate -> {
                     if (selectedDate != null) {
-
                         // Cập nhật ngày đến hạn cho task
                         LocalDate localDate = selectedDate;
                         Date utilDate = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
                         this.task.setDateDue(utilDate);
                         DataManager.Instance.updateTask(this.task);
-                        HBox dateArea = dateArea(selectedDate.toString());
-                        vbox.getChildren().add(dateArea);
+
+                        // Xoá DatePicker nếu có
+                        vbox.getChildren().remove(4);
+                        NavigationManager.navigateToDetailTaskPage(this.task);
 
                     } else {
                         System.out.println("No date selected.");
@@ -473,7 +476,7 @@ public class DetailTaskPage {
     }
 
     public static HBox dateArea(String date) {
-        Label main = new Label("Dute Date: ");
+        Label main = new Label("Due Date: ");
         main.setStyle(
                 "-fx-text-fill: #2f74eb; "
                         + "-fx-font-size: 18px;"

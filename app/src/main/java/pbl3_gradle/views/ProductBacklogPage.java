@@ -182,11 +182,19 @@ public class ProductBacklogPage {
                 menuItem2.setStyle(" -fx-font-size: 14px; -fx-alignment: center; -fx-font-family:'Helvetica';");
 
                 menuItem2.setOnAction(e -> {
-
+                        Boolean check = DataManager.Instance.checkCurrentSprint(CurrentProject.Instance.getIdProject());
+                        if (!check) {
+                                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                                alert.setTitle("Information");
+                                alert.setHeaderText(null);
+                                alert.setContentText("No current sprint available. Please create a sprint first.");
+                                alert.showAndWait();
+                                return;
+                        }
                         item.setBacklogType(0);
                         ProductBacklog productBacklog= DataManager.Instance.getCurrentProductBacklog();
                         DataManager.Instance.updateItemInProductBacklog(productBacklog, item);
-
+                        loadBacklogItems();
                 });
 
                 contextMenu.getItems().addAll(menuItem1, menuItem2);
