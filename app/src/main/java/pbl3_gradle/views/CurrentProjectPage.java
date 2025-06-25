@@ -7,6 +7,7 @@ import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
@@ -40,6 +41,7 @@ public class CurrentProjectPage {
                 Label titleLabel = createTitleLabel();
                 ImageButtonClass moreButton = createMoreButton();
                 TextField searchField = createSearchField();
+                searchEventHandler(searchField, root); // Set up search event handler
                 AvatarViewClass searchIcon = createSearchIcon();
 
                 GridPane projectsGrid = createProjectsGrid();
@@ -129,40 +131,60 @@ public class CurrentProjectPage {
         private TextField createSearchField() {
                 TextField searchField = new TextField();
                 EditAcc_ShowAccPage.setStyleFindText(searchField, 981.8, 65.9, 338.1, 124.7);
-                searchField.setOnKeyPressed(keyEvent -> {
-                        if (keyEvent.getCode().toString().equals("ENTER")) {
-                                getProjectByName(searchField);
-                        }
-                });
+
                 return searchField;
         }
 
-        public void getProjectByName(TextField searchField) {
-                String projectName = searchField.getText().trim();
-                if (projectName.isEmpty()) {
-                        CustomMessageBox.show("Error", "Please enter a project name to search.");
-                        return;
-                }
-                Project project = DataManager.Instance.getProjectByName(projectName);
-                if (project != null) {
-                        GridPane grid = createProjectsGrid();
-
-                } else {
-                        CustomMessageBox.show("Error", "No project found with the name: " + projectName);
-                }
-        }
 
         private AvatarViewClass createSearchIcon() {
                 Image findImage = new Image("file:src/main/resources/image/FindImage.png");
                 AvatarViewClass icon = new AvatarViewClass(findImage, 46.8, 0);
                 icon.setLayoutX(379.7);
                 icon.setLayoutY(134.3);
-                icon.setOnMouseClicked(e -> {
-                        TextField searchField = (TextField) icon.getParent().lookup("#searchField");
-                        getProjectByName(searchField);
-
-                });
                 return icon;
+        }
+
+        public void searchEventHandler(TextField searchField, Pane parentContainer) {
+                searchField.setOnKeyReleased(event -> {
+                        if (event.getCode() == KeyCode.ENTER) {
+                                String projectName = searchField.getText().trim();
+                                if (projectName.isEmpty()) {
+                                        CustomMessageBox.show("Error", "Please enter a project name to search.");
+                                        return;
+                                }
+
+                                // Tạo mới GridPane kết quả tìm kiếm
+                                GridPane newSearchGrid = createProjectSearchGrid(searchField);
+
+                                // Tìm ScrollPane và cập nhật content
+                                for (Node node : parentContainer.getChildren()) {
+                                        if (node instanceof ScrollPane scrollPane) {
+                                                scrollPane.setContent(newSearchGrid);
+                                                break;
+                                        }
+                                }
+                        }
+                });
+        }
+
+        private GridPane createProjectSearchGrid(TextField searchField) {
+                GridPane grid = new GridPane();
+                grid.setHgap(24);
+                grid.setVgap(24);
+                grid.setPadding(new Insets(5));
+
+                String projectName = searchField.getText().trim();
+                Project project = DataManager.Instance.getProjectByName(projectName);
+
+                if (project != null) {
+                        Button btn = createProjectButton(project.getProjectName(), project.getDescription());
+                        grid.add(btn, 0, 1);
+                } else {
+                        Label noResult = new Label("No project found.");
+                        grid.add(noResult, 0, 1);
+                }
+
+                return grid;
         }
 
         private GridPane createProjectsGrid() {
@@ -177,10 +199,12 @@ public class CurrentProjectPage {
                 Button[] projects = new Button[allProjects.size()];
                 for (int i = 0; i < allProjects.size(); i++) {
                         Project project = allProjects.get(i);
+                        if (project.isStatus()) {
+                                continue; // Skip completed projects
+                        }
                         projects[i] = createProjectButton(project.getProjectName(), project.getDescription());
                         grid.add(projects[i], i % 2, i / 2);
                 }
-
                 return grid;
         }
 

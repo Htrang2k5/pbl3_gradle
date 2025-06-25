@@ -273,7 +273,7 @@ public class DataManager {
 
     // Trả về project nếu tìm kiếm theo tên
     public Project getProjectByName(String projectName) {
-        String query = "SELECT * FROM project WHERE BINARY projectName = ?"; //sửa
+        String query = "SELECT * FROM project WHERE projectName = ?"; //sửa
         SqlParameter[] param = {
                 new SqlParameter(1, projectName)
         };

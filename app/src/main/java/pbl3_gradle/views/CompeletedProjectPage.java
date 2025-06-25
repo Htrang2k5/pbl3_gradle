@@ -22,12 +22,14 @@ import java.util.List;
 public class CompeletedProjectPage {
         public Pane getView() {
                 ProjectController.Instance.loadProjectsFromDatabase();
+
                 // Create menu bar
                 Pane menuBar = ProfileMemberPage.MenuBarStyle_Layer2(
                                 "file:src/main/resources/image/ImageAvatar.png",
                                 CurrentUser.Instance.getFullName(),
                                 ProfileMemberPage.getRoleName(CurrentUser.Instance.getRole()),
                                 "CompeletedProjectPage");
+
                 // Create a main label
                 Label mainLb = new Label("COMPLETED PROJECTS");
                 mainLb.setStyle(
@@ -39,6 +41,7 @@ public class CompeletedProjectPage {
                 mainLb.setPrefSize(412.2, 41.1);
                 mainLb.setLayoutX(623.7);
                 mainLb.setLayoutY(43.3);
+
                 // Create a back button
                 Image image1 = new Image(
                                 "file:src/main/resources/image/Back_Icon.png");
@@ -48,6 +51,7 @@ public class CompeletedProjectPage {
                         AppContext.set("currentPage", "CurrentProjectPage");
                         NavigationManager.navigateToCurrentProjectPage();
                 });
+
                 // Tao text field tim kiem
                 Image findImage = new Image("file:src/main/resources/image/FindImage.png");
                 AvatarViewClass findAvatar = new AvatarViewClass(findImage, 46.8, 0);
@@ -55,7 +59,8 @@ public class CompeletedProjectPage {
                 findAvatar.setLayoutY(134.3);
                 TextField findtext = new TextField();
                 EditAcc_ShowAccPage.setStyleFindText(findtext, 981.8, 65.9, 338.1, 124.7);
-                // Tao list current project
+
+                // Tao list completed project
                 List<Project> allProjectsCompelted = ProjectController.Instance.getCompletedProject();
                 Button[] projects = new Button[allProjectsCompelted.size()];
                 for (int i = 0; i < allProjectsCompelted.size() ; i++) {
@@ -88,9 +93,30 @@ public class CompeletedProjectPage {
                 pane.setPrefSize(1366, 768);
                 pane.setLayoutX(0);
                 pane.setLayoutY(0);
+                findtext.setOnKeyReleased(event -> {
+                        if (event.getCode().toString().equals("ENTER")) {
+                                String searchText = findtext.getText().toLowerCase();
 
-                // Add components to the pane here
+                                // Xóa các nút cũ
+                                gridPane.getChildren().clear();
 
+                                Project projectsearch = DataManager.Instance.getProjectByName(searchText);
+                                Button resultButton;
+
+                                if (projectsearch != null && projectsearch.getProjectName() != null) {
+                                        resultButton = CurrentProjectPage.createProjectButton(
+                                                projectsearch.getProjectName(),
+                                                projectsearch.getDescription()
+                                        );
+                                } else {
+                                        resultButton = new Button("No project found");
+                                        resultButton.setStyle("-fx-background-color: #ffcccc; -fx-text-fill: black;");
+                                }
+
+                                // Thêm nút tìm thấy vào vị trí (0,0)
+                                gridPane.add(resultButton, 0, 0);
+                        }
+                });
                 return pane;
         }
 }

@@ -11,6 +11,7 @@ import javafx.scene.layout.Pane;
 import pbl3_gradle.common.ImageButtonClass;
 import pbl3_gradle.common.RoundedRect;
 import pbl3_gradle.controllers.DataManager;
+import pbl3_gradle.models.CurrentUser;
 import pbl3_gradle.util.AppContext;
 import pbl3_gradle.util.NavigationManager;
 import pbl3_gradle.models.Project;
@@ -22,8 +23,10 @@ public class EditProjectPage {
         final Project selectedProject = DataManager.Instance.getProjectByID(idProject);
         // Tao MenuBar
         Pane menuBar = ProfileMemberPage.MenuBarStyle_Layer2(
-                "file:src/main/resources/image/ImageAvatar.png", "Nguyễn Thị Huyền Trang",
-                "Scrum Master", "EditProjectPage");
+                "file:src/main/resources/image/ImageAvatar.png",
+                CurrentUser.Instance.getFullName(),
+                ProfileMemberPage.getRoleName(CurrentUser.Instance.getRole()),
+                "EditProjectPage");
         // Tao button Back
         Image image1 = new Image(
                 "file:src/main/resources/image/Back_Icon.png");
